@@ -1,4 +1,4 @@
-﻿namespace Tycoonia
+﻿namespace Tycoonia.Core
 {
     internal class Program
     {
