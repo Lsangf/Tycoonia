@@ -12,15 +12,10 @@
     <Folder Include="Application\Energy\" />
     <Folder Include="Application\Mining\" />
     <Folder Include="Application\Map\" />
-    <Folder Include="Domain\Buildings\Factory\" />
-    <Folder Include="Domain\Buildings\Mine\" />
     <Folder Include="Domain\Buildings\EnergyPlant\" />
-    <Folder Include="Domain\Player\" />
     <Folder Include="Domain\Map\" />
-    <Folder Include="Domain\Buildings\" />
     <Folder Include="Domain\NPC\" />
-    <Folder Include="Domain\Resources\RawResources\" />
-    <Folder Include="Domain\Resources\ProcessedResources\" />
+    <Folder Include="Domain\Storage\" />
     <Folder Include="Infrastructure\SQL\" />
     <Folder Include="Presentation\UI\" />
     <Folder Include="Presentation\" />
