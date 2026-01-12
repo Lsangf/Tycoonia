@@ -1,11 +1,11 @@
 ﻿namespace Tycoonia.Domain.Resources.RawResources
 {
-    internal class Clay : ResourcesBase
+    internal class Coal : ResourcesBase
     {
-        public Clay()
+        public Coal()
         {
             Type = "Raw";
-            Name = "Clay";
+            Name = "Coal";
         }
     }
 }

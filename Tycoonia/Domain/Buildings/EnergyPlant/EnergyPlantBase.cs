@@ -1,13 +1,14 @@
-﻿namespace Tycoonia.Domain.Buildings.Mine
+﻿namespace Tycoonia.Domain.Buildings.EnergyPlant
 {
-    internal abstract class MineBase
+    internal abstract class EnergyPlantBase
     {
         private string _name;
         private short _level;
         private bool _canUpgrade;
+        private Dictionary<string, long> _receipeUpgradeList = [];
         private int _productionRate;
-        private byte _state;
-        private (int, int) _position;
+        private int _productionTime;
+        private string _receipe;
 
         public string Name
         {
@@ -24,28 +25,31 @@
             get => _canUpgrade;
             set => _canUpgrade = value;
         }
+        public Dictionary<string, long> ReceipeUpgradeList
+        {
+            get => _receipeUpgradeList;
+            set => _receipeUpgradeList = value;
+        }
         public int ProductionRate
         {
             get => _productionRate;
             set => _productionRate = value;
         }
-        public byte State
+        public int ProductionTime
         {
-            get => _state;
-            set => _state = value;
+            get => _productionTime;
+            set => _productionTime = value;
         }
-        public (int, int) Position
+        public string Receipe
         {
-            get => _position;
-            set => _position = value;
+            get => _receipe;
+            set => _receipe = value;
         }
 
-        protected MineBase((int, int) position)
+        protected EnergyPlantBase()
         {
             Level = 1;
             CanUpgrade = false;
-            State = 100;
-            Position = position;
         }
     }
 }

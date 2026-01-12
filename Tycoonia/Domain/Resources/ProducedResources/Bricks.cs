@@ -2,9 +2,9 @@
 {
     internal class Bricks : ResourcesBase
     {
-        public Bricks() : base()
+        public Bricks()
         {
-            Type = "Processed";
+            Type = "Produced";
             Name = "Bricks";
         }
     }
