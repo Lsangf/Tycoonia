@@ -7,6 +7,7 @@
         private bool _canUpgrade;
         private Dictionary<string, long> _receipeUpgradeList = [];
         private int _productionRate;
+        private float energyConsumption;
         private int _productionTime;
         private Dictionary<string, int> _receipeList = [];
         private bool _cancelFlag;
@@ -35,6 +36,11 @@
         {
             get => _productionRate;
             set => _productionRate = value;
+        }
+        public float EnergyConsumption
+        {
+            get => energyConsumption;
+            set => energyConsumption = value;
         }
         public int ProductionTime
         {

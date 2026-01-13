@@ -11,9 +11,9 @@
                 { "Clay", 30 }
             };
             ProductionRate = 100;
+            EnergyConsumption = 0.5f;
             ReceipeList = new Dictionary<string, int>
             {
-                { "Energy", 1 },
                 { "Money", 5 },
                 { "Clay", 5 }
             };

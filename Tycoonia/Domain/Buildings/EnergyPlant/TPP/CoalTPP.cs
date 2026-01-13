@@ -5,13 +5,14 @@
         public CoalTPP()
         {
             Name = "Coal Thermal Power Plant";
-            Receipe = "Coal";
             ProductionRate = 500;
+            EnergyConsumption = 5;
             ReceipeUpgradeList = new Dictionary<string, long>
             {
                 { "Money", 100},
                 { "Bricks", 100 }
             };
+            Receipe = "Coal";
         }
     }
 }

@@ -8,6 +8,7 @@
         private Dictionary<string, long> _receipeUpgradeList = [];
         private int _productionRate;
         private int _productionTime;
+        private int energyConsumption;
         private string _receipe;
 
         public string Name
@@ -39,6 +40,11 @@
         {
             get => _productionTime;
             set => _productionTime = value;
+        }
+        public int EnergyConsumption
+        {
+            get => energyConsumption;
+            set => energyConsumption = value;
         }
         public string Receipe
         {

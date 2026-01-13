@@ -16,8 +16,8 @@
         }
         public EnergyStorage()
         {
-            Capacity = 1000;
-            CurrentStorage = 0;
+            Capacity = 100000;
+            CurrentStorage = 50000;
         }
 
     }
