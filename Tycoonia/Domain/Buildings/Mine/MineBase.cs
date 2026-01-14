@@ -1,6 +1,6 @@
 ﻿namespace Tycoonia.Domain.Buildings.Mine
 {
-    internal abstract class MineBase
+    public abstract class MineBase
     {
         private string _name;
         private short _level;
@@ -46,7 +46,7 @@
             set => _position = value;
         }
 
-        protected MineBase((int, int) position)
+        public MineBase((int, int) position)
         {
             Level = 1;
             CanUpgrade = false;

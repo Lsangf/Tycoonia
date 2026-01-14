@@ -1,6 +1,6 @@
 ﻿namespace Tycoonia.Domain.Buildings.Factory
 {
-    internal class FactoryBricks : FactoryBase
+    public class FactoryBricks : FactoryBase
     {
         public FactoryBricks()
         {
@@ -10,12 +10,12 @@
                 { "Money", 50 },
                 { "Clay", 30 }
             };
-            ProductionRate = 100;
+            ProductionRate = 1;
             EnergyConsumption = 0.5f;
-            ReceipeList = new Dictionary<string, int>
+            ReceipeList = new Dictionary<string, byte>
             {
-                { "Money", 5 },
-                { "Clay", 5 }
+                { "Money", 10 },
+                { "Clay", 3 }
             };
         }
     }

@@ -1,12 +1,12 @@
 ﻿namespace Tycoonia.Domain.Buildings.Mine
 {
-    internal class MineCoal : MineBase
+    public class MineCoal : MineBase
     {
         public MineCoal((int, int) position) : base(position)
         {
-            Name = "Coal mine";
-            ProductionRate = 20;
-            EnergyConsumption = 0.2f;
+            Name = "Coal";
+            ProductionRate = 1;
+            EnergyConsumption = 0.1f;
         }
     }
 }

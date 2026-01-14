@@ -1,6 +1,6 @@
 ﻿namespace Tycoonia.Domain.Resources.RawResources
 {
-    internal class Coal : ResourcesBase
+    public class Coal : ResourcesBase
     {
         public Coal()
         {

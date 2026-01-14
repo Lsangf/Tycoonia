@@ -1,6 +1,6 @@
 ﻿namespace Tycoonia.Domain.Buildings.Factory
 {
-    internal abstract class FactoryBase
+    public abstract class FactoryBase
     {
         private string _name;
         private short _level;
@@ -9,7 +9,7 @@
         private int _productionRate;
         private float energyConsumption;
         private int _productionTime;
-        private Dictionary<string, int> _receipeList = [];
+        private Dictionary<string, byte> _receipeList = [];
         private bool _cancelFlag;
 
         public string Name
@@ -47,7 +47,7 @@
             get => _productionTime;
             set => _productionTime = value;
         }
-        public Dictionary<string, int> ReceipeList
+        public Dictionary<string, byte> ReceipeList
         {
             get => _receipeList;
             set => _receipeList = value;
@@ -58,7 +58,7 @@
             set => _cancelFlag = value;
         }
 
-        protected FactoryBase()
+        public FactoryBase()
         {
             Level = 1;
             CanUpgrade = false;

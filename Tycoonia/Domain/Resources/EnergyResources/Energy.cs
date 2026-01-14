@@ -1,6 +1,6 @@
 ﻿namespace Tycoonia.Domain.Resources.EnergyResources
 {
-    internal class Energy : ResourcesBase
+    public class Energy : ResourcesBase
     {
         public Energy()
         {

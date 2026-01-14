@@ -1,6 +1,6 @@
 ﻿namespace Tycoonia.Domain.Resources.Storage
 {
-    internal class StorageResources
+    public class StorageResources
     {
         private long _capacity;
         private Dictionary<string, long> _storage = new() 

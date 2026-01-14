@@ -1,6 +1,6 @@
 ﻿namespace Tycoonia.Domain.Buildings.EnergyPlant.Storage
 {
-    internal class EnergyStorage
+    public class EnergyStorage
     {
         private long _capacity;
         private long _currentStorage;

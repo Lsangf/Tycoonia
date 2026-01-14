@@ -1,6 +1,6 @@
 ﻿namespace Tycoonia.Domain.Buildings.EnergyPlant
 {
-    internal abstract class EnergyPlantBase
+    public abstract class EnergyPlantBase
     {
         private string _name;
         private short _level;
@@ -9,7 +9,7 @@
         private int _productionRate;
         private int _productionTime;
         private int energyConsumption;
-        private string _receipe;
+        private Dictionary<string, short> _receipeList = [];
 
         public string Name
         {
@@ -46,13 +46,13 @@
             get => energyConsumption;
             set => energyConsumption = value;
         }
-        public string Receipe
+        public Dictionary<string, short> ReceipeList
         {
-            get => _receipe;
-            set => _receipe = value;
+            get => _receipeList;
+            set => _receipeList = value;
         }
 
-        protected EnergyPlantBase()
+        public EnergyPlantBase()
         {
             Level = 1;
             CanUpgrade = false;

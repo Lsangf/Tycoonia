@@ -1,6 +1,6 @@
 ﻿namespace Tycoonia.Domain.Player
 {
-    internal class PlayerReal
+    public class PlayerReal
     {
         private string _name;
         private long _ballance;
@@ -16,7 +16,7 @@
             set => _ballance = value;
         }
 
-        protected PlayerReal(string name, long ballance)
+        public PlayerReal(string name, long ballance)
         {
             Name = name;
             Ballance = ballance;

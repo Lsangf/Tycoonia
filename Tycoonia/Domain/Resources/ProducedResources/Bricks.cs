@@ -1,6 +1,6 @@
 ﻿namespace Tycoonia.Domain.Resources.ProcessedResources
 {
-    internal class Bricks : ResourcesBase
+    public class Bricks : ResourcesBase
     {
         public Bricks()
         {
