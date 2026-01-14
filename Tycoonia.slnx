@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="Tycoonia/Tycoonia.csproj" />
+  <Project Path="TycooniaTest/TycooniaTest.csproj" Id="f753a2ba-27f5-4e70-a5eb-482391430f55" />
 </Solution>
