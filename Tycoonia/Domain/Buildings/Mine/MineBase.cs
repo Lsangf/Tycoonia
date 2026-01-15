@@ -1,6 +1,4 @@
-﻿using System.Reflection.Metadata;
-
-namespace Tycoonia.Domain.Buildings.Mine
+﻿namespace Tycoonia.Domain.Buildings.Mine
 {
     public abstract class MineBase
     {
