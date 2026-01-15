@@ -11,6 +11,7 @@
         private int _productionTime;
         private Dictionary<string, byte> _receipeList = [];
         private string _productionItem;
+        private bool _workFlag;
         private bool _cancelFlag;
 
         public string Name
@@ -58,6 +59,11 @@
             get => _productionItem;
             set => _productionItem = value;
         }
+        public bool WorkFlag
+        {
+            get => _workFlag;
+            set => _workFlag = value;
+        }
         public bool CancelFlag
         {
             get => _cancelFlag;
@@ -68,6 +74,7 @@
         {
             Level = 1;
             CanUpgrade = false;
+            WorkFlag = false;
             CancelFlag = false;
         }
     }

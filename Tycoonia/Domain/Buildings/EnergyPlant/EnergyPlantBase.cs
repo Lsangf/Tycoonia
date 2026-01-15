@@ -11,6 +11,7 @@
         private int energyConsumption;
         private Dictionary<string, short> _receipeList = [];
         private string _productionItem;
+        private bool _workFlag;
 
         public string Name
         {
@@ -57,11 +58,17 @@
             get => _productionItem;
             set => _productionItem = value;
         }
+        public bool WorkFlag
+        {
+            get => _workFlag;
+            set => _workFlag = value;
+        }
 
         public EnergyPlantBase()
         {
             Level = 1;
             CanUpgrade = false;
+            WorkFlag = false;
         }
     }
 }

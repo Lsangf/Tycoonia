@@ -6,7 +6,7 @@
         private Dictionary<string, long> _storage = new() 
         {
             {"Clay", 10 },
-            {"Coal", 0 },
+            {"Coal", 5 },
             {"Bricks", 0 }
         };
 
