@@ -14,6 +14,7 @@ namespace TycooniaTest
         public void FactoryOperationsExtraction()
         {
             StorageResources storageResources = new();
+            StorageResources storageResources1 = new();
             FactoryBase factoryBricks = new FactoryBricks();
             List<FactoryBase> factories = [factoryBricks];
             EnergyStorage energyStorage = new();
@@ -24,6 +25,7 @@ namespace TycooniaTest
             long resultFactoryFabrication = storageResources.Storage[factories[0].ProductionItem];
             decimal resultEnergyStorage = energyStorage.CurrentStorage;
 
+            Assert.NotEqual(storageResources, storageResources1);
             Assert.Equal(1, resultFactoryFabrication);
             Assert.Equal(49999.5m, resultEnergyStorage);
         }
