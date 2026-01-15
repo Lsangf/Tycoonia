@@ -2,22 +2,22 @@
 {
     public class EnergyStorage
     {
-        private long _capacity;
-        private long _currentStorage;
-        public long Capacity
+        private decimal _capacity;
+        private decimal _currentStorage;
+        public decimal Capacity
         {
             get => _capacity;
             set => _capacity = value;
         }
-        public long CurrentStorage
+        public decimal CurrentStorage
         {
             get => _currentStorage;
             set => _currentStorage = value;
         }
         public EnergyStorage()
         {
-            Capacity = 100000;
-            CurrentStorage = 50000;
+            Capacity = 100000m;
+            CurrentStorage = 50000m;
         }
 
     }

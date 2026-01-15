@@ -6,7 +6,7 @@
         private short _level;
         private bool _canUpgrade;
         private int _productionRate;
-        private float _energyConsumption;
+        private decimal _energyConsumption;
         private byte _state;
         private (int, int) _position;
 
@@ -30,7 +30,7 @@
             get => _productionRate;
             set => _productionRate = value;
         }
-        public float EnergyConsumption
+        public decimal EnergyConsumption
         {
             get => _energyConsumption;
             set => _energyConsumption = value;

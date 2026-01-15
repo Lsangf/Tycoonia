@@ -9,7 +9,7 @@ namespace Tycoonia.Application.Mining
         public static void ResourceExtractionMine(StorageResources storageResources, List<MineBase> mine, EnergyStorage energyStorage)
         {
             int mining;
-            float energyNeeded;
+            decimal energyNeeded;
             foreach (MineBase currentMine in mine)
             {
                 mining = currentMine.ProductionRate;
@@ -20,11 +20,11 @@ namespace Tycoonia.Application.Mining
             }
         }
 
-        public static void EnergyReservation(EnergyStorage energyStorage, float energyNeeded)
+        public static void EnergyReservation(EnergyStorage energyStorage, decimal energyNeeded)
         {
             if (energyStorage.CurrentStorage >= energyNeeded)
             {
-                energyStorage.CurrentStorage -= (long)energyNeeded;
+                energyStorage.CurrentStorage -= energyNeeded;
             }
             else
             {

@@ -6,7 +6,7 @@
         {
             Name = "Coal";
             ProductionRate = 1;
-            EnergyConsumption = 0.1f;
+            EnergyConsumption = 0.1m;
         }
     }
 }

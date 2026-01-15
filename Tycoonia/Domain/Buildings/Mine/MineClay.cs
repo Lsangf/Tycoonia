@@ -6,7 +6,7 @@
         {
             Name = "Clay";
             ProductionRate = 5;
-            EnergyConsumption = 0.1f;
+            EnergyConsumption = 0.1m;
         }
     }
 }
