@@ -1,4 +1,6 @@
-﻿namespace Tycoonia.Domain.Buildings.Mine
+﻿using System.Reflection.Metadata;
+
+namespace Tycoonia.Domain.Buildings.Mine
 {
     public abstract class MineBase
     {
@@ -9,6 +11,7 @@
         private decimal _energyConsumption;
         private byte _state;
         private (int, int) _position;
+        private string _productionItem;
 
         public string Name
         {
@@ -44,6 +47,11 @@
         {
             get => _position;
             set => _position = value;
+        }
+        public string ProductionItem
+        {
+            get => _productionItem;
+            set => _productionItem = value;
         }
 
         public MineBase((int, int) position)

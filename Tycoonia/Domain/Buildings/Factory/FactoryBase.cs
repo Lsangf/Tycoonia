@@ -7,9 +7,10 @@
         private bool _canUpgrade;
         private Dictionary<string, long> _receipeUpgradeList = [];
         private int _productionRate;
-        private float energyConsumption;
+        private decimal energyConsumption;
         private int _productionTime;
         private Dictionary<string, byte> _receipeList = [];
+        private string _productionItem;
         private bool _cancelFlag;
 
         public string Name
@@ -37,7 +38,7 @@
             get => _productionRate;
             set => _productionRate = value;
         }
-        public float EnergyConsumption
+        public decimal EnergyConsumption
         {
             get => energyConsumption;
             set => energyConsumption = value;
@@ -51,6 +52,11 @@
         {
             get => _receipeList;
             set => _receipeList = value;
+        }
+        public string ProductionItem
+        {
+            get => _productionItem;
+            set => _productionItem = value;
         }
         public bool CancelFlag
         {

@@ -11,12 +11,13 @@
                 { "Clay", 30 }
             };
             ProductionRate = 1;
-            EnergyConsumption = 0.5f;
+            EnergyConsumption = 0.5m;
             ReceipeList = new Dictionary<string, byte>
             {
                 { "Money", 10 },
                 { "Clay", 3 }
             };
+            ProductionItem = "Bricks";
         }
     }
 }

@@ -16,6 +16,7 @@
             {
                 { "Coal", 10 }
             };
+            ProductionItem = "Energy";
         }
     }
 }

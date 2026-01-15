@@ -10,6 +10,7 @@
         private int _productionTime;
         private int energyConsumption;
         private Dictionary<string, short> _receipeList = [];
+        private string _productionItem;
 
         public string Name
         {
@@ -50,6 +51,11 @@
         {
             get => _receipeList;
             set => _receipeList = value;
+        }
+        public string ProductionItem
+        {
+            get => _productionItem;
+            set => _productionItem = value;
         }
 
         public EnergyPlantBase()
