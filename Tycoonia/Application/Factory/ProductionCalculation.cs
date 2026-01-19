@@ -8,36 +8,24 @@ namespace Tycoonia.Application.Factory
 {
     public class ProductionCalculation
     {
-        public static void ProductionCalculationFactory(StorageResources storageResources, FactoryBase factory, EnergyStorage energyStorage, PlayerReal player)
+        public static int ProductionCalculationFactory(StorageResources storageResources, FactoryBase factory, EnergyStorage energyStorage, PlayerReal player)
         {
-            int fabrication;
-            decimal energyNeeded;
-            long playerMoney = player.Ballance;
+            // long playerMoney = player.Ballance; // for the transaction
+            decimal energyNeeded = factory.EnergyConsumption;
             Dictionary<string, byte> receipeListNeeded = factory.ReceipeList;
-            //factory.ResourceBuffer = [];
+            Dictionary<string, int> resorcesBuffer = factory.ResourceBuffer;
 
-            foreach (var el in receipeListNeeded)
-            {
-                ResourcesSubtraction(storageResources, receipeListNeeded, player);
-            }
+            BufferSubtraction(resorcesBuffer, storageResources, player);
+            ResourcesSubtraction(resorcesBuffer, receipeListNeeded, player);
+            EnergySubtraction(energyStorage, energyNeeded);
+            SaveInStorage.Save(storageResources, factory);
 
-            fabrication = factory.ProductionRate;
-
-            energyNeeded = factory.EnergyConsumption;
-            receipeListNeeded = currentFactory.ReceipeList;
-
-
-            EnergyReservation(energyStorage, energyNeeded);
-            SaveExtractionMine(storageResources, currentFactory, fabrication);
+            return factory.ProductionRate;
         }
 
-        
-
-        public static int ResourcesSubtraction(StorageResources storageResources, Dictionary<string, byte> receipeListNeeded, PlayerReal player)
+        public static void BufferSubtraction(Dictionary<string, int> resourcesBuffer, StorageResources storageResources, PlayerReal player)
         {
-            long playerMoney = player.Ballance;
-
-            foreach (var item in receipeListNeeded)
+            foreach (var item in resourcesBuffer)
             {
                 if (item.Key == "Money")
                 {
@@ -49,12 +37,31 @@ namespace Tycoonia.Application.Factory
                 }
                 else
                 {
-                    throw new Exception("No meaning");
+                    throw new StorageException("ERR bufferCalculation");
                 }
             }
         }
 
-        public static int EnergySubtraction(EnergyStorage energyStorage, decimal energyNeeded)
+        public static void ResourcesSubtraction(Dictionary<string, int> resorcesBuffer, Dictionary<string, byte> receipeListNeeded, PlayerReal player)
+        {
+            foreach (var item in receipeListNeeded)
+            {
+                if (item.Key == "Money")
+                {
+                    resorcesBuffer[item.Key] -= item.Value;
+                }
+                else if (resorcesBuffer[item.Key] >= item.Value)
+                {
+                    resorcesBuffer[item.Key] -= item.Value;
+                }
+                else
+                {
+                    throw new StorageException("ERR resourcesCalculation");
+                }
+            }
+        }
+
+        public static void EnergySubtraction(EnergyStorage energyStorage, decimal energyNeeded)
         {
             if (energyStorage.CurrentStorage >= energyNeeded)
             {
@@ -62,7 +69,7 @@ namespace Tycoonia.Application.Factory
             }
             else
             {
-                throw new StorageException();
+                throw new StorageException("ERR energyCalculation");
             }
         }
     }

@@ -8,7 +8,7 @@ namespace Tycoonia.Application.Factory
 {
     public class LaunchControleCenterFactory
     {
-        public static void LaunchFactory(FactoryBase factory, StorageResources storageResources, EnergyStorage energyStorage, PlayerReal player)
+        public static bool PreparationLaunchFactory(FactoryBase factory, StorageResources storageResources, EnergyStorage energyStorage, PlayerReal player)
         {
             try
             {
@@ -16,46 +16,41 @@ namespace Tycoonia.Application.Factory
                 
                 Dictionary<string, int> receipeListNeeded = CreateBufferCheck(factory, expectedOutput);
 
-                bool checkValues = CheckingValuesForFactory(storageResources, energyStorage, receipeListNeeded, factory.EnergyConsumption, player, expectedOutput);
+                bool checkValues = CheckingValuesForFactory(factory, storageResources, energyStorage, player);
                 if (!checkValues)
                 {
-                    throw new StorageException("Not enough resources for production");
+                    throw new StorageException();
                 }
-                factory.WorkFlag = true;
-
+                return true;
             }
             catch
             {
                 // Log exception
                 factory.ResourceBuffer.Clear();
-                factory.WorkFlag = false;
+                return false;
             }
         }
 
-        public static Dictionary<string, int> CreateBufferCheck(FactoryBase factory, int expectedOutput, StorageResources storageResources)
+        public static Dictionary<string, int> CreateBufferCheck(FactoryBase factory, int expectedOutput)
         {
             foreach (var item in factory.ReceipeList)
             {
                 factory.ResourceBuffer.Add(item.Key, item.Value*expectedOutput);
             }
-            foreach(var item in factory.ResourceBuffer)
-            {
-
-            }
             return factory.ResourceBuffer;
         }
 
-        public static bool CheckingValuesForFactory(StorageResources storageResources, EnergyStorage energyStorage, Dictionary<string, int> receipeListNeeded, decimal energyNeeded, PlayerReal player, int expectedOutput)
+        public static bool CheckingValuesForFactory(FactoryBase factory, StorageResources storageResources, EnergyStorage energyStorage, PlayerReal player)
         {
-            bool checkResources = ReservationBool.ResourcesReservation(storageResources, receipeListNeeded, player);
-            bool checkEnergy = ReservationBool.EnergyReservation(energyStorage, energyNeeded);
+            bool checkResources = ReservationBool.ResourcesReservation(factory.ResourceBuffer, storageResources, player);
+            bool checkEnergy = ReservationBool.EnergyReservation(factory.EnergyConsumption, energyStorage);
             if (checkResources && checkEnergy)
             {
                 return true;
             }
             else
             {
-                throw new Exception("Not enough energy/resources in storage.");
+                throw new StorageException();
             }
         }
 
@@ -63,7 +58,5 @@ namespace Tycoonia.Application.Factory
         {
 
         }
-
-
     }
 }

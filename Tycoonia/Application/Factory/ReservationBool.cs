@@ -6,10 +6,10 @@ namespace Tycoonia.Application.Factory
 {
     public class ReservationBool
     {
-        public static bool ResourcesReservation(StorageResources storageResources, Dictionary<string, byte> receipeListNeeded, PlayerReal player)
+        public static bool ResourcesReservation(Dictionary<string, int> resourcesBuffer, StorageResources storageResources, PlayerReal player)
         {
             bool checkValue = false;
-            foreach (var item in receipeListNeeded)
+            foreach (var item in resourcesBuffer)
             {
                 if (item.Key == "Money" && player.Ballance >= item.Value)
                 {
@@ -27,9 +27,9 @@ namespace Tycoonia.Application.Factory
             return checkValue;
         }
 
-        public static bool EnergyReservation(EnergyStorage energyStorage, decimal energyNeeded)
+        public static bool EnergyReservation(decimal energyConsumption, EnergyStorage energyStorage)
         {
-            if (energyStorage.CurrentStorage >= energyNeeded)
+            if (energyStorage.CurrentStorage >= energyConsumption)
             {
                 return true;
             }

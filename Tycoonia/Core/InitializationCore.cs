@@ -1,6 +1,6 @@
 ﻿namespace Tycoonia.Core
 {
-    internal class Program
+    public class InitializationCore
     {
         static void Main()
         {

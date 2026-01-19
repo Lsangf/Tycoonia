@@ -6,11 +6,11 @@ namespace Tycoonia.Application.Factory
 {
     public class SaveInStorage
     {
-        public static void Save(StorageResources storageResources, FactoryBase factory, int fabrication)
+        public static void Save(StorageResources storageResources, FactoryBase factory)
         {
             if (storageResources.Storage.ContainsKey(factory.ProductionItem))
             {
-                storageResources.Storage[factory.ProductionItem] += fabrication;
+                storageResources.Storage[factory.ProductionItem] += factory.ProductionRate;
             }
             else
             {
