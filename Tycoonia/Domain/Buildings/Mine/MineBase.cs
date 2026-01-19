@@ -10,6 +10,8 @@
         private byte _state;
         private (int, int) _position;
         private string _productionItem;
+        private bool _workFlag;
+        private bool _cancelFlag;
 
         public string Name
         {
@@ -51,6 +53,16 @@
             get => _productionItem;
             set => _productionItem = value;
         }
+        public bool WorkFlag
+        {
+            get => _workFlag;
+            set => _workFlag = value;
+        }
+        public bool CancelFlag
+        {
+            get => _cancelFlag;
+            set => _cancelFlag = value;
+        }
 
         public MineBase((int, int) position)
         {
@@ -58,6 +70,8 @@
             CanUpgrade = false;
             State = 100;
             Position = position;
+            WorkFlag = false;
+            CancelFlag = false;
         }
     }
 }

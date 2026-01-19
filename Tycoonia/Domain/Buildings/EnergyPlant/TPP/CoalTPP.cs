@@ -16,7 +16,12 @@
             {
                 { "Coal", 10 }
             };
-            ProductionItem = "Energy";
+            ProductionItemList = new Dictionary<string, short>
+            {
+                {"Energy", 5}
+            };
+                
+            
         }
     }
 }
