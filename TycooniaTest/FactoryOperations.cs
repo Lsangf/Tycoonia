@@ -16,13 +16,16 @@ namespace TycooniaTest
             FactoryBase factoryBricks = new FactoryBricks();
             List<FactoryBase> factories = [factoryBricks];
             EnergyStorage energyStorage = new();
-            PlayerReal player = new("player1", 10000);
+            long startBallance = 10000;
+            PlayerReal player = new("player1", startBallance);
 
 
             ProductionCalculation.ProductionCalculationFactory(storageResources, factories, energyStorage, player);
             long resultFactoryFabrication = storageResources.Storage[factories[0].ProductionItem];
             decimal resultEnergyStorage = energyStorage.CurrentStorage;
+            long resultBallance = player.Ballance;
 
+            Assert.NotEqual(startBallance, resultBallance);
             Assert.NotEqual(storageResources, storageResources1);
             Assert.Equal(1, resultFactoryFabrication);
             Assert.Equal(49999.5m, resultEnergyStorage);

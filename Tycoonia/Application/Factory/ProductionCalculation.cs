@@ -7,46 +7,50 @@ namespace Tycoonia.Application.Factory
 {
     public class ProductionCalculation
     {
-        public static void ProductionCalculationFactory(StorageResources storageResources, List<FactoryBase> factoryList, EnergyStorage energyStorage, PlayerReal player)
+        public static void ProductionCalculationFactory(StorageResources storageResources, FactoryBase factory, EnergyStorage energyStorage, PlayerReal player, int expectedOutput)
         {
             int fabrication;
             decimal energyNeeded;
             long playerMoney = player.Ballance;
-            Dictionary<string, byte> receipeListNeeded = [];
-
-            foreach (FactoryBase currentFactory in factoryList)
+            Dictionary<string, byte> receipeListNeeded = factory.ReceipeList;
+            int outputNeeded = expectedOutput;
+            factory.ResourceBuffer = [];
+            foreach (var el in receipeListNeeded)
             {
-                fabrication = currentFactory.ProductionRate;
+                ResourcesSubtraction(storageResources, receipeListNeeded, player);
+            }
 
-                energyNeeded = currentFactory.EnergyConsumption;
+                fabrication = factory.ProductionRate;
+
+                energyNeeded = factory.EnergyConsumption;
                 receipeListNeeded = currentFactory.ReceipeList;
 
-                ResourcesReservation(storageResources, receipeListNeeded, playerMoney);
+                
                 EnergyReservation(energyStorage, energyNeeded);
                 SaveExtractionMine(storageResources, currentFactory, fabrication);
-            }
         }
-
-        public static void ResourcesReservation(StorageResources storageResources, Dictionary<string, byte> receipeListNeeded, long playerMoney)
+        public static int ResourcesSubtraction(StorageResources storageResources, Dictionary<string, byte> receipeListNeeded, PlayerReal player)
         {
+            long playerMoney = player.Ballance;
+
             foreach (var item in receipeListNeeded)
             {
-                if (item.Key == "Money" && playerMoney >= item.Value)
+                if (item.Key == "Money")
                 {
-                    playerMoney -= (long)item.Value;
+                    player.Ballance -= (long)item.Value;
                 }
-                else if (storageResources.Storage[item.Key] >= item.Value && item.Key != "Money")
+                else if (storageResources.Storage[item.Key] >= item.Value)
                 {
                     storageResources.Storage[item.Key] -= item.Value;
                 }
                 else
                 {
-                    throw new Exception("Not enough resources in storage.");
+                    throw new Exception("No meaning");
                 }
             }
         }
 
-        public static void EnergyReservation(EnergyStorage energyStorage, decimal energyNeeded)
+        public static int EnergySubtraction(EnergyStorage energyStorage, decimal energyNeeded)
         {
             if (energyStorage.CurrentStorage >= energyNeeded)
             {
@@ -57,22 +61,5 @@ namespace Tycoonia.Application.Factory
                 throw new Exception("Not enough energy in storage.");
             }
         }
-
-        public static void SaveExtractionMine(StorageResources storageResources, FactoryBase currentFactory, int fabrication)
-        {
-            if (storageResources.Storage.ContainsKey(currentFactory.ProductionItem))
-            {
-                storageResources.Storage[currentFactory.ProductionItem] += fabrication;
-            }
-            else
-            {
-                throw new Exception("Resource type not found in storage.");
-            }
-        }
-
-
-
-
-
     }
 }
