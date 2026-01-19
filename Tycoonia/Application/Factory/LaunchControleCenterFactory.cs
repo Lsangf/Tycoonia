@@ -8,7 +8,7 @@ namespace Tycoonia.Application.Factory
 {
     public class LaunchControleCenterFactory
     {
-        public static bool PreparationLaunchFactory(FactoryBase factory, StorageResources storageResources, EnergyStorage energyStorage, PlayerReal player)
+        public static bool PreparationLaunchFactory(FactoryBase factory, StorageResources storageResources, EnergyStorage energyStorage, PlayerReal player/*,  int expectedOutput*/)
         {
             try
             {
@@ -54,9 +54,20 @@ namespace Tycoonia.Application.Factory
             }
         }
 
-        public static void StopFactory()
+        public static void StopFactory(FactoryBase factory, StorageResources storageResources)
         {
-
+            foreach (var item in factory.ResourceBuffer)
+            {
+                if (storageResources.Storage.ContainsKey(item.Key))
+                {
+                    storageResources.Storage[item.Key] += item.Value;
+                }
+                else
+                {
+                    throw new StorageException();
+                }
+            }
+            factory.ResourceBuffer.Clear();
         }
     }
 }
