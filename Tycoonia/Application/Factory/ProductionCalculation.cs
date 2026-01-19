@@ -1,4 +1,5 @@
-﻿using Tycoonia.Domain.Buildings.EnergyPlant.Storage;
+﻿using Tycoonia.Application.ApplicationExceptions;
+using Tycoonia.Domain.Buildings.EnergyPlant.Storage;
 using Tycoonia.Domain.Buildings.Factory;
 using Tycoonia.Domain.Player;
 using Tycoonia.Domain.Resources.Storage;
@@ -7,28 +8,31 @@ namespace Tycoonia.Application.Factory
 {
     public class ProductionCalculation
     {
-        public static void ProductionCalculationFactory(StorageResources storageResources, FactoryBase factory, EnergyStorage energyStorage, PlayerReal player, int expectedOutput)
+        public static void ProductionCalculationFactory(StorageResources storageResources, FactoryBase factory, EnergyStorage energyStorage, PlayerReal player)
         {
             int fabrication;
             decimal energyNeeded;
             long playerMoney = player.Ballance;
             Dictionary<string, byte> receipeListNeeded = factory.ReceipeList;
-            int outputNeeded = expectedOutput;
-            factory.ResourceBuffer = [];
+            //factory.ResourceBuffer = [];
+
             foreach (var el in receipeListNeeded)
             {
                 ResourcesSubtraction(storageResources, receipeListNeeded, player);
             }
 
-                fabrication = factory.ProductionRate;
+            fabrication = factory.ProductionRate;
 
-                energyNeeded = factory.EnergyConsumption;
-                receipeListNeeded = currentFactory.ReceipeList;
+            energyNeeded = factory.EnergyConsumption;
+            receipeListNeeded = currentFactory.ReceipeList;
 
-                
-                EnergyReservation(energyStorage, energyNeeded);
-                SaveExtractionMine(storageResources, currentFactory, fabrication);
+
+            EnergyReservation(energyStorage, energyNeeded);
+            SaveExtractionMine(storageResources, currentFactory, fabrication);
         }
+
+        
+
         public static int ResourcesSubtraction(StorageResources storageResources, Dictionary<string, byte> receipeListNeeded, PlayerReal player)
         {
             long playerMoney = player.Ballance;
@@ -58,7 +62,7 @@ namespace Tycoonia.Application.Factory
             }
             else
             {
-                throw new Exception("Not enough energy in storage.");
+                throw new StorageException();
             }
         }
     }

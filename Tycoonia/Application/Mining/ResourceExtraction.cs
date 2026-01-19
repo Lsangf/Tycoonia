@@ -1,4 +1,5 @@
-﻿using Tycoonia.Domain.Buildings.EnergyPlant.Storage;
+﻿using Tycoonia.Application.ApplicationExceptions;
+using Tycoonia.Domain.Buildings.EnergyPlant.Storage;
 using Tycoonia.Domain.Buildings.Mine;
 using Tycoonia.Domain.Resources.Storage;
 
@@ -28,7 +29,7 @@ namespace Tycoonia.Application.Mining
             }
             else
             {
-                throw new Exception("Not enough energy in storage.");
+                throw new StorageException();
             }
         }
 
@@ -40,7 +41,7 @@ namespace Tycoonia.Application.Mining
             }
             else
             {
-                throw new Exception("Resource type not found in storage.");
+                throw new StorageException();
             }
         }
     }

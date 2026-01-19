@@ -1,4 +1,5 @@
-﻿using Tycoonia.Domain.Buildings.Factory;
+﻿using Tycoonia.Application.ApplicationExceptions;
+using Tycoonia.Domain.Buildings.Factory;
 using Tycoonia.Domain.Resources.Storage;
 
 namespace Tycoonia.Application.Factory
@@ -13,7 +14,7 @@ namespace Tycoonia.Application.Factory
             }
             else
             {
-                throw new Exception("Resource type not found in storage.");
+                throw new StorageException();
             }
         }
     }
