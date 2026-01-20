@@ -15,8 +15,6 @@
     <Folder Include="Domain\NPC\" />
     <Folder Include="Domain\DomainExceptions\" />
     <Folder Include="Infrastructure\SQL\" />
-    <Folder Include="Presentation\UI\" />
-    <Folder Include="Presentation\" />
   </ItemGroup>
 
 </Project>

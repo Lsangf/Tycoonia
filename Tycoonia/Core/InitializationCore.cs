@@ -39,7 +39,7 @@ namespace Tycoonia.Core
                 factoryBricks
             ];
 
-            List<EnergyPlantBase> energyPlantBases =
+            List<EnergyPlantBase> energyPlants =
             [
                 coalTPP
             ];
@@ -48,7 +48,7 @@ namespace Tycoonia.Core
             GameLoop.StartGameLoop(
                 player, 
                 clay, coal, bricks, energy, 
-                factories, energyPlantBases,
+                factories, energyPlants,
                 storageResources, energyStorage);
         }
 
