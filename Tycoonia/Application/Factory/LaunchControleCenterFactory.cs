@@ -54,11 +54,15 @@ namespace Tycoonia.Application.Factory
             }
         }
 
-        public static void StopFactory(FactoryBase factory, StorageResources storageResources)
+        public static void StopFactory(FactoryBase factory, StorageResources storageResources, PlayerReal player)
         {
             foreach (var item in factory.ResourceBuffer)
             {
-                if (storageResources.Storage.ContainsKey(item.Key))
+                if (item.Key == "Money")
+                {
+                    player.Ballance += item.Value;
+                }
+                else if (storageResources.Storage.ContainsKey(item.Key))
                 {
                     storageResources.Storage[item.Key] += item.Value;
                 }

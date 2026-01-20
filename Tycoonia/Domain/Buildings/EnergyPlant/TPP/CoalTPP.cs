@@ -16,9 +16,9 @@
             {
                 { "Coal", 10 }
             };
-            ProductionItemList = new Dictionary<string, short>
+            ProductionItemList = new Dictionary<string, int>
             {
-                {"Energy", 5}
+                {"Energy", ProductionRate}
             };
                 
             
