@@ -14,7 +14,7 @@ namespace Tycoonia.Application.Factory
             {
                 int expectedOutput = 1;
                 
-                Dictionary<string, int> receipeListNeeded = CreateBufferCheck(factory, expectedOutput);
+                Dictionary<string, int> receipeListNeeded = CreateBufferCheck(factory, storageResources, player, expectedOutput);
 
                 bool checkValues = CheckingValuesForFactory(factory, storageResources, energyStorage, player);
                 if (!checkValues)
@@ -31,13 +31,33 @@ namespace Tycoonia.Application.Factory
             }
         }
 
-        public static Dictionary<string, int> CreateBufferCheck(FactoryBase factory, int expectedOutput)
+        public static Dictionary<string, int> CreateBufferCheck(FactoryBase factory, StorageResources storageResources, PlayerReal player,  int expectedOutput)
         {
             foreach (var item in factory.ReceipeList)
             {
                 factory.ResourceBuffer.Add(item.Key, item.Value*expectedOutput);
             }
+            BufferSubtraction(factory, storageResources, player);
             return factory.ResourceBuffer;
+        }
+
+        public static void BufferSubtraction(FactoryBase factory, StorageResources storageResources, PlayerReal player)
+        {
+            foreach (var item in factory.ResourceBuffer)
+            {
+                if (item.Key == "Money")
+                {
+                    player.Ballance -= (long)item.Value;
+                }
+                else if (storageResources.Storage[item.Key] >= item.Value)
+                {
+                    storageResources.Storage[item.Key] -= item.Value;
+                }
+                else
+                {
+                    throw new StorageException("ERR bufferCalculation");
+                }
+            }
         }
 
         public static bool CheckingValuesForFactory(FactoryBase factory, StorageResources storageResources, EnergyStorage energyStorage, PlayerReal player)
