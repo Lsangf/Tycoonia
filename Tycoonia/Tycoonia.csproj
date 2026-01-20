@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <Folder Include="Application\Market\" />
-    <Folder Include="Application\Energy\" />
     <Folder Include="Application\Map\" />
     <Folder Include="Domain\Buildings\EnergyPlant\NPP\" />
     <Folder Include="Domain\Map\" />

@@ -1,4 +1,5 @@
-﻿using Tycoonia.Domain.Buildings.EnergyPlant.Storage;
+﻿using Tycoonia.Domain.Buildings.EnergyPlant;
+using Tycoonia.Domain.Buildings.EnergyPlant.Storage;
 using Tycoonia.Domain.Buildings.EnergyPlant.TPP;
 using Tycoonia.Domain.Buildings.Factory;
 using Tycoonia.Domain.Player;
@@ -28,15 +29,27 @@ namespace Tycoonia.Core
             CoalTPP coalTPP = new();
 
             // storage
-            StorageResources storage = new();
+            StorageResources storageResources = new();
             EnergyStorage energyStorage = new();
 
             // gameloop
+
+            List<FactoryBase> factories =
+            [
+                factoryBricks
+            ];
+
+            List<EnergyPlantBase> energyPlantBases =
+            [
+                coalTPP
+            ];
+
+
             GameLoop.StartGameLoop(
                 player, 
                 clay, coal, bricks, energy, 
-                factoryBricks, coalTPP, 
-                storage, energyStorage);
+                factories, energyPlantBases,
+                storageResources, energyStorage);
         }
 
         public static PlayerReal CreatePlayer()
