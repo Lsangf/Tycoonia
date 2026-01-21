@@ -30,7 +30,7 @@ namespace TycooniaTest
         // "//(line number)" to check exact values ​​without comparing correctness
 
         [Fact]
-        public void FactoryCorrectPreparationBufferSubtractionStorage()
+        public void CorrectPreparationBufferAndSubtractionStorage()
         {
             LaunchControleCenterFactory.CreateBufferCheck(factoryBricks, storageResources, player, 1);
             Dictionary<string, long> resultStorageResorces = storageResources.Storage;
@@ -49,7 +49,7 @@ namespace TycooniaTest
         }
 
         [Fact]
-        public void FactoryCorrectPreparationLaunch()
+        public void CorrectPreparationLaunch()
         {
             LaunchControleCenterFactory.PreparationLaunchFactory(factoryBricks, storageResources, energyStorage, player);
             bool resultFactoryWorkFlag = factoryBricks.WorkFlag;
@@ -58,7 +58,7 @@ namespace TycooniaTest
         }
 
         [Fact]
-        public void FactoryCorrectProductYield()
+        public void CorrectProductYield()
         {
             LaunchControleCenterFactory.PreparationLaunchFactory(factoryBricks, storageResources, energyStorage, player);
             int resultRate = ProductionCalculation.ProductionCalculationFactory(storageResources, factoryBricks, energyStorage, player);
@@ -77,6 +77,26 @@ namespace TycooniaTest
             Assert.Equal(1, resultFactoryFabrication);
 
             Assert.Equal(49999.5m, resultEnergyStorage);
+        }
+
+        [Fact]
+        public void CorrectStopFactoryAndReturnInStorage()
+        {
+            LaunchControleCenterFactory.PreparationLaunchFactory(factoryBricks, storageResources, energyStorage, player);
+            int resultRate = ProductionCalculation.ProductionCalculationFactory(storageResources, factoryBricks, energyStorage, player);
+            LaunchControleCenterFactory.StopFactory(factoryBricks, storageResources, player);
+            Dictionary<string, long> resultStorageResorces = storageResources.Storage;
+            long resultPlayerBallance = player.Ballance;
+            Dictionary<string, int> resultFactoryResourceBuffer = factoryBricks.ResourceBuffer;
+
+            Assert.Equal([], resultFactoryResourceBuffer);
+
+            // 94 Assert.Equal(startStorageResources, resultStorageResorces);
+            Assert.NotEqual(startStorageResources, resultStorageResorces);
+
+            // 97 Assert.Equal(startBallance, resultPlayerBallance);
+            Assert.NotEqual(startBallance, resultPlayerBallance);
+
         }
     }
 }
