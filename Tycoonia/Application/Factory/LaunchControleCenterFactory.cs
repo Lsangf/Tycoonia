@@ -33,7 +33,7 @@ namespace Tycoonia.Application.Factory
             }
         }
 
-        public static Dictionary<string, int> CreateBufferCheck(FactoryBase factory, StorageResources storageResources, PlayerReal player,  int expectedOutput)
+        public static Dictionary<string, long> CreateBufferCheck(FactoryBase factory, StorageResources storageResources, PlayerReal player,  int expectedOutput)
         {
             foreach (var item in factory.ReceipeList)
             {

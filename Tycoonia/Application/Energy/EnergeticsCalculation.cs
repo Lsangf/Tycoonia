@@ -1,27 +1,26 @@
 ﻿using Tycoonia.Application.ApplicationExceptions;
+using Tycoonia.Domain.Buildings.EnergyPlant;
 using Tycoonia.Domain.Buildings.EnergyPlant.Storage;
-using Tycoonia.Domain.Buildings.Factory;
 using Tycoonia.Domain.Resources.Storage;
 
-namespace Tycoonia.Application.Factory
+namespace Tycoonia.Application.Energy
 {
-    public class ProductionCalculation
+    public class EnergeticsCalculation
     {
-        public static int ProductionCalculationFactory(StorageResources storageResources, FactoryBase factory, EnergyStorage energyStorage)
+        public static Dictionary<string, int> EnergeticsCalculationEnergyPlant(StorageResources storageResources, EnergyPlantBase energyPlant, EnergyStorage energyStorage)
         {
-            // long playerMoney = player.Ballance; // for the transaction
-            decimal energyNeeded = factory.EnergyConsumption;
-            Dictionary<string, byte> receipeListNeeded = factory.ReceipeList;
-            Dictionary<string, long> resorcesBuffer = factory.ResourceBuffer;
-            
+            decimal energyNeeded = energyPlant.EnergyConsumption;
+            Dictionary<string, short> receipeListNeeded = energyPlant.ReceipeList;
+            Dictionary<string, long> resorcesBuffer = energyPlant.ResourceBuffer;
+
             ResourcesSubtraction(resorcesBuffer, receipeListNeeded);
             EnergySubtraction(energyStorage, energyNeeded);
-            SaveInStorage.Save(storageResources, factory);
+            SaveInStorageEnergy.Save(storageResources, energyPlant);
 
-            return factory.ProductionRate;
+            return energyPlant.ProductionItemList;
         }
 
-        public static void ResourcesSubtraction(Dictionary<string, long> resorcesBuffer, Dictionary<string, byte> receipeListNeeded)
+        public static void ResourcesSubtraction(Dictionary<string, long> resorcesBuffer, Dictionary<string, short> receipeListNeeded)
         {
             foreach (var item in receipeListNeeded)
             {

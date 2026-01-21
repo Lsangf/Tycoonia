@@ -10,8 +10,8 @@
         private decimal energyConsumption;
         private int _productionTime;
         private Dictionary<string, byte> _receipeList = [];
-        private Dictionary<string, int> _resourceBuffer = [];
-        private string _productionItem;
+        private Dictionary<string, long> _resourceBuffer = [];
+        private Dictionary<string, int> _productionItemList = [];
         private bool _workFlag;
         private bool _cancelFlag;
 
@@ -55,16 +55,16 @@
             get => _receipeList;
             set => _receipeList = value;
         }
-        public Dictionary<string, int> ResourceBuffer
+        public Dictionary<string, long> ResourceBuffer
         {
             get => _resourceBuffer;
             set => _resourceBuffer = value;
         }
-        public string ProductionItem
+        public Dictionary<string, int> ProductionItemList
         {
-            get => _productionItem;
-            set => _productionItem = value;
-        }
+            get => _productionItemList;
+            set => _productionItemList = value;
+        } 
         public bool WorkFlag
         {
             get => _workFlag;

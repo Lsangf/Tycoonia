@@ -10,6 +10,7 @@
         private int _productionTime;
         private int energyConsumption;
         private Dictionary<string, short> _receipeList = [];
+        private Dictionary<string, long> _resourceBuffer = [];
         private Dictionary<string, int> _productionItemList = [];
         private bool _workFlag;
 
@@ -52,6 +53,11 @@
         {
             get => _receipeList;
             set => _receipeList = value;
+        }
+        public Dictionary<string, long> ResourceBuffer
+        {
+            get => _resourceBuffer;
+            set => _resourceBuffer = value;
         }
         public Dictionary<string, int> ProductionItemList
         {

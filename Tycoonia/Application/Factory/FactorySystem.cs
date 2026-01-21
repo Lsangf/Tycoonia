@@ -9,7 +9,7 @@ namespace Tycoonia.Application.Factory
     {
         public static int UpdateFactoryCalculations(StorageResources storageResources, FactoryBase factory, EnergyStorage energyStorage, PlayerReal player, int expectedOutput)
         {
-            int result = ProductionCalculation.ProductionCalculationFactory(storageResources, factory, energyStorage, player);
+            int result = ProductionCalculation.ProductionCalculationFactory(storageResources, factory, energyStorage);
             return result;
         }
     }

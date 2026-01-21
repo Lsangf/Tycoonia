@@ -1,14 +1,14 @@
 ﻿using Tycoonia.Application.ApplicationExceptions;
-using Tycoonia.Domain.Buildings.Factory;
+using Tycoonia.Domain.Buildings.EnergyPlant;
 using Tycoonia.Domain.Resources.Storage;
 
-namespace Tycoonia.Application.Factory
+namespace Tycoonia.Application.Energy
 {
-    public class SaveInStorage
+    public class SaveInStorageEnergy
     {
-        public static void Save(StorageResources storageResources, FactoryBase factory)
+        public static void Save(StorageResources storageResources, EnergyPlantBase energyPlant)
         {
-            foreach (var item in factory.ProductionItemList)
+            foreach (var item in energyPlant.ProductionItemList)
             {
                 if (storageResources.Storage.ContainsKey(item.Key))
                 {

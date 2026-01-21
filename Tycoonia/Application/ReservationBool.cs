@@ -2,11 +2,11 @@
 using Tycoonia.Domain.Player;
 using Tycoonia.Domain.Resources.Storage;
 
-namespace Tycoonia.Application.Factory
+namespace Tycoonia.Application
 {
     public class ReservationBool
     {
-        public static bool ResourcesReservation(Dictionary<string, int> resourcesBuffer, StorageResources storageResources, PlayerReal player)
+        public static bool ResourcesReservation(Dictionary<string, long> resourcesBuffer, StorageResources storageResources, PlayerReal player)
         {
             bool checkValue = false;
             foreach (var item in resourcesBuffer)
