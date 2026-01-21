@@ -6,6 +6,7 @@ namespace Tycoonia.Presentation.UI
     {
         public static void ShowMineInfo(MineBase mine)
         {
+            Console.WriteLine("------------------------------------------------");
             Console.WriteLine($"Name:               {mine.Name}");
             Console.WriteLine($"LVL:                {mine.Level}");
             Console.WriteLine($"Can Upgrade:        {mine.CanUpgrade}");

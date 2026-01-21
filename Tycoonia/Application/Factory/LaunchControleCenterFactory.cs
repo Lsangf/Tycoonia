@@ -8,26 +8,28 @@ namespace Tycoonia.Application.Factory
 {
     public class LaunchControleCenterFactory
     {
-        public static bool PreparationLaunchFactory(FactoryBase factory, StorageResources storageResources, EnergyStorage energyStorage, PlayerReal player/*,  int expectedOutput*/)
+        public static void PreparationLaunchFactory(FactoryBase factory, StorageResources storageResources, EnergyStorage energyStorage, PlayerReal player/*,  int expectedOutput*/)
         {
             try
             {
                 int expectedOutput = 1;
-                
-                Dictionary<string, int> receipeListNeeded = CreateBufferCheck(factory, storageResources, player, expectedOutput);
+                CreateBufferCheck(factory, storageResources, player, expectedOutput);
 
                 bool checkValues = CheckingValuesForFactory(factory, storageResources, energyStorage, player);
                 if (!checkValues)
                 {
                     throw new StorageException();
                 }
-                return true;
+                else
+                {
+                    factory.WorkFlag = true;
+                }
             }
             catch
             {
                 // Log exception
                 factory.ResourceBuffer.Clear();
-                return false;
+                factory.WorkFlag = false;
             }
         }
 
