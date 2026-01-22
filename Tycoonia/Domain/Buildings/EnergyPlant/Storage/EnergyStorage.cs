@@ -2,21 +2,31 @@
 {
     public class EnergyStorage
     {
-        private decimal _capacity;
+        private decimal _maxCapacity;
         private decimal _currentStorage;
-        public decimal Capacity
+        private Dictionary<string, long> _receipeUpgradeList = new()
         {
-            get => _capacity;
-            set => _capacity = value;
+            {"?", 1000 } 
+        };
+        public decimal MaxCapacity
+        {
+            get => _maxCapacity;
+            set => _maxCapacity = value;
         }
         public decimal CurrentStorage
         {
             get => _currentStorage;
             set => _currentStorage = value;
         }
+        public Dictionary<string, long> ReceipeUpgradeList
+        {
+            get => _receipeUpgradeList;
+            set => _receipeUpgradeList = value;
+        }
+
         public EnergyStorage()
         {
-            Capacity = 100000m;
+            MaxCapacity = 100000m;
             CurrentStorage = 50000m;
         }
 
