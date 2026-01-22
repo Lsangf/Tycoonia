@@ -17,7 +17,7 @@ namespace TycooniaTest
 
 
             ResourceExtraction.ResourceExtractionMine(storageResources, mines, energyStorage);
-            long resultMiningClay = storageResources.Storage[mines[0].ProductionItem];
+            long resultMiningClay = storageResources.StorageList[mines[0].ProductionItem];
             decimal resultEnergyStorage = energyStorage.CurrentStorage;
 
             Assert.Equal(15, resultMiningClay);

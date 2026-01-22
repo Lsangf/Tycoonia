@@ -51,9 +51,9 @@ namespace Tycoonia.Application.Factory
                 {
                     player.Ballance -= (long)item.Value;
                 }
-                else if (storageResources.Storage[item.Key] >= item.Value)
+                else if (storageResources.StorageList[item.Key] >= item.Value)
                 {
-                    storageResources.Storage[item.Key] -= item.Value;
+                    storageResources.StorageList[item.Key] -= item.Value;
                 }
                 else
                 {
@@ -84,9 +84,9 @@ namespace Tycoonia.Application.Factory
                 {
                     player.Ballance += item.Value;
                 }
-                else if (storageResources.Storage.ContainsKey(item.Key))
+                else if (storageResources.StorageList.ContainsKey(item.Key))
                 {
-                    storageResources.Storage[item.Key] += item.Value;
+                    storageResources.StorageList[item.Key] += item.Value;
                 }
                 else
                 {

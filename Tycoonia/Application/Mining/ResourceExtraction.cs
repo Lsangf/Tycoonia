@@ -30,9 +30,9 @@ namespace Tycoonia.Application.Mining
 
         public static void SaveExtractionMine(StorageResources storageResources, MineBase currentMine)
         {
-            if (storageResources.Storage.ContainsKey(currentMine.ProductionItem))
+            if (storageResources.StorageList.ContainsKey(currentMine.ProductionItem))
             {
-                storageResources.Storage[currentMine.ProductionItem] += currentMine.ProductionRate;
+                storageResources.StorageList[currentMine.ProductionItem] += currentMine.ProductionRate;
             }
             else
             {

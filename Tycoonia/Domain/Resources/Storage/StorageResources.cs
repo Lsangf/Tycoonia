@@ -1,25 +1,66 @@
-﻿namespace Tycoonia.Domain.Resources.Storage
+﻿using Tycoonia.Application.Storage;
+
+namespace Tycoonia.Domain.Resources.Storage
 {
     public class StorageResources
     {
-        private long _capacity;
-        private Dictionary<string, long> _storage = new() 
-        {
-            { "Clay", 10 },
-            { "Coal", 5 },
-            { "Uranium", 10 },
-            { "Bricks", 0 }
-        };
+        private Dictionary<string, StorageResourcesBase> _storageList = [];
 
-        public long Capacity
+        public Dictionary<string, StorageResourcesBase> StorageList
         {
-            get => _capacity;
-            set => _capacity = value;
+            get => _storageList;
+            set => _storageList = value;
         }
-        public Dictionary<string, long> Storage
+
+        public StorageResources()
         {
-            get => _storage;
-            set => _storage = value;
+            StorageList["Clay"] = new StorageResourcesBase
+            {
+                CurrentQuantity = 10,
+                MaxCapacity = 100,
+                UpgradeCost = 10
+            };
+            StorageList["Coal"] = new StorageResourcesBase
+            {
+                CurrentQuantity = 10,
+                MaxCapacity = 100,
+                UpgradeCost = 10
+            };
+            StorageList["Uranium"] = new StorageResourcesBase
+            {
+                CurrentQuantity = 10,
+                MaxCapacity = 100,
+                UpgradeCost = 10
+            };
+            StorageList["Bricks"] = new StorageResourcesBase
+            {
+                CurrentQuantity = 0,
+                MaxCapacity = 100,
+                UpgradeCost = 10
+            };
         }
+
+        //    { "Clay", 10 },
+        //    { "Coal", 5 },
+        //    { "Uranium", 10 },
+        //    { "Bricks", 0 }
+
+        //StorageList = new Dictionary<string, Dictionary<string, long>>()
+        //{
+        //    {"Clay", new Dictionary<string, long>
+        //        {
+        //            {"Current quantity", 10 },
+        //            {"Maximum Capacity", 100},
+        //            {"Cost upgrade", 10 }
+        //        }
+        //},
+        //    {"Coal", new Dictionary<string, long>
+        //        {
+        //            {"Current quantity", 10 },
+        //            {"Maximum Capacity", 100},
+        //            {"Cost upgrade", 10 }
+        //        }
+        //}
+        //};
     }
 }

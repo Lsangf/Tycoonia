@@ -24,11 +24,7 @@ namespace Tycoonia.Application.Energy
         {
             foreach (var item in receipeListNeeded)
             {
-                if (item.Key == "Money")
-                {
-                    resorcesBuffer[item.Key] -= item.Value;
-                }
-                else if (resorcesBuffer[item.Key] >= item.Value)
+                if (resorcesBuffer[item.Key] >= item.Value)
                 {
                     resorcesBuffer[item.Key] -= item.Value;
                 }

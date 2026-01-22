@@ -19,7 +19,7 @@ namespace TycooniaTest
         public FactoryOperations()
         {
             storageResources = new StorageResources();
-            startStorageResources = new Dictionary<string, long>(storageResources.Storage);
+            startStorageResources = new Dictionary<string, long>(storageResources.StorageList);
             factoryBricks = new FactoryBricks();
             factories = [factoryBricks];
             energyStorage = new EnergyStorage();
@@ -33,7 +33,7 @@ namespace TycooniaTest
         public void CorrectPreparationBufferAndSubtractionStorage()
         {
             LaunchControleCenterFactory.CreateBufferCheck(factoryBricks, storageResources, player, 1);
-            Dictionary<string, long> resultStorageResorces = storageResources.Storage;
+            Dictionary<string, long> resultStorageResorces = storageResources.StorageList;
             long resultPlayerBallance = player.Ballance;
             Dictionary<string, int> resultFactoryResourceBuffer = factoryBricks.ResourceBuffer;
 
@@ -62,7 +62,7 @@ namespace TycooniaTest
         {
             LaunchControleCenterFactory.PreparationLaunchFactory(factoryBricks, storageResources, energyStorage, player);
             int resultRate = ProductionCalculation.ProductionCalculationFactory(storageResources, factoryBricks, energyStorage, player);
-            long resultFactoryFabrication = storageResources.Storage[factories[0].ProductionItem];
+            long resultFactoryFabrication = storageResources.StorageList[factories[0].ProductionItem];
             decimal resultEnergyStorage = energyStorage.CurrentStorage;
             long resultBallance = player.Ballance;
 
@@ -85,7 +85,7 @@ namespace TycooniaTest
             LaunchControleCenterFactory.PreparationLaunchFactory(factoryBricks, storageResources, energyStorage, player);
             int resultRate = ProductionCalculation.ProductionCalculationFactory(storageResources, factoryBricks, energyStorage, player);
             LaunchControleCenterFactory.StopFactory(factoryBricks, storageResources, player);
-            Dictionary<string, long> resultStorageResorces = storageResources.Storage;
+            Dictionary<string, long> resultStorageResorces = storageResources.StorageList;
             long resultPlayerBallance = player.Ballance;
             Dictionary<string, int> resultFactoryResourceBuffer = factoryBricks.ResourceBuffer;
 

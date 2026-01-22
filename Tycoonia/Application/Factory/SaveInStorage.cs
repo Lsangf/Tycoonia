@@ -10,9 +10,9 @@ namespace Tycoonia.Application.Factory
         {
             foreach (var item in factory.ProductionItemList)
             {
-                if (storageResources.Storage.ContainsKey(item.Key))
+                if (storageResources.StorageList.ContainsKey(item.Key))
                 {
-                    storageResources.Storage[item.Key] += item.Value;
+                    storageResources.StorageList[item.Key] += item.Value;
                 }
                 else
                 {

@@ -51,9 +51,9 @@ namespace Tycoonia.Application.Energy
                 {
                     player.Ballance -= (long)item.Value;
                 }
-                else if (storageResources.Storage[item.Key] >= item.Value)
+                else if (storageResources.StorageList[item.Key] >= item.Value)
                 {
-                    storageResources.Storage[item.Key] -= item.Value;
+                    storageResources.StorageList[item.Key] -= item.Value;
                 }
                 else
                 {
