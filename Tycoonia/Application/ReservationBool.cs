@@ -15,7 +15,7 @@ namespace Tycoonia.Application
                 {
                     checkValue = true;
                 }
-                else if (storageResources.StorageList[item.Key] >= item.Value)
+                else if (storageResources.StorageList[item.Key].CurrentQuantity >= item.Value)
                 {
                     checkValue = true;
                 }

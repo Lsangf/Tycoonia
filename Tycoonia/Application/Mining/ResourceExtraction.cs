@@ -32,7 +32,7 @@ namespace Tycoonia.Application.Mining
         {
             if (storageResources.StorageList.ContainsKey(currentMine.ProductionItem))
             {
-                storageResources.StorageList[currentMine.ProductionItem] += currentMine.ProductionRate;
+                storageResources.StorageList[currentMine.ProductionItem].CurrentQuantity += currentMine.ProductionRate;
             }
             else
             {

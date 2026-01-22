@@ -12,7 +12,7 @@ namespace Tycoonia.Application.Factory
             {
                 if (storageResources.StorageList.ContainsKey(item.Key))
                 {
-                    storageResources.StorageList[item.Key] += item.Value;
+                    storageResources.StorageList[item.Key].CurrentQuantity += item.Value;
                 }
                 else
                 {
