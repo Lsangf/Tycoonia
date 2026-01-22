@@ -39,28 +39,5 @@ namespace Tycoonia.Domain.Resources.Storage
                 UpgradeCost = 10
             };
         }
-
-        //    { "Clay", 10 },
-        //    { "Coal", 5 },
-        //    { "Uranium", 10 },
-        //    { "Bricks", 0 }
-
-        //StorageList = new Dictionary<string, Dictionary<string, long>>()
-        //{
-        //    {"Clay", new Dictionary<string, long>
-        //        {
-        //            {"Current quantity", 10 },
-        //            {"Maximum Capacity", 100},
-        //            {"Cost upgrade", 10 }
-        //        }
-        //},
-        //    {"Coal", new Dictionary<string, long>
-        //        {
-        //            {"Current quantity", 10 },
-        //            {"Maximum Capacity", 100},
-        //            {"Cost upgrade", 10 }
-        //        }
-        //}
-        //};
     }
 }

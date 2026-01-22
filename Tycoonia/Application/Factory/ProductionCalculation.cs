@@ -1,4 +1,5 @@
 ﻿using Tycoonia.Application.ApplicationExceptions;
+using Tycoonia.Application.Storage;
 using Tycoonia.Domain.Buildings.EnergyPlant.Storage;
 using Tycoonia.Domain.Buildings.Factory;
 using Tycoonia.Domain.Resources.Storage;
@@ -12,7 +13,7 @@ namespace Tycoonia.Application.Factory
             // long playerMoney = player.Ballance; // for the transaction
             decimal energyNeeded = factory.EnergyConsumption;
             Dictionary<string, byte> receipeListNeeded = factory.ReceipeList;
-            Dictionary<string, long> resorcesBuffer = factory.ResourceBuffer;
+            Dictionary<string, StorageResourcesBase> resorcesBuffer = factory.ResourceBuffer;
             
             ResourcesSubtraction(resorcesBuffer, receipeListNeeded);
             EnergySubtraction(energyStorage, energyNeeded);
@@ -21,13 +22,13 @@ namespace Tycoonia.Application.Factory
             return factory.ProductionRate;
         }
 
-        public static void ResourcesSubtraction(Dictionary<string, long> resorcesBuffer, Dictionary<string, byte> receipeListNeeded)
+        public static void ResourcesSubtraction(Dictionary<string, StorageResourcesBase> resorcesBuffer, Dictionary<string, byte> receipeListNeeded)
         {
             foreach (var item in receipeListNeeded)
             {
-                if (resorcesBuffer[item.Key] >= item.Value)
+                if (resorcesBuffer[item.Key].CurrentQuantity >= item.Value)
                 {
-                    resorcesBuffer[item.Key] -= item.Value;
+                    resorcesBuffer[item.Key].CurrentQuantity -= item.Value;
                 }
                 else
                 {

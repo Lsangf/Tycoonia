@@ -1,4 +1,5 @@
 ﻿using Tycoonia.Application.Factory;
+using Tycoonia.Application.Storage;
 using Tycoonia.Domain.Buildings.EnergyPlant.Storage;
 using Tycoonia.Domain.Buildings.Factory;
 using Tycoonia.Domain.Player;
@@ -9,17 +10,28 @@ namespace TycooniaTest
     public class FactoryOperations
     {
         private StorageResources storageResources;
-        private Dictionary<string, long> startStorageResources;
+        private Dictionary<string, StorageResourcesBase> startStorageResources;
         private FactoryBase factoryBricks;
         private List<FactoryBase> factories;
         private EnergyStorage energyStorage;
         private long startBallance;
         private PlayerReal player;
 
+        private long startClay;
+        private long startCoal;
+        private long startUranium;
+        private long startBricks;
+
         public FactoryOperations()
         {
             storageResources = new StorageResources();
-            startStorageResources = new Dictionary<string, long>(storageResources.StorageList);
+
+            startClay = storageResources.StorageList["Clay"].CurrentQuantity;
+            startCoal = storageResources.StorageList["Coal"].CurrentQuantity;
+            startUranium = storageResources.StorageList["Uranium"].CurrentQuantity;
+            startBricks = storageResources.StorageList["Bricks"].CurrentQuantity;
+
+            startStorageResources = new Dictionary<string, StorageResourcesBase>(storageResources.StorageList);
             factoryBricks = new FactoryBricks();
             factories = [factoryBricks];
             energyStorage = new EnergyStorage();
@@ -33,17 +45,26 @@ namespace TycooniaTest
         public void CorrectPreparationBufferAndSubtractionStorage()
         {
             LaunchControleCenterFactory.CreateBufferCheck(factoryBricks, storageResources, player, 1);
-            Dictionary<string, long> resultStorageResorces = storageResources.StorageList;
+            Dictionary<string, StorageResourcesBase> resultStorageResorces = storageResources.StorageList;
             long resultPlayerBallance = player.Ballance;
-            Dictionary<string, int> resultFactoryResourceBuffer = factoryBricks.ResourceBuffer;
+            Dictionary<string, StorageResourcesBase> resultFactoryResourceBuffer = factoryBricks.ResourceBuffer;
 
-            // 40 Assert.Null(resultFactoryResourceBuffer);
+            // 52 Assert.Null(resultFactoryResourceBuffer);
             Assert.NotNull(resultFactoryResourceBuffer);
 
-            // 43 Assert.Equal(startStorageResources, resultStorageResorces);
-            Assert.NotEqual(startStorageResources, resultStorageResorces);
+            // 55 Assert.Equal(startClay, resultStorageResorces["Clay"].CurrentQuantity);
+            Assert.NotEqual(startClay, resultStorageResorces["Clay"].CurrentQuantity);
 
-            // 46 Assert.Equal(startBallance, resultPlayerBallance);
+            // 58 Assert.NotEqual(startCoal, resultStorageResorces["Coal"].CurrentQuantity);
+            Assert.Equal(startCoal, resultStorageResorces["Coal"].CurrentQuantity);
+
+            // 61 Assert.NotEqual(startUranium, resultStorageResorces["Uranium"].CurrentQuantity);
+            Assert.Equal(startUranium, resultStorageResorces["Uranium"].CurrentQuantity);
+
+            // 64 Assert.NotEqual(startBricks, resultStorageResorces["Bricks"].CurrentQuantity);
+            Assert.Equal(startBricks, resultStorageResorces["Bricks"].CurrentQuantity);
+
+            // 67 Assert.Equal(startBallance, resultPlayerBallance);
             Assert.NotEqual(startBallance, resultPlayerBallance);
 
         }
@@ -61,15 +82,16 @@ namespace TycooniaTest
         public void CorrectProductYield()
         {
             LaunchControleCenterFactory.PreparationLaunchFactory(factoryBricks, storageResources, energyStorage, player);
-            int resultRate = ProductionCalculation.ProductionCalculationFactory(storageResources, factoryBricks, energyStorage, player);
-            long resultFactoryFabrication = storageResources.StorageList[factories[0].ProductionItem];
+            int resultRate = ProductionCalculation.ProductionCalculationFactory(storageResources, factoryBricks, energyStorage);
+            string productionItemKey = factories[0].ProductionItemList.Keys.First();
+            long resultFactoryFabrication = storageResources.StorageList[productionItemKey].CurrentQuantity;
             decimal resultEnergyStorage = energyStorage.CurrentStorage;
             long resultBallance = player.Ballance;
 
-            //69 Assert.Null(factoryBricks.ResourceBuffer);
+            //91 Assert.Null(factoryBricks.ResourceBuffer);
             Assert.NotNull(factoryBricks.ResourceBuffer);
 
-            //72 Assert.Equal(startBallance, resultBallance);
+            //94 Assert.Equal(startBallance, resultBallance);
             Assert.NotEqual(startBallance, resultBallance);
 
             Assert.Equal(factoryBricks.ProductionRate, resultRate);
@@ -83,20 +105,28 @@ namespace TycooniaTest
         public void CorrectStopFactoryAndReturnInStorage()
         {
             LaunchControleCenterFactory.PreparationLaunchFactory(factoryBricks, storageResources, energyStorage, player);
-            int resultRate = ProductionCalculation.ProductionCalculationFactory(storageResources, factoryBricks, energyStorage, player);
+            int resultRate = ProductionCalculation.ProductionCalculationFactory(storageResources, factoryBricks, energyStorage);
             LaunchControleCenterFactory.StopFactory(factoryBricks, storageResources, player);
-            Dictionary<string, long> resultStorageResorces = storageResources.StorageList;
+            Dictionary<string, StorageResourcesBase> resultStorageResorces = storageResources.StorageList;
             long resultPlayerBallance = player.Ballance;
-            Dictionary<string, int> resultFactoryResourceBuffer = factoryBricks.ResourceBuffer;
+            Dictionary<string, StorageResourcesBase> resultFactoryResourceBuffer = factoryBricks.ResourceBuffer;
 
-            Assert.Equal([], resultFactoryResourceBuffer);
+            Assert.Empty(resultFactoryResourceBuffer);
 
-            // 94 Assert.Equal(startStorageResources, resultStorageResorces);
-            Assert.NotEqual(startStorageResources, resultStorageResorces);
+            // 116 Assert.Equal(startClay, resultStorageResorces["Clay"].CurrentQuantity);
+            Assert.NotEqual(startClay, resultStorageResorces["Clay"].CurrentQuantity);
 
-            // 97 Assert.Equal(startBallance, resultPlayerBallance);
+            // 119 Assert.NotEqual(startCoal, resultStorageResorces["Coal"].CurrentQuantity);
+            Assert.Equal(startCoal, resultStorageResorces["Coal"].CurrentQuantity);
+
+            // 122 Assert.NotEqual(startUranium, resultStorageResorces["Uranium"].CurrentQuantity);
+            Assert.Equal(startUranium, resultStorageResorces["Uranium"].CurrentQuantity);
+
+            // 125 Assert.Equal(startBricks, resultStorageResorces["Bricks"].CurrentQuantity);
+            Assert.NotEqual(startBricks, resultStorageResorces["Bricks"].CurrentQuantity);
+
+            // 128 Assert.Equal(startBallance, resultPlayerBallance);
             Assert.NotEqual(startBallance, resultPlayerBallance);
-
         }
     }
 }

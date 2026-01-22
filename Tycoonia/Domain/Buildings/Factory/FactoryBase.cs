@@ -1,4 +1,6 @@
-﻿namespace Tycoonia.Domain.Buildings.Factory
+﻿using Tycoonia.Application.Storage;
+
+namespace Tycoonia.Domain.Buildings.Factory
 {
     public abstract class FactoryBase
     {
@@ -10,7 +12,7 @@
         private decimal energyConsumption;
         private int _productionTime;
         private Dictionary<string, byte> _receipeList = [];
-        private Dictionary<string, long> _resourceBuffer = [];
+        private Dictionary<string, StorageResourcesBase> _resourceBuffer = [];
         private Dictionary<string, int> _productionItemList = [];
         private bool _workFlag;
         private bool _cancelFlag;
@@ -55,7 +57,7 @@
             get => _receipeList;
             set => _receipeList = value;
         }
-        public Dictionary<string, long> ResourceBuffer
+        public Dictionary<string, StorageResourcesBase> ResourceBuffer
         {
             get => _resourceBuffer;
             set => _resourceBuffer = value;

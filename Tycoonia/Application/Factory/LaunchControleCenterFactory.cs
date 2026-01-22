@@ -1,4 +1,5 @@
 ﻿using Tycoonia.Application.ApplicationExceptions;
+using Tycoonia.Application.Storage;
 using Tycoonia.Domain.Buildings.EnergyPlant.Storage;
 using Tycoonia.Domain.Buildings.Factory;
 using Tycoonia.Domain.Player;
@@ -33,11 +34,11 @@ namespace Tycoonia.Application.Factory
             }
         }
 
-        public static Dictionary<string, long> CreateBufferCheck(FactoryBase factory, StorageResources storageResources, PlayerReal player,  int expectedOutput)
+        public static Dictionary<string, StorageResourcesBase> CreateBufferCheck(FactoryBase factory, StorageResources storageResources, PlayerReal player, int expectedOutput)
         {
             foreach (var item in factory.ReceipeList)
             {
-                factory.ResourceBuffer.Add(item.Key, item.Value*expectedOutput);
+                factory.ResourceBuffer.Add(item.Key, new StorageResourcesBase { CurrentQuantity = item.Value * expectedOutput });
             }
             BufferSubtraction(factory, storageResources, player);
             return factory.ResourceBuffer;
@@ -49,11 +50,11 @@ namespace Tycoonia.Application.Factory
             {
                 if (item.Key == "Money")
                 {
-                    player.Ballance -= (long)item.Value;
+                    player.Ballance -= (long)item.Value.CurrentQuantity;
                 }
-                else if (storageResources.StorageList[item.Key].CurrentQuantity >= item.Value)
+                else if (storageResources.StorageList[item.Key].CurrentQuantity >= item.Value.CurrentQuantity)
                 {
-                    storageResources.StorageList[item.Key].CurrentQuantity -= item.Value;
+                    storageResources.StorageList[item.Key].CurrentQuantity -= item.Value.CurrentQuantity;
                 }
                 else
                 {
@@ -82,11 +83,11 @@ namespace Tycoonia.Application.Factory
             {
                 if (item.Key == "Money")
                 {
-                    player.Ballance += item.Value;
+                    player.Ballance += item.Value.CurrentQuantity;
                 }
                 else if (storageResources.StorageList.ContainsKey(item.Key))
                 {
-                    storageResources.StorageList[item.Key].CurrentQuantity += item.Value;
+                    storageResources.StorageList[item.Key].CurrentQuantity += item.Value.CurrentQuantity;
                 }
                 else
                 {

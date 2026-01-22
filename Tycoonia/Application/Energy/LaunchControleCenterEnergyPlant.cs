@@ -1,4 +1,5 @@
 ﻿using Tycoonia.Application.ApplicationExceptions;
+using Tycoonia.Application.Storage;
 using Tycoonia.Domain.Buildings.EnergyPlant;
 using Tycoonia.Domain.Buildings.EnergyPlant.Storage;
 using Tycoonia.Domain.Player;
@@ -33,11 +34,11 @@ namespace Tycoonia.Application.Energy
             }
         }
 
-        public static Dictionary<string, long> CreateBufferCheck(EnergyPlantBase energyPlant, StorageResources storageResources, PlayerReal player, int expectedOutput)
+        public static Dictionary<string, StorageResourcesBase> CreateBufferCheck(EnergyPlantBase energyPlant, StorageResources storageResources, PlayerReal player, int expectedOutput)
         {
             foreach (var item in energyPlant.ReceipeList)
             {
-                energyPlant.ResourceBuffer.Add(item.Key, item.Value * expectedOutput);
+                energyPlant.ResourceBuffer.Add(item.Key, new StorageResourcesBase { CurrentQuantity = item.Value * expectedOutput });
             }
             BufferSubtraction(energyPlant, storageResources, player);
             return energyPlant.ResourceBuffer;
@@ -49,11 +50,11 @@ namespace Tycoonia.Application.Energy
             {
                 if (item.Key == "Money")
                 {
-                    player.Ballance -= (long)item.Value;
+                    player.Ballance -= (long)item.Value.CurrentQuantity;
                 }
-                else if (storageResources.StorageList[item.Key].CurrentQuantity >= item.Value)
+                else if (storageResources.StorageList[item.Key].CurrentQuantity >= item.Value.CurrentQuantity)
                 {
-                    storageResources.StorageList[item.Key].CurrentQuantity -= item.Value;
+                    storageResources.StorageList[item.Key].CurrentQuantity -= item.Value.CurrentQuantity;
                 }
                 else
                 {
