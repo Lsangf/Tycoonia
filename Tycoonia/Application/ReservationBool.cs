@@ -1,6 +1,4 @@
-﻿using Tycoonia.Application.Storage;
-using Tycoonia.Domain.Buildings.EnergyPlant.Storage;
-using Tycoonia.Domain.Player;
+﻿using Tycoonia.Domain.Player;
 using Tycoonia.Domain.Resources.Storage;
 
 namespace Tycoonia.Application

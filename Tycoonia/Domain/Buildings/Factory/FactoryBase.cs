@@ -1,4 +1,4 @@
-﻿using Tycoonia.Application.Storage;
+﻿using Tycoonia.Domain.Resources.Storage;
 
 namespace Tycoonia.Domain.Buildings.Factory
 {

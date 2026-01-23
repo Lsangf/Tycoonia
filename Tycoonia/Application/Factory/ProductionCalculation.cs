@@ -1,6 +1,4 @@
 ﻿using Tycoonia.Application.ApplicationExceptions;
-using Tycoonia.Application.Storage;
-using Tycoonia.Domain.Buildings.EnergyPlant.Storage;
 using Tycoonia.Domain.Buildings.Factory;
 using Tycoonia.Domain.Resources.Storage;
 

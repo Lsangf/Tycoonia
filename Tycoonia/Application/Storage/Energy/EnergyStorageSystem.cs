@@ -1,4 +1,4 @@
-﻿namespace Tycoonia.Application.Storage
+﻿namespace Tycoonia.Application.Storage.Energy
 {
     public class EnergyStorageSystem
     {

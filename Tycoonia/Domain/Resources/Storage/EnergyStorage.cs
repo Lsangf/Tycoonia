@@ -1,12 +1,14 @@
-﻿namespace Tycoonia.Domain.Buildings.EnergyPlant.Storage
+﻿namespace Tycoonia.Domain.Resources.Storage
 {
     public class EnergyStorage
     {
         private decimal _maxCapacity;
         private decimal _currentStorage;
+        private bool _canUpgrade;
         private Dictionary<string, long> _receipeUpgradeList = new()
         {
-            {"?", 1000 } 
+            {"Money", 10 },
+            {"Bricks", 1000 } 
         };
         public decimal MaxCapacity
         {
@@ -18,6 +20,11 @@
             get => _currentStorage;
             set => _currentStorage = value;
         }
+        public bool CanUpgrade
+        {
+            get => _canUpgrade;
+            set => _canUpgrade = value;
+        }
         public Dictionary<string, long> ReceipeUpgradeList
         {
             get => _receipeUpgradeList;
@@ -26,6 +33,7 @@
 
         public EnergyStorage()
         {
+            CanUpgrade = false;
             MaxCapacity = 100000m;
             CurrentStorage = 50000m;
         }

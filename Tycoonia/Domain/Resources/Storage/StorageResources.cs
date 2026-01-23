@@ -1,11 +1,15 @@
-﻿using Tycoonia.Application.Storage;
-
-namespace Tycoonia.Domain.Resources.Storage
+﻿namespace Tycoonia.Domain.Resources.Storage
 {
     public class StorageResources
     {
+        private bool _canUpgrade;
         private Dictionary<string, StorageResourcesBase> _storageList = [];
 
+        public bool CanUpgrade
+        {
+            get => _canUpgrade;
+            set => _canUpgrade = value;
+        }
         public Dictionary<string, StorageResourcesBase> StorageList
         {
             get => _storageList;
@@ -14,6 +18,7 @@ namespace Tycoonia.Domain.Resources.Storage
 
         public StorageResources()
         {
+            CanUpgrade = false;
             StorageList["Clay"] = new StorageResourcesBase
             {
                 CurrentQuantity = 10,

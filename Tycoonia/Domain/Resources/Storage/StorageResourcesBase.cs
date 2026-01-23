@@ -1,4 +1,4 @@
-﻿namespace Tycoonia.Application.Storage
+﻿namespace Tycoonia.Domain.Resources.Storage
 {
     public class StorageResourcesBase
     {
