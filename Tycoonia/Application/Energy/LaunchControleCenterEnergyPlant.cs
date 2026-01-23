@@ -14,8 +14,8 @@ namespace Tycoonia.Application.Energy
             try
             {
                 int expectedOutput = 1;
-                CreateBufferCheck(energyPlant, storageResources, player, expectedOutput);
 
+                CreateBufferCheck(energyPlant, storageResources, expectedOutput);
                 bool checkValues = CheckingValuesForFactory(energyPlant, storageResources, energyStorage, player);
                 if (!checkValues)
                 {
@@ -23,6 +23,7 @@ namespace Tycoonia.Application.Energy
                 }
                 else
                 {
+                    BufferSubtraction(energyPlant, storageResources);
                     energyPlant.WorkFlag = true;
                 }
             }
@@ -34,25 +35,20 @@ namespace Tycoonia.Application.Energy
             }
         }
 
-        public static Dictionary<string, StorageResourcesBase> CreateBufferCheck(EnergyPlantBase energyPlant, StorageResources storageResources, PlayerReal player, int expectedOutput)
+        public static Dictionary<string, StorageResourcesBase> CreateBufferCheck(EnergyPlantBase energyPlant, StorageResources storageResources, int expectedOutput)
         {
             foreach (var item in energyPlant.ReceipeList)
             {
                 energyPlant.ResourceBuffer.Add(item.Key, new StorageResourcesBase { CurrentQuantity = item.Value * expectedOutput });
             }
-            BufferSubtraction(energyPlant, storageResources, player);
             return energyPlant.ResourceBuffer;
         }
 
-        public static void BufferSubtraction(EnergyPlantBase energyPlant, StorageResources storageResources, PlayerReal player)
+        public static void BufferSubtraction(EnergyPlantBase energyPlant, StorageResources storageResources)
         {
             foreach (var item in energyPlant.ResourceBuffer)
             {
-                if (item.Key == "Money")
-                {
-                    player.Ballance -= (long)item.Value.CurrentQuantity;
-                }
-                else if (storageResources.StorageList[item.Key].CurrentQuantity >= item.Value.CurrentQuantity)
+                if (storageResources.StorageList[item.Key].CurrentQuantity >= item.Value.CurrentQuantity)
                 {
                     storageResources.StorageList[item.Key].CurrentQuantity -= item.Value.CurrentQuantity;
                 }

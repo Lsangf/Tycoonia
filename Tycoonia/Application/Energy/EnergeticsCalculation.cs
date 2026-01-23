@@ -16,7 +16,7 @@ namespace Tycoonia.Application.Energy
 
             ResourcesSubtraction(resorcesBuffer, receipeListNeeded);
             EnergySubtraction(energyStorage, energyNeeded);
-            SaveInStorageEnergy.Save(storageResources, energyPlant);
+            SaveInStorageEnergy.Save(storageResources, energyPlant, energyStorage);
 
             return energyPlant.ProductionItemList;
         }

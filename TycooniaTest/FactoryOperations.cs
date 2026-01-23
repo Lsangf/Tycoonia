@@ -44,7 +44,7 @@ namespace TycooniaTest
         [Fact]
         public void CorrectPreparationBufferAndSubtractionStorage()
         {
-            LaunchControleCenterFactory.CreateBufferCheck(factoryBricks, storageResources, player, 1);
+            LaunchControleCenterFactory.PreparationLaunchFactory(factoryBricks, storageResources, energyStorage, player);
             Dictionary<string, StorageResourcesBase> resultStorageResorces = storageResources.StorageList;
             long resultPlayerBallance = player.Ballance;
             Dictionary<string, StorageResourcesBase> resultFactoryResourceBuffer = factoryBricks.ResourceBuffer;

@@ -14,8 +14,8 @@ namespace Tycoonia.Application.Factory
             try
             {
                 int expectedOutput = 1;
-                CreateBufferCheck(factory, storageResources, player, expectedOutput);
 
+                CreateBufferCheck(factory, storageResources, player, expectedOutput);
                 bool checkValues = CheckingValuesForFactory(factory, storageResources, energyStorage, player);
                 if (!checkValues)
                 {
@@ -23,6 +23,7 @@ namespace Tycoonia.Application.Factory
                 }
                 else
                 {
+                    BufferSubtraction(factory, storageResources, player);
                     factory.WorkFlag = true;
                 }
             }
@@ -40,7 +41,6 @@ namespace Tycoonia.Application.Factory
             {
                 factory.ResourceBuffer.Add(item.Key, new StorageResourcesBase { CurrentQuantity = item.Value * expectedOutput });
             }
-            BufferSubtraction(factory, storageResources, player);
             return factory.ResourceBuffer;
         }
 

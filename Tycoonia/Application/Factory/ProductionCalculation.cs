@@ -10,7 +10,6 @@ namespace Tycoonia.Application.Factory
     {
         public static int ProductionCalculationFactory(StorageResources storageResources, FactoryBase factory, EnergyStorage energyStorage)
         {
-            // long playerMoney = player.Ballance; // for the transaction
             decimal energyNeeded = factory.EnergyConsumption;
             Dictionary<string, byte> receipeListNeeded = factory.ReceipeList;
             Dictionary<string, StorageResourcesBase> resorcesBuffer = factory.ResourceBuffer;
