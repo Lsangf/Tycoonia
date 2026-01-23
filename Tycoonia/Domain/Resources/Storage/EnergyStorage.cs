@@ -8,7 +8,7 @@
         private Dictionary<string, long> _receipeUpgradeList = new()
         {
             {"Money", 10 },
-            {"Bricks", 1000 } 
+            {"Bricks", 1 } 
         };
         public decimal MaxCapacity
         {

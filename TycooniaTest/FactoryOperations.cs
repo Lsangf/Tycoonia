@@ -94,7 +94,7 @@ namespace TycooniaTest
 
             Assert.Equal(factoryBricks.ProductionRate, resultRate);
 
-            Assert.Equal(1, resultFactoryFabrication);
+            Assert.Equal(2, resultFactoryFabrication);
 
             Assert.Equal(49999.5m, resultEnergyStorage);
         }

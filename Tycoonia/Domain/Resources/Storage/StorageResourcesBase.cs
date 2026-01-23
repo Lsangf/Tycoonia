@@ -5,6 +5,7 @@
         private long _currentQuantity;
         private long _maxCapacity;
         private long _upgradeCost;
+        private bool _canUpgrade;
 
         public long CurrentQuantity
         {
@@ -20,6 +21,11 @@
         {
             get => _upgradeCost;
             set => _upgradeCost = value;
+        }
+        public bool CanUpgrade
+        {
+            get => _canUpgrade;
+            set => _canUpgrade = value;
         }
     }
 }

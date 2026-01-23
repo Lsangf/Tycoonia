@@ -6,7 +6,7 @@ namespace Tycoonia.Application.Storage.Energy
 {
     public class EnergyStorageUpgrade
     {
-        public void UpgradeStorage(EnergyStorage energyStorage, StorageResources storageResources, PlayerReal player)
+        public static void UpgradeStorage(EnergyStorage energyStorage, StorageResources storageResources, PlayerReal player)
         {
             CanUpgradeStorage(energyStorage, storageResources, player);
             if (!energyStorage.CanUpgrade)
@@ -19,28 +19,26 @@ namespace Tycoonia.Application.Storage.Energy
             }
         }
 
-        public bool CanUpgradeStorage(EnergyStorage energyStorage, StorageResources storageResources, PlayerReal player)
+        public static void CanUpgradeStorage(EnergyStorage energyStorage, StorageResources storageResources, PlayerReal player)
         {
-            bool canUpgradeStorage = false;
             foreach(var item in energyStorage.ReceipeUpgradeList)
             {
                 if (item.Key == "Money" && player.Ballance >= item.Value)
                 {
-                    canUpgradeStorage = true;
+                    energyStorage.CanUpgrade = true;
                 }
                 else if (storageResources.StorageList[item.Key].CurrentQuantity >= item.Value)
                 {
-                    canUpgradeStorage = true;
+                    energyStorage.CanUpgrade = true;
                 }
                 else
                 {
-                    canUpgradeStorage = false;
+                    energyStorage.CanUpgrade = false;
                 }
             }
-            return canUpgradeStorage;
         }
 
-        public void UpgradeSubtractionStorage(EnergyStorage energyStorage, StorageResources storageResources, PlayerReal player)
+        public static void UpgradeSubtractionStorage(EnergyStorage energyStorage, StorageResources storageResources, PlayerReal player)
         {
             foreach (var item in energyStorage.ReceipeUpgradeList)
             {
