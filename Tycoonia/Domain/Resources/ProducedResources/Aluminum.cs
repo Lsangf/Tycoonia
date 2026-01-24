@@ -1,11 +1,12 @@
 ﻿namespace Tycoonia.Domain.Resources.ProducedResources
 {
-    internal class Plutonium_239 : ResourcesBase
+    public class Aluminum : ResourcesBase
     {
-        public Plutonium_239()
+        public Aluminum()
         {
             Type = "Produced";
-            Name = "Plutonium-239";
+            Name = "Aluminum";
         }
     }
 }
+

@@ -1,6 +1,9 @@
-﻿using Tycoonia.Application.Energy;
+﻿using Tycoonia.Application;
+using Tycoonia.Application.Energy;
+using Tycoonia.Application.Factory;
 using Tycoonia.Domain.Buildings.EnergyPlant;
 using Tycoonia.Domain.Buildings.EnergyPlant.TPP;
+using Tycoonia.Domain.Buildings.Factory;
 using Tycoonia.Domain.Player;
 using Tycoonia.Domain.Resources.Storage;
 
@@ -86,5 +89,42 @@ namespace TycooniaTest
 
             Assert.Equal(50000m, resultEnergyStorage);
         }
+
+        [Fact]
+        public void CorrectCanUpgrade()
+        {
+            UpgradeBuilding.CanUpgrade(coalTPP, storageResources, player);
+
+            Assert.True(coalTPP.CanUpgrade);
+        }
+
+        [Fact]
+        public void CorrectUpgradeSubtraction()
+        {
+            UpgradeBuilding.UpgradeSubtraction(coalTPP, storageResources, player);
+            long resultStorageResourcesBricks = storageResources.StorageList["Bricks"].CurrentQuantity;
+            long resultPlayerBallance = player.Ballance;
+
+            // 108 Assert.Equal(startCoal, resultStorageResourcesBricks);
+            Assert.NotEqual(startCoal, resultStorageResourcesBricks);
+
+            // 111 Assert.Equal(startBallance, resultPlayerBallance);
+            Assert.NotEqual(startBallance, resultPlayerBallance);
+        }
+
+        [Fact]
+        public void CorrectUpgradeStorage()
+        {
+            UpgradeBuilding.Upgrade(coalTPP, storageResources, player);
+            long resultStorageResourcesBricks = storageResources.StorageList["Bricks"].CurrentQuantity;
+            long resultPlayerBallance = player.Ballance;
+
+            // 122 Assert.Equal(startCoal, resultStorageResourcesBricks);
+            Assert.NotEqual(startCoal, resultStorageResourcesBricks);
+
+            // 125 Assert.Equal(startBallance, resultPlayerBallance);
+            Assert.NotEqual(startBallance, resultPlayerBallance);
+        }
+
     }
 }

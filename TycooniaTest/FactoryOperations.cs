@@ -1,6 +1,9 @@
-﻿using Tycoonia.Application.Factory;
+﻿using Tycoonia.Application;
+using Tycoonia.Application.Factory;
+using Tycoonia.Application.Storage.Resources;
 using Tycoonia.Domain.Buildings.Factory;
 using Tycoonia.Domain.Player;
+using Tycoonia.Domain.Resources;
 using Tycoonia.Domain.Resources.Storage;
 
 namespace TycooniaTest
@@ -124,6 +127,42 @@ namespace TycooniaTest
             Assert.NotEqual(startBricks, resultStorageResorces["Bricks"].CurrentQuantity);
 
             // 128 Assert.Equal(startBallance, resultPlayerBallance);
+            Assert.NotEqual(startBallance, resultPlayerBallance);
+        }
+
+        [Fact]
+        public void CorrectCanUpgrade()
+        {
+            UpgradeBuilding.CanUpgrade(factoryBricks, storageResources, player);
+
+            Assert.True(factoryBricks.CanUpgrade);
+        }
+
+        [Fact]
+        public void CorrectUpgradeSubtraction()
+        {
+            UpgradeBuilding.UpgradeSubtraction(factoryBricks, storageResources, player);
+            long resultStorageResourcesClay = storageResources.StorageList["Clay"].CurrentQuantity;
+            long resultPlayerBallance = player.Ballance;
+
+            // 148 Assert.NotEqual(startClay, resultStorageResourcesClay);
+            Assert.NotEqual(startClay, resultStorageResourcesClay);
+
+            // 151 Assert.Equal(startBallance, resultPlayerBallance);
+            Assert.NotEqual(startBallance, resultPlayerBallance);
+        }
+
+        [Fact]
+        public void CorrectUpgradeStorage()
+        {
+            UpgradeBuilding.Upgrade(factoryBricks, storageResources, player);
+            long resultStorageResourcesClay = storageResources.StorageList["Clay"].CurrentQuantity;
+            long resultPlayerBallance = player.Ballance;
+
+            // 162 Assert.Equal(startClay, resultStorageResourcesClay);
+            Assert.NotEqual(startClay, resultStorageResourcesClay);
+
+            // 165 Assert.Equal(startBallance, resultPlayerBallance);
             Assert.NotEqual(startBallance, resultPlayerBallance);
         }
     }

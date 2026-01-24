@@ -1,11 +1,11 @@
 ﻿namespace Tycoonia.Domain.Resources.ProducedResources
 {
-    public class Uranium_235 : ResourcesBase
+    public class Diamonds : ResourcesBase
     {
-        public Uranium_235()
+        public Diamonds()
         {
             Type = "Produced";
-            Name = "Uranium-235";
+            Name = "Diamonds";
         }
     }
 }

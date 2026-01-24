@@ -8,7 +8,7 @@
             ReceipeUpgradeList = new Dictionary<string, long>
             {
                 { "Money", 50 },
-                { "Clay", 30 }
+                { "Clay", 3 }
             };
             ProductionRate = 1;
             EnergyConsumption = 0.5m;

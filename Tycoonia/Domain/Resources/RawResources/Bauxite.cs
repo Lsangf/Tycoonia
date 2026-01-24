@@ -1,11 +1,11 @@
 ﻿namespace Tycoonia.Domain.Resources.RawResources
 {
-    public class Thorium_232 : ResourcesBase
+    public class Bauxite : ResourcesBase
     {
-        public Thorium_232()
+        public Bauxite()
         {
             Type = "Raw";
-            Name = "Thorium-232";
+            Name = "Bauxite";
         }
     }
 }

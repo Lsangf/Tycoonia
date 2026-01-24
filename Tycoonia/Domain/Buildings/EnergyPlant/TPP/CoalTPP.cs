@@ -10,7 +10,7 @@
             ReceipeUpgradeList = new Dictionary<string, long>
             {
                 { "Money", 100},
-                { "Bricks", 100 }
+                { "Bricks", 1 }
             };
             ReceipeList = new Dictionary<string, short>
             {

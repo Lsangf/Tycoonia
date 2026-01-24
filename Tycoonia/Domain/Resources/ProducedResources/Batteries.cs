@@ -1,11 +1,11 @@
 ﻿namespace Tycoonia.Domain.Resources.ProducedResources
 {
-    public class Uranium_238 : ResourcesBase
+    public class Batteries : ResourcesBase
     {
-        public Uranium_238()
+        public Batteries()
         {
             Type = "Produced";
-            Name = "Uranium-238";
+            Name = "Batteries";
         }
     }
 }
