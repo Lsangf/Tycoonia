@@ -9,7 +9,7 @@
             EnergyConsumption = 5;
             ReceipeUpgradeList = new Dictionary<string, long>
             {
-                { "Money", 100},
+                { "Money", 100 },
                 { "Bricks", 1 }
             };
             ReceipeList = new Dictionary<string, short>

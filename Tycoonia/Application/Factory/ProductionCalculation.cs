@@ -9,7 +9,7 @@ namespace Tycoonia.Application.Factory
         public static int ProductionCalculationFactory(StorageResources storageResources, FactoryBase factory, EnergyStorage energyStorage)
         {
             decimal energyNeeded = factory.EnergyConsumption;
-            Dictionary<string, byte> receipeListNeeded = factory.ReceipeList;
+            Dictionary<string, byte> receipeListNeeded = factory.RecipeList;
             Dictionary<string, StorageResourcesBase> resorcesBuffer = factory.ResourceBuffer;
             
             ResourcesSubtraction(resorcesBuffer, receipeListNeeded);

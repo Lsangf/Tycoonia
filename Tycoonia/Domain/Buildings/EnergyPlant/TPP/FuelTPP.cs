@@ -1,10 +1,10 @@
-﻿namespace Tycoonia.Domain.Buildings.EnergyPlant.NPP
+﻿namespace Tycoonia.Domain.Buildings.EnergyPlant.TPP
 {
-    public class UraniumNPP : EnergyPlantBase
+    public class FuelTPP : EnergyPlantBase
     {
-        public UraniumNPP()
+        public FuelTPP() 
         {
-            Name = "Uranium Nuclear Power Plant";
+            Name = "Fuel Thermal Power Plant";
             ProductionRate = 50;
             EnergyConsumption = 20;
             ReceipeUpgradeList = new Dictionary<string, long>
@@ -14,12 +14,11 @@
             };
             ReceipeList = new Dictionary<string, short>
             {
-                { "Uranium Rod", 1 }
+                { "Fuel", 1 }
             };
             ProductionItemList = new Dictionary<string, int>
             {
-                {"Energy", ProductionRate},
-                { "Plutonium-239", 1}
+                {"Energy", ProductionRate}
             };
         }
     }
