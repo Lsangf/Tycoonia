@@ -35,7 +35,7 @@ namespace Tycoonia.Application.Factory
 
         public static Dictionary<string, StorageResourcesBase> CreateBufferCheck(FactoryBase factory, StorageResources storageResources, PlayerReal player, int expectedOutput)
         {
-            foreach (var item in factory.ReceipeList)
+            foreach (var item in factory.RecipeList)
             {
                 factory.ResourceBuffer.Add(item.Key, new StorageResourcesBase { CurrentQuantity = item.Value * expectedOutput });
             }

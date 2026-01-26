@@ -6,7 +6,7 @@
         {
             Name = "Uranium Mine";
             ProductionRate = 5;
-            EnergyConsumption = 200m;
+            EnergyConsumption = 0.1m;
             ProductionItem = "Uranium";
         }
     }

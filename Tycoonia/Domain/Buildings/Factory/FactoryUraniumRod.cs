@@ -1,26 +1,26 @@
 ﻿namespace Tycoonia.Domain.Buildings.Factory
 {
-    public class FactoryEnrichment : FactoryBase
+    public class FactoryUraniumRod : FactoryBase
     {
-        public FactoryEnrichment()
+        public FactoryUraniumRod()
         {
-            Name = "Enrichment Factory";
+            Name = "Uranium Rod Factory";
             ReceipeUpgradeList = new Dictionary<string, long>
             {
                 { "Money", 100 },
-                { "Bricks", 50 }
+                { "Bricks", 1 }
             };
-            ProductionRate = 10;
+            ProductionRate = 1;
             EnergyConsumption = 1m;
-            ReceipeList = new Dictionary<string, byte>
+            RecipeList = new Dictionary<string, byte>
             {
                 { "Money", 10 },
-                { "Uranium", 3 }
+                { "Uranium-238", 1},
+                { "Uranium-235", 10}
             };
             ProductionItemList = new Dictionary<string, int>
             {
-                { "Uranium-238", ProductionRate},
-                { "Uranium-235", 1}
+                { "Uranium Rod", ProductionRate }
             };
         }
     }

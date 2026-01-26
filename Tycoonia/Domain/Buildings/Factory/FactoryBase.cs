@@ -52,7 +52,7 @@ namespace Tycoonia.Domain.Buildings.Factory
             get => _productionTime;
             set => _productionTime = value;
         }
-        public Dictionary<string, byte> ReceipeList
+        public Dictionary<string, byte> RecipeList
         {
             get => _receipeList;
             set => _receipeList = value;
