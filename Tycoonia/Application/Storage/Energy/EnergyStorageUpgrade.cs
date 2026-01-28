@@ -16,6 +16,7 @@ namespace Tycoonia.Application.Storage.Energy
             else
             {
                 UpgradeSubtractionStorage(energyStorage, storageResources, player);
+                UpdateUpgradeAmount(energyStorage);
             }
         }
 
@@ -55,6 +56,17 @@ namespace Tycoonia.Application.Storage.Energy
                     throw new StorageException();
                 }
             }
+        }
+
+        public static void UpdateUpgradeAmount(EnergyStorage energyStorage)
+        {
+            foreach (var item in energyStorage.ReceipeUpgradeList)
+            {
+                energyStorage.ReceipeUpgradeList[item.Key] = item.Value * 2;
+            }
+            energyStorage.Level += 1;
+            energyStorage.CanUpgrade = false;
+
         }
     }
 }

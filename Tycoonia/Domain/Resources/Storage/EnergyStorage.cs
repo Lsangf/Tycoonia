@@ -5,6 +5,7 @@
         private decimal _maxCapacity;
         private decimal _currentStorage;
         private bool _canUpgrade;
+        private short _level;
         private Dictionary<string, long> _receipeUpgradeList = new()
         {
             {"Money", 10 },
@@ -25,6 +26,11 @@
             get => _canUpgrade;
             set => _canUpgrade = value;
         }
+        public short Level
+        {
+            get => _level;
+            set => _level = value;
+        }
         public Dictionary<string, long> ReceipeUpgradeList
         {
             get => _receipeUpgradeList;
@@ -36,6 +42,7 @@
             CanUpgrade = false;
             MaxCapacity = 100000m;
             CurrentStorage = 50000m;
+            Level = 1;
         }
 
     }

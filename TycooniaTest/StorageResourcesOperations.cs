@@ -1,28 +1,19 @@
 ﻿using Tycoonia.Application.Storage.Resources;
-using Tycoonia.Domain.Buildings.Factory;
 using Tycoonia.Domain.Player;
 using Tycoonia.Domain.Resources.Storage;
-using Xunit;
 
 namespace TycooniaTest
 {
     public class StorageResourcesOperations
     {
         private StorageResources storageResources;
-        private Dictionary<string, StorageResourcesBase> startStorageResources;
         private long startBallance;
         private PlayerReal player;
-
-        private bool startClayCanUpgrade;
-        private bool startCoalCanUpgrade;
-        private bool startUraniumCanUpgrade;
-        private bool startBricksCanUpgrade;
 
         public StorageResourcesOperations()
         {
             storageResources = new StorageResources();
 
-            startStorageResources = new Dictionary<string, StorageResourcesBase>(storageResources.StorageList);
             startBallance = 10000;
             player = new PlayerReal("player1", startBallance);
         }
@@ -30,56 +21,54 @@ namespace TycooniaTest
         [Fact]
         public void CorrectCanUpgradeStorage()
         {
-            StorageResourcesBase upgradeResourceList = storageResources.StorageList["Clay"];
-            StorageResourcesUpgrade.CanUpgradeStorage(player, upgradeResourceList);
+            foreach (var resource in storageResources.StorageList)
+            {
+                StorageResourcesBase upgradeResourceList = storageResources.StorageList[resource.Key];
+                StorageResourcesUpgrade.CanUpgradeStorage(player, upgradeResourceList);
 
-            StorageResourcesBase upgradeResourceList1 = storageResources.StorageList["Coal"];
-            StorageResourcesUpgrade.CanUpgradeStorage(player, upgradeResourceList1);
-
-            StorageResourcesBase upgradeResourceList2 = storageResources.StorageList["Uranium"];
-            StorageResourcesUpgrade.CanUpgradeStorage(player, upgradeResourceList2);
-
-            StorageResourcesBase upgradeResourceList3 = storageResources.StorageList["Bricks"];
-            StorageResourcesUpgrade.CanUpgradeStorage(player, upgradeResourceList3);
-
-            Dictionary<string, StorageResourcesBase> resultStorageResorces = storageResources.StorageList;
-
-            Assert.True(resultStorageResorces["Clay"].CanUpgrade);
-            Assert.True(resultStorageResorces["Coal"].CanUpgrade);
-            Assert.True(resultStorageResorces["Uranium"].CanUpgrade);
-            Assert.True(resultStorageResorces["Bricks"].CanUpgrade);
+                Assert.True(upgradeResourceList.CanUpgrade);
+            }
         }
 
         [Fact]
         public void CorrectUpgradeSubtractionStorage()
         {
-            StorageResourcesBase upgradeResourceList = storageResources.StorageList["Clay"];
-            StorageResourcesUpgrade.UpgradeSubtractionStorage(player, upgradeResourceList);
+            foreach (var resource in storageResources.StorageList)
+            {
+                StorageResourcesBase upgradeResourceList = storageResources.StorageList[resource.Key];
+                StorageResourcesUpgrade.UpgradeSubtractionStorage(player, upgradeResourceList);
 
-            StorageResourcesBase upgradeResourceList1 = storageResources.StorageList["Coal"];
-            StorageResourcesUpgrade.UpgradeSubtractionStorage(player, upgradeResourceList1);
-
-            StorageResourcesBase upgradeResourceList2 = storageResources.StorageList["Uranium"];
-            StorageResourcesUpgrade.UpgradeSubtractionStorage(player, upgradeResourceList2);
-
-            StorageResourcesBase upgradeResourceList3 = storageResources.StorageList["Bricks"];
-            StorageResourcesUpgrade.UpgradeSubtractionStorage(player, upgradeResourceList3);
-
-            long resultPlayerBallance = player.Ballance;
-
-            Assert.NotEqual(startBallance, resultPlayerBallance);
+                Assert.NotEqual(startBallance, player.Ballance);
+            }
         }
 
+        [Fact]
+        public void CorrectUpdateUpgradeAmount()
+        {
+            foreach (var resource in storageResources.StorageList)
+            {
+                StorageResourcesBase upgradeResourceList = storageResources.StorageList[resource.Key];
+                StorageResourcesUpgrade.UpdateUpgradeAmount(upgradeResourceList);
+
+                Assert.False(upgradeResourceList.CanUpgrade);
+                Assert.Equal(20, upgradeResourceList.UpgradeCost);
+                Assert.Equal(2, upgradeResourceList.Level);
+            }
+        }
 
         [Fact]
         public void CorrectUpgradeStorageResources()
         {
-            StorageResourcesUpgrade.UpgradeStorage(storageResources, player);
-            Dictionary<string, StorageResourcesBase> resultStorageResorces = storageResources.StorageList;
-            long resultPlayerBallance = player.Ballance;
+            foreach (var resource in storageResources.StorageList)
+            {
+                StorageResourcesUpgrade.UpgradeStorage(resource.Key, storageResources, player);
+                StorageResourcesBase upgradeResourceList = storageResources.StorageList[resource.Key];
 
-            Assert.True(resultStorageResorces["Clay"].CanUpgrade);
-            Assert.NotEqual(startBallance, resultPlayerBallance);
+                Assert.False(storageResources.StorageList[resource.Key].CanUpgrade);
+                Assert.Equal(2, storageResources.StorageList[resource.Key].Level);
+                Assert.Equal(20, storageResources.StorageList[resource.Key].UpgradeCost);
+                Assert.NotEqual(startBallance, player.Ballance);
+            }
         }
     }
 }

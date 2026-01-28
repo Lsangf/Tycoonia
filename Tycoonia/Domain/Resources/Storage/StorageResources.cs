@@ -18,28 +18,32 @@
                 CurrentQuantity = 10,
                 MaxCapacity = 100,
                 UpgradeCost = 10,
-                CanUpgrade = false
+                CanUpgrade = false,
+                Level = 1
             };
             StorageList["Coal"] = new StorageResourcesBase
             {
                 CurrentQuantity = 10,
                 MaxCapacity = 100,
                 UpgradeCost = 10,
-                CanUpgrade = false
+                CanUpgrade = false,
+                Level = 1
             };
             StorageList["Uranium"] = new StorageResourcesBase
             {
                 CurrentQuantity = 10,
                 MaxCapacity = 100,
                 UpgradeCost = 10,
-                CanUpgrade = false
+                CanUpgrade = false,
+                Level = 1
             };
             StorageList["Bricks"] = new StorageResourcesBase
             {
-                CurrentQuantity = 1,
+                CurrentQuantity = 50,
                 MaxCapacity = 100,
                 UpgradeCost = 10,
-                CanUpgrade = false
+                CanUpgrade = false,
+                Level = 1
             };
         }
     }

@@ -7,8 +7,8 @@
             Name = "Bricks Factory";
             ReceipeUpgradeList = new Dictionary<string, long>
             {
-                { "Money", 50 },
-                { "Clay", 3 }
+                { "Money", 100 },
+                { "Bricks", 1 }
             };
             ProductionRate = 1;
             EnergyConsumption = 0.5m;

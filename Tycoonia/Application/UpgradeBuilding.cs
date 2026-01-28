@@ -16,6 +16,7 @@ namespace Tycoonia.Application
             else
             {
                 UpgradeSubtraction(building, storageResources, player);
+                UpdateUpgradeAmount(building);
             }
         }
 
@@ -55,6 +56,15 @@ namespace Tycoonia.Application
                     throw new StorageException();
                 }
             }
+        }
+        public static void UpdateUpgradeAmount(dynamic building)
+        {
+            foreach (var item in building.ReceipeUpgradeList)
+            {
+                building.ReceipeUpgradeList[item.Key] = item.Value * 2;
+            }
+            building.Level += 1;
+            building.CanUpgrade = false;
         }
     }
 }

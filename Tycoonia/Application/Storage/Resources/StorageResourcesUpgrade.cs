@@ -6,10 +6,9 @@ namespace Tycoonia.Application.Storage.Resources
 {
     public class StorageResourcesUpgrade
     {
-        public static void UpgradeStorage(StorageResources storageResources, PlayerReal player)
+        public static void UpgradeStorage(string resorce, StorageResources storageResources, PlayerReal player)
         {
-            string upgradeResourceString = storageResources.StorageList.Keys.First();
-            StorageResourcesBase upgradeResourceList = storageResources.StorageList[upgradeResourceString];
+            StorageResourcesBase upgradeResourceList = storageResources.StorageList[resorce];
 
             CanUpgradeStorage(player, upgradeResourceList);
             if (!upgradeResourceList.CanUpgrade)
@@ -19,6 +18,7 @@ namespace Tycoonia.Application.Storage.Resources
             else
             {
                 UpgradeSubtractionStorage(player, upgradeResourceList);
+                UpdateUpgradeAmount(upgradeResourceList);
             }
         }
 
@@ -44,6 +44,13 @@ namespace Tycoonia.Application.Storage.Resources
             {
                 throw new StorageException();
             }
+        }
+        public static void UpdateUpgradeAmount(StorageResourcesBase upgradeResourceList)
+        {
+            upgradeResourceList.UpgradeCost *= 2;
+            upgradeResourceList.Level += 1;
+            upgradeResourceList.CanUpgrade = false;
+
         }
     }
 }
