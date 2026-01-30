@@ -11,7 +11,7 @@ namespace Tycoonia.Application.Factory
         {
             try
             {
-                int expectedOutput = 1;
+                int expectedOutput = 1; // !!!
 
                 CreateBufferCheck(factory, storageResources, player, expectedOutput);
                 bool checkValues = CheckingValuesForFactory(factory, storageResources, energyStorage, player);

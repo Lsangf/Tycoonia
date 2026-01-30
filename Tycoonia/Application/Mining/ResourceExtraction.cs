@@ -6,20 +6,17 @@ namespace Tycoonia.Application.Mining
 {
     public class ResourceExtraction
     {
-        public static void ResourceExtractionMine(StorageResources storageResources, List<MineBase> mine, EnergyStorage energyStorage)
+        public static void ResourceExtractionMine(StorageResources storageResources, MineBase mine, EnergyStorage energyStorage)
         {
-            foreach (MineBase currentMine in mine)
-            {
-                EnergyReservation(energyStorage, currentMine);
-                SaveExtractionMine(storageResources, currentMine);
-            }
+            EnergyReservation(energyStorage, mine);
+            SaveExtractionMine(storageResources, mine);
         }
 
-        public static void EnergyReservation(EnergyStorage energyStorage, MineBase currentMine)
+        public static void EnergyReservation(EnergyStorage energyStorage, MineBase mine)
         {
-            if (energyStorage.CurrentStorage >= currentMine.EnergyConsumption)
+            if (energyStorage.CurrentStorage >= mine.EnergyConsumption)
             {
-                energyStorage.CurrentStorage -= currentMine.EnergyConsumption;
+                energyStorage.CurrentStorage -= mine.EnergyConsumption;
             }
             else
             {
@@ -27,11 +24,11 @@ namespace Tycoonia.Application.Mining
             }
         }
 
-        public static void SaveExtractionMine(StorageResources storageResources, MineBase currentMine)
+        public static void SaveExtractionMine(StorageResources storageResources, MineBase mine)
         {
-            if (storageResources.StorageList.ContainsKey(currentMine.ProductionItem))
+            if (storageResources.StorageList.ContainsKey(mine.ProductionItem))
             {
-                storageResources.StorageList[currentMine.ProductionItem].CurrentQuantity += currentMine.ProductionRate;
+                storageResources.StorageList[mine.ProductionItem].CurrentQuantity += mine.ProductionRate;
             }
             else
             {

@@ -8,11 +8,13 @@ namespace Tycoonia.Application.Energy
     {
         public static Dictionary<string, int> EnergeticsCalculationEnergyPlant(StorageResources storageResources, EnergyPlantBase energyPlant, EnergyStorage energyStorage)
         {
+            // byte i = 0; !!!
             decimal energyNeeded = energyPlant.EnergyConsumption;
             Dictionary<string, short> receipeListNeeded = energyPlant.ReceipeList;
             Dictionary<string, StorageResourcesBase> resorcesBuffer = energyPlant.ResourceBuffer;
 
             ResourcesSubtraction(resorcesBuffer, receipeListNeeded);
+
             EnergySubtraction(energyStorage, energyNeeded);
             SaveInStorageEnergy.Save(storageResources, energyPlant, energyStorage);
 

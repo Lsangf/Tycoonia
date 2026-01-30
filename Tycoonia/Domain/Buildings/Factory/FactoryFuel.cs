@@ -1,8 +1,8 @@
 namespace Tycoonia.Domain.Buildings.Factory
 {
-    public class FactoryOil : FactoryBase
+    public class FactoryFuel : FactoryBase
     {
-        public FactoryOil()
+        public FactoryFuel()
         {
             Name = "Fuel Factory";
             ReceipeUpgradeList = new Dictionary<string, long>
@@ -11,7 +11,7 @@ namespace Tycoonia.Domain.Buildings.Factory
                 { "Bricks", 1 }
             };
             ProductionRate = 1;
-            EnergyConsumption = 1m;
+            EnergyConsumption = 0.5m;
             RecipeList = new Dictionary<string, byte>
             {
                 { "Money", 10 },

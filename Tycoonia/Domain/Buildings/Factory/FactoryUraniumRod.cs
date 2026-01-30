@@ -11,7 +11,7 @@
                 { "Bricks", 1 }
             };
             ProductionRate = 1;
-            EnergyConsumption = 1m;
+            EnergyConsumption = 0.5m;
             RecipeList = new Dictionary<string, byte>
             {
                 { "Money", 10 },

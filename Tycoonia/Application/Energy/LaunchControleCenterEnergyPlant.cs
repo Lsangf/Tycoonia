@@ -11,7 +11,7 @@ namespace Tycoonia.Application.Energy
         {
             try
             {
-                int expectedOutput = 1;
+                int expectedOutput = 1;   // !!!!!!
 
                 CreateBufferCheck(energyPlant, storageResources, expectedOutput);
                 bool checkValues = CheckingValuesForFactory(energyPlant, storageResources, energyStorage, player);

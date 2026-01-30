@@ -1,10 +1,10 @@
-namespace Tycoonia.Domain.Buildings.Factory
+﻿namespace Tycoonia.Domain.Buildings.Factory
 {
-    public class FactoryEnergyStorage : FactoryBase
+    public class FactoryCopperWire : FactoryBase
     {
-        public FactoryEnergyStorage()
+        public FactoryCopperWire()
         {
-            Name = "Storage Factory";
+            Name = "Copper Wire Factory";
             ReceipeUpgradeList = new Dictionary<string, long>
             {
                 { "Money", 100 },
@@ -15,12 +15,11 @@ namespace Tycoonia.Domain.Buildings.Factory
             RecipeList = new Dictionary<string, byte>
             {
                 { "Money", 10 },
-                { "Batteries", 3 },
-                { "Steel", 2 }
+                { "Copper", 3 }
             };
             ProductionItemList = new Dictionary<string, int>
             {
-                { "Energy Storage", ProductionRate }
+                { "Fuel", ProductionRate }
             };
         }
     }

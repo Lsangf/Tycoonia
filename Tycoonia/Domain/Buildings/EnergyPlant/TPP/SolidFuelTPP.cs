@@ -5,8 +5,8 @@
         public SolidFuelTPP() 
         {
             Name = "Solid Fuel Nuclear Power Plant";
-            ProductionRate = 50;
-            EnergyConsumption = 20;
+            ProductionRate = 10;
+            EnergyConsumption = 5;
             ReceipeUpgradeList = new Dictionary<string, long>
             {
                 { "Money", 100 },

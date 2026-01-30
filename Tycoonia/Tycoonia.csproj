@@ -17,4 +17,8 @@
     <Folder Include="Infrastructure\SQL\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Domain\Buildings\Factory\FactoryPurifiedLithium.cs" />
+  </ItemGroup>
+
 </Project>

@@ -4,10 +4,10 @@ namespace Tycoonia.Domain.Buildings.Mine
     {
         public MineThorium232((int, int) position) : base(position)
         {
-            Name = "Thorium232 mine";
+            Name = "Thorium-232 mine";
             ProductionRate = 1;
             EnergyConsumption = 0.1m;
-            ProductionItem = "Thorium232";
+            ProductionItem = "Thorium-232";
         }
     }
 }

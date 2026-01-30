@@ -31,6 +31,8 @@ namespace Tycoonia.Presentation.UI
                         {
                             //MineClay mineClay = new((0, 0));
                             //MineInfo.ShowMineInfo(mineClay);
+                            //MineUranium mineUranium = new((0, 0));
+                            //MineInfo.ShowMineInfo(mineUranium);
                             Console.WriteLine("No mines available.");
                             break;
                         }

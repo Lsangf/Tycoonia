@@ -5,7 +5,7 @@
         public CoalTPP()
         {
             Name = "Coal Thermal Power Plant";
-            ProductionRate = 5;
+            ProductionRate = 10;
             EnergyConsumption = 5;
             ReceipeUpgradeList = new Dictionary<string, long>
             {
