@@ -14,6 +14,10 @@ namespace Tycoonia.Application
                 {
                     checkValue = true;
                 }
+                else if(item.Key == "Money" && player.Ballance < item.Value.CurrentQuantity)
+                {
+                    checkValue = false;
+                }
                 else if (storageResources.StorageList[item.Key].CurrentQuantity >= item.Value.CurrentQuantity)
                 {
                     checkValue = true;

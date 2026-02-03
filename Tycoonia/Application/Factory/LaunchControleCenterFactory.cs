@@ -7,14 +7,13 @@ namespace Tycoonia.Application.Factory
 {
     public class LaunchControleCenterFactory
     {
-        public static void PreparationLaunchFactory(FactoryBase factory, StorageResources storageResources, EnergyStorage energyStorage, PlayerReal player/*,  int expectedOutput*/)
+        public static void PreparationLaunchFactory(FactoryBase factory, StorageResources storageResources, EnergyStorage energyStorage, PlayerReal player, int expectedOutput)
         {
             try
             {
-                int expectedOutput = 1; // !!!
-
                 CreateBufferCheck(factory, storageResources, player, expectedOutput);
                 bool checkValues = CheckingValuesForFactory(factory, storageResources, energyStorage, player);
+                CreateProductionTime(factory, expectedOutput);
                 if (!checkValues)
                 {
                     throw new StorageException();
@@ -22,6 +21,7 @@ namespace Tycoonia.Application.Factory
                 else
                 {
                     BufferSubtraction(factory, storageResources, player);
+                    CreateProductionTime(factory, expectedOutput);
                     factory.WorkFlag = true;
                 }
             }
@@ -73,6 +73,12 @@ namespace Tycoonia.Application.Factory
             {
                 throw new StorageException();
             }
+        }
+
+        public static void CreateProductionTime(FactoryBase factory, int expectedOutput)
+        {
+            factory.ProductionTime = expectedOutput/factory.ProductionRate;
+
         }
 
         public static void StopFactory(FactoryBase factory, StorageResources storageResources, PlayerReal player)

@@ -7,12 +7,10 @@ namespace Tycoonia.Application.Energy
 {
     public class LaunchControleCenterEnergyPlant
     {
-        public static void PreparationLaunchEnergyPlant(EnergyPlantBase energyPlant, StorageResources storageResources, EnergyStorage energyStorage, PlayerReal player/*,  int expectedOutput*/)
+        public static void PreparationLaunchEnergyPlant(EnergyPlantBase energyPlant, StorageResources storageResources, EnergyStorage energyStorage, PlayerReal player, int expectedOutput)
         {
             try
             {
-                int expectedOutput = 1;   // !!!!!!
-
                 CreateBufferCheck(energyPlant, storageResources, expectedOutput);
                 bool checkValues = CheckingValuesForFactory(energyPlant, storageResources, energyStorage, player);
                 if (!checkValues)

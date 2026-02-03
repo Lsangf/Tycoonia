@@ -6,18 +6,23 @@ namespace Tycoonia.Application.Energy
 {
     public class EnergeticsCalculation
     {
-        public static Dictionary<string, int> EnergeticsCalculationEnergyPlant(StorageResources storageResources, EnergyPlantBase energyPlant, EnergyStorage energyStorage)
+        public static Dictionary<string, int> EnergeticsCalculationEnergyPlant(StorageResources storageResources, EnergyPlantBase energyPlant, EnergyStorage energyStorage/*, byte iteration*/)
         {
-            // byte i = 0; !!!
+            byte iteration = 0;
             decimal energyNeeded = energyPlant.EnergyConsumption;
             Dictionary<string, short> receipeListNeeded = energyPlant.ReceipeList;
             Dictionary<string, StorageResourcesBase> resorcesBuffer = energyPlant.ResourceBuffer;
 
             ResourcesSubtraction(resorcesBuffer, receipeListNeeded);
-
-            EnergySubtraction(energyStorage, energyNeeded);
-            SaveInStorageEnergy.Save(storageResources, energyPlant, energyStorage);
-
+            if (iteration == 0)
+            {
+                EnergySubtraction(energyStorage, energyNeeded);
+                SaveInStorageEnergy.Save(storageResources, energyPlant, energyStorage);
+            }
+            else
+            {
+                SaveInStorageEnergy.Save(storageResources, energyPlant, energyStorage);
+            }
             return energyPlant.ProductionItemList;
         }
 

@@ -52,7 +52,7 @@ namespace TycooniaTest
         {
             foreach (var energyPlant in energyPlants)
             {
-                LaunchControleCenterEnergyPlant.PreparationLaunchEnergyPlant(energyPlant, storageResources, energyStorage, player);
+                LaunchControleCenterEnergyPlant.PreparationLaunchEnergyPlant(energyPlant, storageResources, energyStorage, player, 1);
 
                 // 57 Assert.Null(energyPlant.ResourceBuffer);
                 Assert.NotNull(energyPlant.ResourceBuffer);
@@ -68,7 +68,7 @@ namespace TycooniaTest
         {
             foreach (var energyPlant in energyPlants)
             {
-                LaunchControleCenterEnergyPlant.PreparationLaunchEnergyPlant(energyPlant, storageResources, energyStorage, player);
+                LaunchControleCenterEnergyPlant.PreparationLaunchEnergyPlant(energyPlant, storageResources, energyStorage, player, 1);
                 Assert.True(energyPlant.WorkFlag);
             }
         }
@@ -78,7 +78,7 @@ namespace TycooniaTest
         {
             foreach (var energyPlant in energyPlants)
             {
-                LaunchControleCenterEnergyPlant.PreparationLaunchEnergyPlant(energyPlant, storageResources, energyStorage, player);
+                LaunchControleCenterEnergyPlant.PreparationLaunchEnergyPlant(energyPlant, storageResources, energyStorage, player, 1);
                 Dictionary<string, int> resultRateDictionary = EnergeticsCalculation.EnergeticsCalculationEnergyPlant(storageResources, energyPlant, energyStorage);
 
                 // 84 Assert.Null(energyPlant.ResourceBuffer);

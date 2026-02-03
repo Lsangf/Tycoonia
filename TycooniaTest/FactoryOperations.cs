@@ -90,7 +90,7 @@ namespace TycooniaTest
         {
             foreach (var factory in factories)
             {
-                LaunchControleCenterFactory.PreparationLaunchFactory(factory, storageResources, energyStorage, player);
+                LaunchControleCenterFactory.PreparationLaunchFactory(factory, storageResources, energyStorage, player, 1);
 
                 // 95 Assert.Null(factory.ResourceBuffer);
                 Assert.NotNull(factory.ResourceBuffer);
@@ -120,7 +120,7 @@ namespace TycooniaTest
         {
             foreach (var factory in factories)
             {
-                LaunchControleCenterFactory.PreparationLaunchFactory(factory, storageResources, energyStorage, player);
+                LaunchControleCenterFactory.PreparationLaunchFactory(factory, storageResources, energyStorage, player, 1);
                 Assert.True(factory.WorkFlag);
             }
         }
@@ -130,7 +130,7 @@ namespace TycooniaTest
         {
             foreach (var factory in factories)
             {
-                LaunchControleCenterFactory.PreparationLaunchFactory(factory, storageResources, energyStorage, player);
+                LaunchControleCenterFactory.PreparationLaunchFactory(factory, storageResources, energyStorage, player, 1);
                 int resultRate = ProductionCalculation.ProductionCalculationFactory(storageResources, factory, energyStorage);
 
                 // 136 Assert.Null(factory.ResourceBuffer);
@@ -153,7 +153,7 @@ namespace TycooniaTest
         {
             foreach (var factory in factories)
             {
-                LaunchControleCenterFactory.PreparationLaunchFactory(factory, storageResources, energyStorage, player);
+                LaunchControleCenterFactory.PreparationLaunchFactory(factory, storageResources, energyStorage, player, 1);
                 int resultRate = ProductionCalculation.ProductionCalculationFactory(storageResources, factory, energyStorage);
                 LaunchControleCenterFactory.StopFactory(factory, storageResources, player);
 

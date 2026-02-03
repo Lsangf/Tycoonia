@@ -11,11 +11,19 @@ namespace Tycoonia.Application.Factory
             decimal energyNeeded = factory.EnergyConsumption;
             Dictionary<string, byte> receipeListNeeded = factory.RecipeList;
             Dictionary<string, StorageResourcesBase> resorcesBuffer = factory.ResourceBuffer;
-            
-            ResourcesSubtraction(resorcesBuffer, receipeListNeeded);
-            EnergySubtraction(energyStorage, energyNeeded);
-            SaveInStorage.Save(storageResources, factory);
+            bool buferCheck = ResourcesBufferBool.CheckResourcesBuffer(resorcesBuffer, receipeListNeeded);
 
+            if (!buferCheck)
+            {
+                factory.WorkFlag = false;
+                return 0;
+            }
+            else
+            {
+                ResourcesSubtraction(resorcesBuffer, receipeListNeeded);
+                EnergySubtraction(energyStorage, energyNeeded);
+                SaveInStorage.Save(storageResources, factory);
+            }
             return factory.ProductionRate;
         }
 
