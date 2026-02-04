@@ -19,7 +19,7 @@ namespace Tycoonia.Application.Factory
 
             FactoryInfo.ShowFactoryInfo(currentFactory);
             ChoiceFactoryActions(currentFactory, storageResources, energyStorage, player);
-            
+
         }
 
         public static void ChoiceFactoryActions(FactoryBase currentFactory, StorageResources storageResources, EnergyStorage energyStorage, PlayerReal player)
@@ -66,11 +66,6 @@ namespace Tycoonia.Application.Factory
                     break;
             }
         }
-
-
-
-
-
 
         public static void UpdateFactoryCalculations(StorageResources storageResources, FactoryBase currentFactory, EnergyStorage energyStorage, PlayerReal player, int choiceProductYield)
         {

@@ -78,7 +78,6 @@ namespace Tycoonia.Application.Factory
         public static void CreateProductionTime(FactoryBase factory, int expectedOutput)
         {
             factory.ProductionTime = expectedOutput/factory.ProductionRate;
-
         }
 
         public static void StopFactory(FactoryBase factory, StorageResources storageResources, PlayerReal player)
@@ -98,7 +97,9 @@ namespace Tycoonia.Application.Factory
                     throw new StorageException();
                 }
             }
+            factory.ProductionTime = 0;
             factory.ResourceBuffer.Clear();
+            factory.WorkFlag = false;
         }
     }
 }

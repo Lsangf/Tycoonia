@@ -33,6 +33,7 @@ namespace TycooniaTest
 
         private StorageResources startStorageResources;
         private List<FactoryBase> factories;
+        private int startProductionTimeFactory;
         private EnergyStorage energyStorage;
         private EnergyStorage startEnergyStorage;
         private long startBallance;
@@ -75,6 +76,7 @@ namespace TycooniaTest
                 factorySolidFuel, factorySteel, factoryThoriumRod, factoryTitanium, 
                 factoryUraniumRod
                 ];
+            startProductionTimeFactory = 10;
 
             energyStorage = new EnergyStorage();
             startEnergyStorage = new EnergyStorage();
@@ -92,22 +94,22 @@ namespace TycooniaTest
             {
                 LaunchControleCenterFactory.PreparationLaunchFactory(factory, storageResources, energyStorage, player, 1);
 
-                // 95 Assert.Null(factory.ResourceBuffer);
+                // 97 Assert.Null(factory.ResourceBuffer);
                 Assert.NotNull(factory.ResourceBuffer);
 
-                // 98 Assert.Equal(startStorageResources.StorageList, storageResources.StorageList);
+                // 100 Assert.Equal(startStorageResources.StorageList, storageResources.StorageList);
                 Assert.NotEqual(startStorageResources.StorageList, storageResources.StorageList);
 
                 foreach (var item in factory.RecipeList)
                 {
                     if (item.Key == "Money")
                     {
-                        // 105 Assert.Equal(startBallance, player.Ballance);
+                        // 107 Assert.Equal(startBallance, player.Ballance);
                         Assert.NotEqual(startBallance, player.Ballance);
                     }
                     else
                     {
-                        // 110 Assert.Equal(startStorageResources.StorageList[item.Key].CurrentQuantity, storageResources.StorageList[item.Key].CurrentQuantity);
+                        // 112 Assert.Equal(startStorageResources.StorageList[item.Key].CurrentQuantity, storageResources.StorageList[item.Key].CurrentQuantity);
                         Assert.NotEqual(startStorageResources.StorageList[item.Key].CurrentQuantity, storageResources.StorageList[item.Key].CurrentQuantity);
                     }
                 }
@@ -130,21 +132,26 @@ namespace TycooniaTest
         {
             foreach (var factory in factories)
             {
+                factory.ProductionTime = startProductionTimeFactory;
                 LaunchControleCenterFactory.PreparationLaunchFactory(factory, storageResources, energyStorage, player, 1);
                 int resultRate = ProductionCalculation.ProductionCalculationFactory(storageResources, factory, energyStorage);
+                int resultProductionTimeFactory = factory.ProductionTime;
 
-                // 136 Assert.Null(factory.ResourceBuffer);
+                // 140 Assert.Null(factory.ResourceBuffer);
                 Assert.NotNull(factory.ResourceBuffer);
 
                 Assert.Equal(factory.ProductionRate, resultRate);
+
+                // 145 Assert.Equal(startProductionTimeFactory, resultProductionTimeFactory);
+                Assert.NotEqual(startProductionTimeFactory, resultProductionTimeFactory);
             }
-            // 141 Assert.Equal(startBallance, player.Ballance);
+            // 148 Assert.Equal(startBallance, player.Ballance);
             Assert.NotEqual(startBallance, player.Ballance);
 
-            // 144 Assert.Equal(startStorageResources.StorageList, storageResources.StorageList);
+            // 151 Assert.Equal(startStorageResources.StorageList, storageResources.StorageList);
             Assert.NotEqual(startStorageResources.StorageList, storageResources.StorageList);
 
-            // 147 Assert.Equal(startEnergyStorage.CurrentStorage, energyStorage.CurrentStorage);
+            // 154 Assert.Equal(startEnergyStorage.CurrentStorage, energyStorage.CurrentStorage);
             Assert.NotEqual(startEnergyStorage.CurrentStorage, energyStorage.CurrentStorage);
         }
 
@@ -153,21 +160,38 @@ namespace TycooniaTest
         {
             foreach (var factory in factories)
             {
+                factory.ProductionTime = startProductionTimeFactory;
                 LaunchControleCenterFactory.PreparationLaunchFactory(factory, storageResources, energyStorage, player, 1);
                 int resultRate = ProductionCalculation.ProductionCalculationFactory(storageResources, factory, energyStorage);
+                int resultProductionTimeFactory = factory.ProductionTime;
                 LaunchControleCenterFactory.StopFactory(factory, storageResources, player);
 
                 Assert.Empty(factory.ResourceBuffer);
                 Assert.Equal(factory.ProductionRate, resultRate);
+                Assert.Equal(0, resultProductionTimeFactory);
             }
-            // 163 Assert.Equal(startBallance, player.Ballance);
+            // 173 Assert.Equal(startBallance, player.Ballance);
             Assert.NotEqual(startBallance, player.Ballance);
 
-            // 166 Assert.Equal(startStorageResources.StorageList, storageResources.StorageList);
+            // 176 Assert.Equal(startStorageResources.StorageList, storageResources.StorageList);
             Assert.NotEqual(startStorageResources.StorageList, storageResources.StorageList);
 
-            // 169 Assert.Equal(startEnergyStorage.CurrentStorage, energyStorage.CurrentStorage);
+            // 179 Assert.Equal(startEnergyStorage.CurrentStorage, energyStorage.CurrentStorage);
             Assert.NotEqual(startEnergyStorage.CurrentStorage, energyStorage.CurrentStorage);
+        }
+
+        [Fact]
+        public void CorrectSubtractionTime()
+        {
+            foreach (var factory in factories)
+            {
+                factory.ProductionTime = startProductionTimeFactory;
+                TimeSubtractionBuilding.TimeSubtraction(factory);
+                int resultProductionTimeFactory = factory.ProductionTime;
+
+                // 192 Assert.Equal(startProductionTimeFactory, resultProductionTimeFactory);
+                Assert.NotEqual(startProductionTimeFactory, resultProductionTimeFactory);
+            }
         }
 
         [Fact]
@@ -190,12 +214,12 @@ namespace TycooniaTest
                 {
                     if (item.Key == "Money")
                     {
-                        // 193 Assert.Equal(startBallance, resultPlayerBallance);
+                        // 217 Assert.Equal(startBallance, resultPlayerBallance);
                         Assert.NotEqual(startBallance, player.Ballance);
                     }
                     else
                     {
-                        // 198 Assert.Equal(startClay, resultStorageResourcesProductionItem);
+                        // 222 Assert.Equal(startClay, resultStorageResourcesProductionItem);
                         Assert.NotEqual(startStorageResources.StorageList[item.Key].CurrentQuantity, storageResources.StorageList[item.Key].CurrentQuantity);
                     }
                 }
@@ -212,13 +236,13 @@ namespace TycooniaTest
                 {
                     if (item.Key == "Money")
                     {
-                        // 215 Assert.Equal(startBallance, resultPlayerBallance);
+                        // 239 Assert.Equal(startBallance, resultPlayerBallance);
                         Assert.NotEqual(startBallance, player.Ballance);
                         Assert.Equal(200, factory.ReceipeUpgradeList["Money"]);
                     }
                     else
                     {
-                        // 221 Assert.Equal(startStorageResorces.StorageList[item.Key].CurrentQuantity, storageResources.StorageList[item.Key].CurrentQuantity);
+                        // 245 Assert.Equal(startStorageResorces.StorageList[item.Key].CurrentQuantity, storageResources.StorageList[item.Key].CurrentQuantity);
                         Assert.NotEqual(startStorageResources.StorageList[item.Key].CurrentQuantity, storageResources.StorageList[item.Key].CurrentQuantity);
                         Assert.Equal(2, factory.ReceipeUpgradeList[item.Key]);
                     }

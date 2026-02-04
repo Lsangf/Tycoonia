@@ -17,10 +17,12 @@ namespace Tycoonia.Application.Energy
             if (iteration == 0)
             {
                 EnergySubtraction(energyStorage, energyNeeded);
+                TimeSubtractionBuilding.TimeSubtraction(energyPlant);
                 SaveInStorageEnergy.Save(storageResources, energyPlant, energyStorage);
             }
             else
             {
+                TimeSubtractionBuilding.TimeSubtraction(energyPlant);
                 SaveInStorageEnergy.Save(storageResources, energyPlant, energyStorage);
             }
             return energyPlant.ProductionItemList;

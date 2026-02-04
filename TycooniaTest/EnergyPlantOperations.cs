@@ -21,6 +21,7 @@ namespace TycooniaTest
 
         private List<EnergyPlantBase> energyPlants;
         private EnergyStorage energyStorage;
+        private int startProductionTimeEnergyPlant;
         private EnergyStorage startEnergyStorage;
         private long startBallance;
         private PlayerReal player;
@@ -39,6 +40,7 @@ namespace TycooniaTest
             energyPlants = [coalTPP, fuelTPP, solidFuelTPP, uraniumNPP, thoriumNPP];
 
             energyStorage = new EnergyStorage();
+            startProductionTimeEnergyPlant = 10;
             startEnergyStorage = new EnergyStorage();
 
             startBallance = 10000;
@@ -54,10 +56,10 @@ namespace TycooniaTest
             {
                 LaunchControleCenterEnergyPlant.PreparationLaunchEnergyPlant(energyPlant, storageResources, energyStorage, player, 1);
 
-                // 57 Assert.Null(energyPlant.ResourceBuffer);
+                // 59 Assert.Null(energyPlant.ResourceBuffer);
                 Assert.NotNull(energyPlant.ResourceBuffer);
 
-                // 60 Assert.Equal(startStorageResources.StorageList, storageResources.StorageList);
+                // 62 Assert.Equal(startStorageResources.StorageList, storageResources.StorageList);
                 Assert.NotEqual(startStorageResources.StorageList, storageResources.StorageList);
                 Assert.True(energyPlant.WorkFlag);
             }
@@ -78,16 +80,36 @@ namespace TycooniaTest
         {
             foreach (var energyPlant in energyPlants)
             {
+                energyPlant.ProductionTime = startProductionTimeEnergyPlant;
                 LaunchControleCenterEnergyPlant.PreparationLaunchEnergyPlant(energyPlant, storageResources, energyStorage, player, 1);
                 Dictionary<string, int> resultRateDictionary = EnergeticsCalculation.EnergeticsCalculationEnergyPlant(storageResources, energyPlant, energyStorage);
+                TimeSubtractionBuilding.TimeSubtraction(energyPlant);
+                int resultProductionTimeEnergyPlant = energyPlant.ProductionTime;
 
-                // 84 Assert.Null(energyPlant.ResourceBuffer);
+                // 89 Assert.Null(energyPlant.ResourceBuffer);
                 Assert.NotNull(energyPlant.ResourceBuffer);
 
                 Assert.Equal(energyPlant.ProductionItemList, resultRateDictionary);
+
+                // 94 Assert.Equal(startProductionTimeEnergyPlant, resultProductionTimeEnergyPlant);
+                Assert.NotEqual(startProductionTimeEnergyPlant, resultProductionTimeEnergyPlant);
             }
-            // 89 Assert.Equal(startEnergyStorage.CurrentStorage, energyStorage.CurrentStorage);
+            // 97 Assert.Equal(startEnergyStorage.CurrentStorage, energyStorage.CurrentStorage);
             Assert.NotEqual(startEnergyStorage.CurrentStorage, energyStorage.CurrentStorage);
+        }
+
+        [Fact]
+        public void CorrectSubtractionTime()
+        {
+            foreach (var energyPlant in energyPlants)
+            {
+                energyPlant.ProductionTime = startProductionTimeEnergyPlant;
+                TimeSubtractionBuilding.TimeSubtraction(energyPlant);
+                int resultProductionTimeEnergyPlant = energyPlant.ProductionTime;
+
+                // 110 Assert.Equal(startProductionTimeEnergyPlant, resultProductionTimeEnergyPlant);
+                Assert.NotEqual(startProductionTimeEnergyPlant, resultProductionTimeEnergyPlant);
+            }
         }
 
         [Fact]
@@ -110,12 +132,12 @@ namespace TycooniaTest
                 {
                     if (item.Key == "Money")
                     {
-                        // 113 Assert.Equal(startBallance, player.Ballance);
+                        // 135 Assert.Equal(startBallance, player.Ballance);
                         Assert.NotEqual(startBallance, player.Ballance);
                     }
                     else
                     {
-                        // 118 Assert.Equal(startStorageResources.StorageList[item.Key].CurrentQuantity, storageResources.StorageList[item.Key].CurrentQuantity);
+                        // 140 Assert.Equal(startStorageResources.StorageList[item.Key].CurrentQuantity, storageResources.StorageList[item.Key].CurrentQuantity);
                         Assert.NotEqual(startStorageResources.StorageList[item.Key].CurrentQuantity, storageResources.StorageList[item.Key].CurrentQuantity);
                     }
                 }
@@ -132,13 +154,13 @@ namespace TycooniaTest
                 {
                     if (item.Key == "Money")
                     {
-                        // 135 Assert.Equal(startBallance, player.Ballance);
+                        // 157 Assert.Equal(startBallance, player.Ballance);
                         Assert.NotEqual(startBallance, player.Ballance);
                         Assert.Equal(200, energyPlant.ReceipeUpgradeList["Money"]);
                     }
                     else
                     {
-                        // 141 Assert.Equal(startStorageResources.StorageList[item.Key].CurrentQuantity, storageResources.StorageList[item.Key].CurrentQuantity);
+                        // 163 Assert.Equal(startStorageResources.StorageList[item.Key].CurrentQuantity, storageResources.StorageList[item.Key].CurrentQuantity);
                         Assert.NotEqual(startStorageResources.StorageList[item.Key].CurrentQuantity, storageResources.StorageList[item.Key].CurrentQuantity);
                         Assert.Equal(2, energyPlant.ReceipeUpgradeList[item.Key]);
                     }

@@ -22,6 +22,7 @@ namespace Tycoonia.Application.Factory
             {
                 ResourcesSubtraction(resorcesBuffer, receipeListNeeded);
                 EnergySubtraction(energyStorage, energyNeeded);
+                TimeSubtractionBuilding.TimeSubtraction(factory);
                 SaveInStorage.Save(storageResources, factory);
             }
             return factory.ProductionRate;
