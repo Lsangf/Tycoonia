@@ -4,11 +4,13 @@
     {
         private string _name;
         private short _level;
+        private short _MAXLevel;
         private bool _canUpgrade;
-        private int _productionRate;
+        private Dictionary<string, long> _recipeUpgradeList = [];
         private decimal _energyConsumption;
         private byte _state;
         private (int, int) _position;
+        private int _productionRate;
         private string _productionItem;
         private bool _workFlag;
         private bool _cancelFlag;
@@ -23,15 +25,20 @@
             get => _level;
             set => _level = value;
         }
+        public short MAXLevel
+        {
+            get => _MAXLevel;
+            protected set => _MAXLevel = value;
+        }
         public bool CanUpgrade
         {
             get => _canUpgrade;
             set => _canUpgrade = value;
         }
-        public int ProductionRate
+        public Dictionary<string, long> RecipeUpgradeList
         {
-            get => _productionRate;
-            set => _productionRate = value;
+            get => _recipeUpgradeList;
+            set => _recipeUpgradeList = value;
         }
         public decimal EnergyConsumption
         {
@@ -47,6 +54,11 @@
         {
             get => _position;
             set => _position = value;
+        }
+        public int ProductionRate
+        {
+            get => _productionRate;
+            set => _productionRate = value;
         }
         public string ProductionItem
         {
@@ -67,6 +79,7 @@
         public MineBase((int, int) position)
         {
             Level = 1;
+            MAXLevel = 5;
             CanUpgrade = false;
             State = 100;
             Position = position;

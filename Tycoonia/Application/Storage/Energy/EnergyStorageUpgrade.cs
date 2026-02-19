@@ -22,7 +22,7 @@ namespace Tycoonia.Application.Storage.Energy
 
         public static void CanUpgradeStorage(EnergyStorage energyStorage, StorageResources storageResources, PlayerReal player)
         {
-            foreach(var item in energyStorage.ReceipeUpgradeList)
+            foreach(var item in energyStorage.RecipeUpgradeList)
             {
                 if (item.Key == "Money" && player.Ballance >= item.Value)
                 {
@@ -41,29 +41,26 @@ namespace Tycoonia.Application.Storage.Energy
 
         public static void UpgradeSubtractionStorage(EnergyStorage energyStorage, StorageResources storageResources, PlayerReal player)
         {
-            foreach (var item in energyStorage.ReceipeUpgradeList)
+            foreach (var item in energyStorage.RecipeUpgradeList)
             {
                 if (item.Key == "Money")
                 {
-                    player.Ballance -= item.Value;
-                }
-                else if (storageResources.StorageList[item.Key].CurrentQuantity >= item.Value)
-                {
-                    storageResources.StorageList[item.Key].CurrentQuantity -= item.Value;
+                    player.SubtractSafe(item.Value);
                 }
                 else
                 {
-                    throw new StorageException();
+                    storageResources.SubtractResourceSafe(item.Key, item.Value);
                 }
             }
         }
 
         public static void UpdateUpgradeAmount(EnergyStorage energyStorage)
         {
-            foreach (var item in energyStorage.ReceipeUpgradeList)
+            foreach (var item in energyStorage.RecipeUpgradeList)
             {
-                energyStorage.ReceipeUpgradeList[item.Key] = item.Value * 2;
+                energyStorage.RecipeUpgradeList[item.Key] = item.Value * 2;
             }
+            energyStorage.MaxCapacity += Math.Round(energyStorage.MaxCapacity * 0.25m + 1m, 2);
             energyStorage.Level += 1;
             energyStorage.CanUpgrade = false;
 

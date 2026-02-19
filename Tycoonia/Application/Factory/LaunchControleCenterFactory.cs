@@ -21,7 +21,6 @@ namespace Tycoonia.Application.Factory
                 else
                 {
                     BufferSubtraction(factory, storageResources, player);
-                    CreateProductionTime(factory, expectedOutput);
                     factory.WorkFlag = true;
                 }
             }
@@ -48,15 +47,11 @@ namespace Tycoonia.Application.Factory
             {
                 if (item.Key == "Money")
                 {
-                    player.Ballance -= (long)item.Value.CurrentQuantity;
-                }
-                else if (storageResources.StorageList[item.Key].CurrentQuantity >= item.Value.CurrentQuantity)
-                {
-                    storageResources.StorageList[item.Key].CurrentQuantity -= item.Value.CurrentQuantity;
+                    player.SubtractSafe((long)item.Value.CurrentQuantity);
                 }
                 else
                 {
-                    throw new StorageException("ERR bufferCalculation");
+                    storageResources.SubtractResourceSafe(item.Key, item.Value.CurrentQuantity);
                 }
             }
         }
@@ -77,7 +72,8 @@ namespace Tycoonia.Application.Factory
 
         public static void CreateProductionTime(FactoryBase factory, int expectedOutput)
         {
-            factory.ProductionTime = expectedOutput/factory.ProductionRate;
+            factory.ProductionTime = (decimal)expectedOutput/(decimal)factory.ProductionRate;
+            factory.ProductionTimePerIteration = (decimal)factory.ProductionTime / (decimal)Math.Ceiling(factory.ProductionTime);
         }
 
         public static void StopFactory(FactoryBase factory, StorageResources storageResources, PlayerReal player)
@@ -86,15 +82,11 @@ namespace Tycoonia.Application.Factory
             {
                 if (item.Key == "Money")
                 {
-                    player.Ballance += item.Value.CurrentQuantity;
-                }
-                else if (storageResources.StorageList.ContainsKey(item.Key))
-                {
-                    storageResources.StorageList[item.Key].CurrentQuantity += item.Value.CurrentQuantity;
+                    player.AddSafe(item.Value.CurrentQuantity);
                 }
                 else
                 {
-                    throw new StorageException();
+                    storageResources.AddResourceSafe(item.Key, item.Value.CurrentQuantity);
                 }
             }
             factory.ProductionTime = 0;

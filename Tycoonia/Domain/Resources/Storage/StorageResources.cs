@@ -1,14 +1,37 @@
-﻿namespace Tycoonia.Domain.Resources.Storage
+﻿using Tycoonia.Application.ApplicationExceptions;
+
+namespace Tycoonia.Domain.Resources.Storage
 {
     public class StorageResources
     {
-        
         private Dictionary<string, StorageResourcesBase> _storageList = [];
+        private readonly object _dictLock = new();
 
         public Dictionary<string, StorageResourcesBase> StorageList
         {
-            get => _storageList;
-            set => _storageList = value;
+            get { lock (_dictLock) return _storageList; }
+            set { lock (_dictLock) _storageList = value; }
+        }
+
+        public void AddResourceSafe(string name, long amount)
+        {
+            StorageResourcesBase resource;
+            lock (_dictLock)
+            {
+                if (!_storageList.TryGetValue(name, out resource)) return;
+            }
+            resource.Add(amount);
+        }
+        public void SubtractResourceSafe(string name, long amount)
+        {
+            StorageResourcesBase resource;
+
+            lock (_dictLock)
+            {
+                if (!_storageList.TryGetValue(name, out resource))
+                    throw new StorageException($"Resource {name} not found!");
+            }
+            resource.Subtract(amount);
         }
 
         public StorageResources()
@@ -19,7 +42,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Clay"] = new StorageResourcesBase
             {
@@ -27,7 +51,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Gravel"] = new StorageResourcesBase
             {
@@ -35,7 +60,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Quartz Sand"] = new StorageResourcesBase
             {
@@ -43,7 +69,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Limestone"] = new StorageResourcesBase
             {
@@ -51,15 +78,17 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Coal"] = new StorageResourcesBase
             {
-                CurrentQuantity = 10,
+                CurrentQuantity = 99,
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Iron"] = new StorageResourcesBase
             {
@@ -67,7 +96,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Copper"] = new StorageResourcesBase
             {
@@ -75,7 +105,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Silver"] = new StorageResourcesBase
             {
@@ -83,7 +114,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Gold"] = new StorageResourcesBase
             {
@@ -91,7 +123,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Bauxite"] = new StorageResourcesBase
             {
@@ -99,7 +132,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Oil"] = new StorageResourcesBase
             {
@@ -107,7 +141,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Lithium"] = new StorageResourcesBase
             {
@@ -115,7 +150,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Limenite"] = new StorageResourcesBase
             {
@@ -123,7 +159,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Uranium"] = new StorageResourcesBase
             {
@@ -131,7 +168,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Thorium-232"] = new StorageResourcesBase
             {
@@ -139,7 +177,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Rough Diamonds"] = new StorageResourcesBase
             {
@@ -147,7 +186,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Bricks"] = new StorageResourcesBase
             {
@@ -155,7 +195,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Concrete"] = new StorageResourcesBase
             {
@@ -163,7 +204,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Steel"] = new StorageResourcesBase
             {
@@ -171,7 +213,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Copper Wire"] = new StorageResourcesBase
             {
@@ -179,7 +222,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Silver Bars"] = new StorageResourcesBase
             {
@@ -187,7 +231,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Gold Bars"] = new StorageResourcesBase
             {
@@ -195,7 +240,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Aluminum"] = new StorageResourcesBase
             {
@@ -203,7 +249,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Titanium"] = new StorageResourcesBase
             {
@@ -211,7 +258,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Glass"] = new StorageResourcesBase
             {
@@ -219,7 +267,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Silicon"] = new StorageResourcesBase
             {
@@ -235,7 +284,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Plastic"] = new StorageResourcesBase
             {
@@ -243,7 +293,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Fuel"] = new StorageResourcesBase
             {
@@ -251,7 +302,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Solid Fuel"] = new StorageResourcesBase
             {
@@ -259,7 +311,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Purified Lithium"] = new StorageResourcesBase
             {
@@ -267,7 +320,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Batteries"] = new StorageResourcesBase
             {
@@ -275,7 +329,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Energy Storage"] = new StorageResourcesBase
             {
@@ -283,7 +338,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Diamonds"] = new StorageResourcesBase
             {
@@ -291,7 +347,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Uranium-238"] = new StorageResourcesBase
             {
@@ -299,7 +356,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Uranium-235"] = new StorageResourcesBase
             {
@@ -307,7 +365,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Uranium Rod"] = new StorageResourcesBase
             {
@@ -315,7 +374,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Plutonium-239"] = new StorageResourcesBase
             {
@@ -323,7 +383,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
             StorageList["Thorium Rod"] = new StorageResourcesBase
             {
@@ -331,7 +392,8 @@
                 MaxCapacity = 100,
                 UpgradeCost = 10,
                 CanUpgrade = false,
-                Level = 1
+                Level = 1,
+                Price = 1
             };
         }
     }

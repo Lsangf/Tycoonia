@@ -12,15 +12,11 @@ namespace Tycoonia.Application.Energy
             {
                 if (item.Key == "Energy")
                 {
-                    energyStorage.CurrentStorage += item.Value;
-                }
-                else if (storageResources.StorageList.ContainsKey(item.Key))
-                {
-                    storageResources.StorageList[item.Key].CurrentQuantity += item.Value;
+                    energyStorage.AddSafe(item.Value);
                 }
                 else
                 {
-                    throw new StorageException();
+                    storageResources.AddResourceSafe(item.Key, item.Value);
                 }
             }
         }

@@ -13,14 +13,15 @@ namespace Tycoonia.Application.Energy
             {
                 CreateBufferCheck(energyPlant, storageResources, expectedOutput);
                 bool checkValues = CheckingValuesForFactory(energyPlant, storageResources, energyStorage, player);
-                if (!checkValues)
+				CreateProductionTime(energyPlant, expectedOutput);
+				if (!checkValues)
                 {
                     throw new StorageException();
                 }
                 else
                 {
                     BufferSubtraction(energyPlant, storageResources);
-                    energyPlant.WorkFlag = true;
+					energyPlant.WorkFlag = true;
                 }
             }
             catch
@@ -33,7 +34,7 @@ namespace Tycoonia.Application.Energy
 
         public static Dictionary<string, StorageResourcesBase> CreateBufferCheck(EnergyPlantBase energyPlant, StorageResources storageResources, int expectedOutput)
         {
-            foreach (var item in energyPlant.ReceipeList)
+            foreach (var item in energyPlant.RecipeList)
             {
                 energyPlant.ResourceBuffer.Add(item.Key, new StorageResourcesBase { CurrentQuantity = item.Value * expectedOutput });
             }
@@ -44,14 +45,7 @@ namespace Tycoonia.Application.Energy
         {
             foreach (var item in energyPlant.ResourceBuffer)
             {
-                if (storageResources.StorageList[item.Key].CurrentQuantity >= item.Value.CurrentQuantity)
-                {
-                    storageResources.StorageList[item.Key].CurrentQuantity -= item.Value.CurrentQuantity;
-                }
-                else
-                {
-                    throw new StorageException("ERR bufferCalculation");
-                }
+                storageResources.SubtractResourceSafe(item.Key, item.Value.CurrentQuantity);
             }
         }
 
@@ -69,5 +63,10 @@ namespace Tycoonia.Application.Energy
             }
         }
 
-    }
+		public static void CreateProductionTime(EnergyPlantBase energyPlant, int expectedOutput)
+		{
+			energyPlant.ProductionTime = (decimal)expectedOutput / (decimal)energyPlant.ProductionRate;
+            energyPlant.ProductionTimePerIteration = (decimal)energyPlant.ProductionTime / (decimal)Math.Ceiling(energyPlant.ProductionTime);
+        }
+	}
 }

@@ -5,7 +5,7 @@
         public FactoryCopperWire()
         {
             Name = "Copper Wire Factory";
-            ReceipeUpgradeList = new Dictionary<string, long>
+            RecipeUpgradeList = new Dictionary<string, long>
             {
                 { "Money", 100 },
                 { "Bricks", 1 }
@@ -19,7 +19,7 @@
             };
             ProductionItemList = new Dictionary<string, int>
             {
-                { "Fuel", ProductionRate }
+                { "Copper Wire", ProductionRate }
             };
         }
     }

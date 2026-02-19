@@ -1,6 +1,6 @@
 ﻿using Tycoonia.Domain.Buildings.Mine;
 
-namespace Tycoonia.Presentation.UI
+namespace Tycoonia.Presentation.UI.Info
 {
     public class MineInfo
     {

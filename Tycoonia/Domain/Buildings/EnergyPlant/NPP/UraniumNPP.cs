@@ -5,14 +5,14 @@
         public UraniumNPP()
         {
             Name = "Uranium Nuclear Power Plant";
-            ProductionRate = 10;
+            ProductionRate = 1;
             EnergyConsumption = 5;
-            ReceipeUpgradeList = new Dictionary<string, long>
+            RecipeUpgradeList = new Dictionary<string, long>
             {
                 { "Money", 100 },
                 { "Bricks", 1 }
             };
-            ReceipeList = new Dictionary<string, short>
+            RecipeList = new Dictionary<string, short>
             {
                 { "Uranium Rod", 1 }
             };

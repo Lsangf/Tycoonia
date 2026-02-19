@@ -4,6 +4,7 @@
     {
         private string _name;
         private long _ballance;
+        private readonly object _lock = new();
 
         public string Name
         {
@@ -12,8 +13,24 @@
         }
         public long Ballance
         {
-            get => _ballance;
-            set => _ballance = value;
+            get { lock (_lock) return _ballance; }
+            set { lock (_lock) _ballance = value; }
+        }
+        public void SubtractSafe(long amount)
+        {
+            lock (_lock)
+            {
+                if (_ballance < amount)
+                    throw new Exception("Insufficient money!");
+                _ballance -= amount;
+            }
+        }
+        public void AddSafe(long amount)
+        {
+            lock (_lock)
+            {
+                _ballance += amount;
+            }
         }
 
         public PlayerReal(string name, long ballance)

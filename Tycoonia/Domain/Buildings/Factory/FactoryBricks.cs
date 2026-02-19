@@ -5,7 +5,7 @@
         public FactoryBricks()
         {
             Name = "Bricks Factory";
-            ReceipeUpgradeList = new Dictionary<string, long>
+            RecipeUpgradeList = new Dictionary<string, long>
             {
                 { "Money", 100 },
                 { "Bricks", 1 }

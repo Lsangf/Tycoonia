@@ -22,7 +22,7 @@ namespace Tycoonia.Application
 
         public static void CanUpgrade(dynamic building, StorageResources storageResources, PlayerReal player)
         {
-            foreach (var item in building.ReceipeUpgradeList)
+            foreach (var item in building.RecipeUpgradeList)
             {
                 if (item.Key == "Money" && player.Ballance >= item.Value)
                 {
@@ -41,28 +41,31 @@ namespace Tycoonia.Application
 
         public static void UpgradeSubtraction(dynamic building, StorageResources storageResources, PlayerReal player)
         {
-            foreach (var item in building.ReceipeUpgradeList)
+            foreach (var item in building.RecipeUpgradeList)
             {
                 if (item.Key == "Money")
                 {
-                    player.Ballance -= item.Value;
-                }
-                else if (storageResources.StorageList[item.Key].CurrentQuantity >= item.Value)
-                {
-                    storageResources.StorageList[item.Key].CurrentQuantity -= item.Value;
+                    player.SubtractSafe(item.Value);
                 }
                 else
                 {
-                    throw new StorageException();
+                    storageResources.SubtractResourceSafe(item.Key, item.Value);
                 }
             }
         }
+
         public static void UpdateUpgradeAmount(dynamic building)
         {
-            foreach (var item in building.ReceipeUpgradeList)
+            foreach (var item in building.RecipeUpgradeList)
             {
-                building.ReceipeUpgradeList[item.Key] = item.Value * 2;
+                building.RecipeUpgradeList[item.Key] = item.Value * 2;
             }
+            foreach (var item in building.ProductionItemList)
+            {
+                building.ProductionItemList[item.Key] += (int)Math.Truncate(item.Value * 0.25 + 1);
+            }
+            building.ProductionRate += (int)Math.Truncate(building.ProductionRate * 0.25 + 1);
+            building.EnergyConsumption += 0.01m;
             building.Level += 1;
             building.CanUpgrade = false;
         }

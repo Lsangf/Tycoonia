@@ -1,5 +1,4 @@
-﻿using Tycoonia.Application.ApplicationExceptions;
-using Tycoonia.Domain.Buildings.Mine;
+﻿using Tycoonia.Domain.Buildings.Mine;
 using Tycoonia.Domain.Resources.Storage;
 
 namespace Tycoonia.Application.Mining
@@ -14,26 +13,12 @@ namespace Tycoonia.Application.Mining
 
         public static void EnergyReservation(EnergyStorage energyStorage, MineBase mine)
         {
-            if (energyStorage.CurrentStorage >= mine.EnergyConsumption)
-            {
-                energyStorage.CurrentStorage -= mine.EnergyConsumption;
-            }
-            else
-            {
-                throw new StorageException();
-            }
+            energyStorage.SubtractSafe(mine.EnergyConsumption);
         }
 
         public static void SaveExtractionMine(StorageResources storageResources, MineBase mine)
         {
-            if (storageResources.StorageList.ContainsKey(mine.ProductionItem))
-            {
-                storageResources.StorageList[mine.ProductionItem].CurrentQuantity += mine.ProductionRate;
-            }
-            else
-            {
-                throw new StorageException();
-            }
+            storageResources.AddResourceSafe(mine.ProductionItem, mine.ProductionRate);
         }
     }
 }

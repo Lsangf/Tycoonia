@@ -6,14 +6,13 @@ namespace Tycoonia.Application.Energy
 {
     public class EnergeticsCalculation
     {
-        public static Dictionary<string, int> EnergeticsCalculationEnergyPlant(StorageResources storageResources, EnergyPlantBase energyPlant, EnergyStorage energyStorage/*, byte iteration*/)
+        public static Dictionary<string, int> EnergeticsCalculationEnergyPlant(StorageResources storageResources, EnergyPlantBase energyPlant, EnergyStorage energyStorage, byte iteration)
         {
-            byte iteration = 0;
             decimal energyNeeded = energyPlant.EnergyConsumption;
-            Dictionary<string, short> receipeListNeeded = energyPlant.ReceipeList;
+            Dictionary<string, short> recipeListNeeded = energyPlant.RecipeList;
             Dictionary<string, StorageResourcesBase> resorcesBuffer = energyPlant.ResourceBuffer;
 
-            ResourcesSubtraction(resorcesBuffer, receipeListNeeded);
+            ResourcesSubtraction(resorcesBuffer, recipeListNeeded);
             if (iteration == 0)
             {
                 EnergySubtraction(energyStorage, energyNeeded);
@@ -28,9 +27,9 @@ namespace Tycoonia.Application.Energy
             return energyPlant.ProductionItemList;
         }
 
-        public static void ResourcesSubtraction(Dictionary<string, StorageResourcesBase> resorcesBuffer, Dictionary<string, short> receipeListNeeded)
+        public static void ResourcesSubtraction(Dictionary<string, StorageResourcesBase> resorcesBuffer, Dictionary<string, short> recipeListNeeded)
         {
-            foreach (var item in receipeListNeeded)
+            foreach (var item in recipeListNeeded)
             {
                 if (resorcesBuffer[item.Key].CurrentQuantity >= item.Value)
                 {
@@ -45,14 +44,7 @@ namespace Tycoonia.Application.Energy
 
         public static void EnergySubtraction(EnergyStorage energyStorage, decimal energyNeeded)
         {
-            if (energyStorage.CurrentStorage >= energyNeeded)
-            {
-                energyStorage.CurrentStorage -= energyNeeded;
-            }
-            else
-            {
-                throw new StorageException("ERR energyCalculation");
-            }
+            energyStorage.SubtractSafe(energyNeeded);
         }
     }
 }

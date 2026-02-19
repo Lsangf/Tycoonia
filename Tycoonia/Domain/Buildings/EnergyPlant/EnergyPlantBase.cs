@@ -7,11 +7,13 @@ namespace Tycoonia.Domain.Buildings.EnergyPlant
         private string _name;
         private short _level;
         private bool _canUpgrade;
-        private Dictionary<string, long> _receipeUpgradeList = [];
+        private Dictionary<string, long> _recipeUpgradeList = [];
         private int _productionRate;
-        private int _productionTime;
+        private long _maxExpectedOtput;
+        private decimal _productionTime;
+        private decimal _productionTimePerIteration;
         private int energyConsumption;
-        private Dictionary<string, short> _receipeList = [];
+        private Dictionary<string, short> _recipeList = [];
         private Dictionary<string, StorageResourcesBase> _resourceBuffer = [];
         private Dictionary<string, int> _productionItemList = [];
         private bool _workFlag;
@@ -31,30 +33,40 @@ namespace Tycoonia.Domain.Buildings.EnergyPlant
             get => _canUpgrade;
             set => _canUpgrade = value;
         }
-        public Dictionary<string, long> ReceipeUpgradeList
+        public Dictionary<string, long> RecipeUpgradeList
         {
-            get => _receipeUpgradeList;
-            set => _receipeUpgradeList = value;
+            get => _recipeUpgradeList;
+            set => _recipeUpgradeList = value;
         }
         public int ProductionRate
         {
             get => _productionRate;
             set => _productionRate = value;
         }
-        public int ProductionTime
+        public long MaxExpectedOtput
+        {
+            get => _maxExpectedOtput;
+            set => _maxExpectedOtput = value;
+        }
+        public decimal ProductionTime
         {
             get => _productionTime;
             set => _productionTime = value;
+        }
+        public decimal ProductionTimePerIteration
+        {
+            get => _productionTimePerIteration;
+            set => _productionTimePerIteration = value;
         }
         public int EnergyConsumption
         {
             get => energyConsumption;
             set => energyConsumption = value;
         }
-        public Dictionary<string, short> ReceipeList
+        public Dictionary<string, short> RecipeList
         {
-            get => _receipeList;
-            set => _receipeList = value;
+            get => _recipeList;
+            set => _recipeList = value;
         }
         public Dictionary<string, StorageResourcesBase> ResourceBuffer
         {

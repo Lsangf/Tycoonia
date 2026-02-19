@@ -6,20 +6,17 @@
         private decimal _currentStorage;
         private bool _canUpgrade;
         private short _level;
-        private Dictionary<string, long> _receipeUpgradeList = new()
+        private Dictionary<string, long> _recipeUpgradeList = new()
         {
             {"Money", 10 },
             {"Bricks", 1 } 
         };
+        private readonly object _lock = new();
+
         public decimal MaxCapacity
         {
             get => _maxCapacity;
             set => _maxCapacity = value;
-        }
-        public decimal CurrentStorage
-        {
-            get => _currentStorage;
-            set => _currentStorage = value;
         }
         public bool CanUpgrade
         {
@@ -31,10 +28,32 @@
             get => _level;
             set => _level = value;
         }
-        public Dictionary<string, long> ReceipeUpgradeList
+        public Dictionary<string, long> RecipeUpgradeList
         {
-            get => _receipeUpgradeList;
-            set => _receipeUpgradeList = value;
+            get => _recipeUpgradeList;
+            set => _recipeUpgradeList = value;
+        }
+        public decimal CurrentStorage
+        {
+            get { lock (_lock) return _currentStorage; }
+            set { lock (_lock) _currentStorage = value; }
+        }
+        public void SubtractSafe(decimal amount)
+        {
+            lock (_lock)
+            {
+                if (_currentStorage < amount)
+                    throw new Exception("Insufficient energy!");
+                _currentStorage -= amount;
+            }
+        }
+        public void AddSafe(long amount)
+        {
+            lock (_lock)
+            {
+                _currentStorage += amount;
+                if (_currentStorage > MaxCapacity) _currentStorage = MaxCapacity;
+            }
         }
 
         public EnergyStorage()
@@ -44,6 +63,5 @@
             CurrentStorage = 50000m;
             Level = 1;
         }
-
     }
 }

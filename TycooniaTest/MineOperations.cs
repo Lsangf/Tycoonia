@@ -1,5 +1,6 @@
 ﻿using Tycoonia.Application.Mining;
 using Tycoonia.Domain.Buildings.Mine;
+using Tycoonia.Domain.Player;
 using Tycoonia.Domain.Resources.Storage;
 namespace TycooniaTest
 {
@@ -28,6 +29,8 @@ namespace TycooniaTest
         private List<MineBase> mines;
         private EnergyStorage energyStorage;
         private EnergyStorage startEnergyStorage;
+        private PlayerReal player;
+        private int startBallance;
 
         public MineOperations()
         {
@@ -63,6 +66,9 @@ namespace TycooniaTest
 
                 energyStorage = new EnergyStorage();
                 startEnergyStorage = new EnergyStorage();
+
+                startBallance = 10000;
+                player = new PlayerReal("player1", startBallance);
             }
         }
 
@@ -75,7 +81,7 @@ namespace TycooniaTest
             {
                 ResourceExtraction.EnergyReservation(energyStorage, mine);
             }
-            // 78 Assert.NotEqual(startEnergyStorage.CurrentStorage, energyStorage.CurrentStorage);
+            // 85 Assert.NotEqual(startEnergyStorage.CurrentStorage, energyStorage.CurrentStorage);
             Assert.NotEqual(startEnergyStorage.CurrentStorage, energyStorage.CurrentStorage);
         }
 
@@ -86,7 +92,7 @@ namespace TycooniaTest
             {
                 ResourceExtraction.SaveExtractionMine(storageResources, mine);
 
-                // 89 Assert.Equal(startStorageResources.StorageList[mine.ProductionItem].CurrentQuantity, storageResources.StorageList[mine.ProductionItem].CurrentQuantity);
+                // 96 Assert.Equal(startStorageResources.StorageList[mine.ProductionItem].CurrentQuantity, storageResources.StorageList[mine.ProductionItem].CurrentQuantity);
                 Assert.NotEqual(startStorageResources.StorageList[mine.ProductionItem].CurrentQuantity, storageResources.StorageList[mine.ProductionItem].CurrentQuantity);
             }
         }
@@ -98,11 +104,91 @@ namespace TycooniaTest
             {
                 ResourceExtraction.ResourceExtractionMine(storageResources, mine, energyStorage);
 
-                // 101 Assert.Equal(startStorageResources.StorageList[mine.ProductionItem].CurrentQuantity, storageResources.StorageList[mine.ProductionItem].CurrentQuantity);
+                // 108 Assert.Equal(startStorageResources.StorageList[mine.ProductionItem].CurrentQuantity, storageResources.StorageList[mine.ProductionItem].CurrentQuantity);
                 Assert.NotEqual(startStorageResources.StorageList[mine.ProductionItem].CurrentQuantity, storageResources.StorageList[mine.ProductionItem].CurrentQuantity);
             }
-            // 104 Assert.Equal(startEnergyStorage, energyStorage);
+            // 111 Assert.Equal(startEnergyStorage, energyStorage);
             Assert.NotEqual(startEnergyStorage, energyStorage);
+        }
+
+        [Fact]
+        public void CorrectCanUpgrade()
+        {
+            foreach (var mine in mines)
+            {
+                MineUpgrade.CanUpgrade(mine, storageResources, player);
+                Assert.True(mine.CanUpgrade);
+            }
+        }
+
+        [Fact]
+        public void CorrectUpgradeSubtraction()
+        {
+            foreach (var mine in mines)
+            {
+                MineUpgrade.UpgradeSubtraction(mine, storageResources, player);
+                foreach (var item in mine.RecipeUpgradeList)
+                {
+                    if (item.Key == "Money")
+                    {
+                        // 135 Assert.Equal(startBallance, resultPlayerBallance);
+                        Assert.NotEqual(startBallance, player.Ballance);
+                    }
+                    else
+                    {
+                        // 140 Assert.Equal(startClay, resultStorageResourcesProductionItem);
+                        Assert.NotEqual(startStorageResources.StorageList[item.Key].CurrentQuantity, storageResources.StorageList[item.Key].CurrentQuantity);
+                    }
+                }
+            }
+        }
+
+        [Fact]
+        public void CorrectUpgradeStorage()
+        {
+            foreach (var mine in mines)
+            {
+                MineUpgrade.Upgrade(mine, storageResources, player);
+                foreach (var item in mine.RecipeUpgradeList)
+                {
+                    if (item.Key == "Money")
+                    {
+                        // 157 Assert.Equal(startBallance, resultPlayerBallance);
+                        Assert.NotEqual(startBallance, player.Ballance);
+                        Assert.Equal(200, mine.RecipeUpgradeList["Money"]);
+                    }
+                    else
+                    {
+                        // 163 Assert.Equal(startStorageResorces.StorageList[item.Key].CurrentQuantity, storageResources.StorageList[item.Key].CurrentQuantity);
+                        Assert.NotEqual(startStorageResources.StorageList[item.Key].CurrentQuantity, storageResources.StorageList[item.Key].CurrentQuantity);
+                        Assert.Equal(2, mine.RecipeUpgradeList[item.Key]);
+                    }
+                }
+                Assert.False(mine.CanUpgrade);
+                Assert.Equal(2, mine.Level);
+            }
+        }
+
+        [Fact]
+        public void CorrectUpdateUpgradeAmount()
+        {
+            foreach (var mine in mines)
+            {
+                MineUpgrade.UpdateUpgradeAmount(mine);
+                foreach (var item in mine.RecipeUpgradeList)
+                {
+                    if (item.Key == "Money")
+                    {
+                        Assert.Equal(200, mine.RecipeUpgradeList["Money"]);
+                    }
+                    else
+                    {
+                        Assert.Equal(2, mine.RecipeUpgradeList[item.Key]);
+                    }
+                }
+                Assert.False(mine.CanUpgrade);
+                Assert.Equal(2, mine.Level);
+            }
         }
     }
 }

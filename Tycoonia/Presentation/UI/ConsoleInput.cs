@@ -1,4 +1,6 @@
-﻿namespace Tycoonia.Presentation.UI
+﻿using Tycoonia.Application.ApplicationExceptions;
+
+namespace Tycoonia.Presentation.UI
 {
     public class ConsoleInput
     {
@@ -15,7 +17,7 @@
                 }
                 else
                 {
-                    Console.WriteLine("Invalid input. Please enter a valid number.\n");
+                    throw new InputException();
                 }
             }
             return choice;

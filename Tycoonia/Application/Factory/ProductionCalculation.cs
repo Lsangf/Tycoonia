@@ -9,9 +9,9 @@ namespace Tycoonia.Application.Factory
         public static int ProductionCalculationFactory(StorageResources storageResources, FactoryBase factory, EnergyStorage energyStorage)
         {
             decimal energyNeeded = factory.EnergyConsumption;
-            Dictionary<string, byte> receipeListNeeded = factory.RecipeList;
+            Dictionary<string, byte> recipeListNeeded = factory.RecipeList;
             Dictionary<string, StorageResourcesBase> resorcesBuffer = factory.ResourceBuffer;
-            bool buferCheck = ResourcesBufferBool.CheckResourcesBuffer(resorcesBuffer, receipeListNeeded);
+            bool buferCheck = ResourcesBufferBool.CheckResourcesBuffer(resorcesBuffer, recipeListNeeded);
 
             if (!buferCheck)
             {
@@ -20,7 +20,7 @@ namespace Tycoonia.Application.Factory
             }
             else
             {
-                ResourcesSubtraction(resorcesBuffer, receipeListNeeded);
+                ResourcesSubtraction(resorcesBuffer, recipeListNeeded);
                 EnergySubtraction(energyStorage, energyNeeded);
                 TimeSubtractionBuilding.TimeSubtraction(factory);
                 SaveInStorage.Save(storageResources, factory);
@@ -28,9 +28,9 @@ namespace Tycoonia.Application.Factory
             return factory.ProductionRate;
         }
 
-        public static void ResourcesSubtraction(Dictionary<string, StorageResourcesBase> resorcesBuffer, Dictionary<string, byte> receipeListNeeded)
+        public static void ResourcesSubtraction(Dictionary<string, StorageResourcesBase> resorcesBuffer, Dictionary<string, byte> recipeListNeeded)
         {
-            foreach (var item in receipeListNeeded)
+            foreach (var item in recipeListNeeded)
             {
                 if (resorcesBuffer[item.Key].CurrentQuantity >= item.Value)
                 {
@@ -45,14 +45,7 @@ namespace Tycoonia.Application.Factory
 
         public static void EnergySubtraction(EnergyStorage energyStorage, decimal energyNeeded)
         {
-            if (energyStorage.CurrentStorage >= energyNeeded)
-            {
-                energyStorage.CurrentStorage -= energyNeeded;
-            }
-            else
-            {
-                throw new StorageException("ERR energyCalculation");
-            }
+            energyStorage.SubtractSafe(energyNeeded);
         }
     }
 }

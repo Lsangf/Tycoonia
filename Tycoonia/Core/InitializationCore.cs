@@ -2,6 +2,7 @@
 using Tycoonia.Domain.Buildings.EnergyPlant.NPP;
 using Tycoonia.Domain.Buildings.EnergyPlant.TPP;
 using Tycoonia.Domain.Buildings.Factory;
+using Tycoonia.Domain.Buildings.Mine;
 using Tycoonia.Domain.Player;
 using Tycoonia.Domain.Resources.EnergyResources;
 using Tycoonia.Domain.Resources.ProcessedResources;
@@ -98,6 +99,8 @@ namespace Tycoonia.Core
 
             // gameloop
 
+            List<MineBase> mines = null;
+
             List<FactoryBase> factories =
                 [
                 factoryAluminum, factoryBatteries, factoryBricks, factoryConcrete,
@@ -113,7 +116,7 @@ namespace Tycoonia.Core
             ];
 
 
-            GameLoop.StartGameLoop(player, factories, energyPlants, storageResources, energyStorage);
+            GameLoop.StartGameLoop(mines, player, factories, energyPlants, storageResources, energyStorage);
         }
 
         public static PlayerReal CreatePlayer()

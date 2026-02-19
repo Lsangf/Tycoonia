@@ -38,6 +38,7 @@ namespace TycooniaTest
         private EnergyStorage startEnergyStorage;
         private long startBallance;
         private PlayerReal player;
+        private long startMaxExpectedOtput;
 
         public FactoryOperations()
         {
@@ -83,6 +84,8 @@ namespace TycooniaTest
 
             startBallance = 10000;
             player = new PlayerReal("player1", startBallance);
+
+            startMaxExpectedOtput = 0;
         }
 
         // "//(line number)" to check exact values ​​without comparing correctness
@@ -94,22 +97,22 @@ namespace TycooniaTest
             {
                 LaunchControleCenterFactory.PreparationLaunchFactory(factory, storageResources, energyStorage, player, 1);
 
-                // 97 Assert.Null(factory.ResourceBuffer);
+                // 100 Assert.Null(factory.ResourceBuffer);
                 Assert.NotNull(factory.ResourceBuffer);
 
-                // 100 Assert.Equal(startStorageResources.StorageList, storageResources.StorageList);
+                // 103 Assert.Equal(startStorageResources.StorageList, storageResources.StorageList);
                 Assert.NotEqual(startStorageResources.StorageList, storageResources.StorageList);
 
                 foreach (var item in factory.RecipeList)
                 {
                     if (item.Key == "Money")
                     {
-                        // 107 Assert.Equal(startBallance, player.Ballance);
+                        // 110 Assert.Equal(startBallance, player.Ballance);
                         Assert.NotEqual(startBallance, player.Ballance);
                     }
                     else
                     {
-                        // 112 Assert.Equal(startStorageResources.StorageList[item.Key].CurrentQuantity, storageResources.StorageList[item.Key].CurrentQuantity);
+                        // 115 Assert.Equal(startStorageResources.StorageList[item.Key].CurrentQuantity, storageResources.StorageList[item.Key].CurrentQuantity);
                         Assert.NotEqual(startStorageResources.StorageList[item.Key].CurrentQuantity, storageResources.StorageList[item.Key].CurrentQuantity);
                     }
                 }
@@ -135,23 +138,23 @@ namespace TycooniaTest
                 factory.ProductionTime = startProductionTimeFactory;
                 LaunchControleCenterFactory.PreparationLaunchFactory(factory, storageResources, energyStorage, player, 1);
                 int resultRate = ProductionCalculation.ProductionCalculationFactory(storageResources, factory, energyStorage);
-                int resultProductionTimeFactory = factory.ProductionTime;
+                decimal resultProductionTimeFactory = factory.ProductionTime;
 
-                // 140 Assert.Null(factory.ResourceBuffer);
+                // 143 Assert.Null(factory.ResourceBuffer);
                 Assert.NotNull(factory.ResourceBuffer);
 
                 Assert.Equal(factory.ProductionRate, resultRate);
 
-                // 145 Assert.Equal(startProductionTimeFactory, resultProductionTimeFactory);
+                // 148 Assert.Equal(startProductionTimeFactory, resultProductionTimeFactory);
                 Assert.NotEqual(startProductionTimeFactory, resultProductionTimeFactory);
             }
-            // 148 Assert.Equal(startBallance, player.Ballance);
+            // 151 Assert.Equal(startBallance, player.Ballance);
             Assert.NotEqual(startBallance, player.Ballance);
 
-            // 151 Assert.Equal(startStorageResources.StorageList, storageResources.StorageList);
+            // 154 Assert.Equal(startStorageResources.StorageList, storageResources.StorageList);
             Assert.NotEqual(startStorageResources.StorageList, storageResources.StorageList);
 
-            // 154 Assert.Equal(startEnergyStorage.CurrentStorage, energyStorage.CurrentStorage);
+            // 157 Assert.Equal(startEnergyStorage.CurrentStorage, energyStorage.CurrentStorage);
             Assert.NotEqual(startEnergyStorage.CurrentStorage, energyStorage.CurrentStorage);
         }
 
@@ -163,20 +166,20 @@ namespace TycooniaTest
                 factory.ProductionTime = startProductionTimeFactory;
                 LaunchControleCenterFactory.PreparationLaunchFactory(factory, storageResources, energyStorage, player, 1);
                 int resultRate = ProductionCalculation.ProductionCalculationFactory(storageResources, factory, energyStorage);
-                int resultProductionTimeFactory = factory.ProductionTime;
+                decimal resultProductionTimeFactory = factory.ProductionTime;
                 LaunchControleCenterFactory.StopFactory(factory, storageResources, player);
 
                 Assert.Empty(factory.ResourceBuffer);
                 Assert.Equal(factory.ProductionRate, resultRate);
                 Assert.Equal(0, resultProductionTimeFactory);
             }
-            // 173 Assert.Equal(startBallance, player.Ballance);
+            // 176 Assert.Equal(startBallance, player.Ballance);
             Assert.NotEqual(startBallance, player.Ballance);
 
-            // 176 Assert.Equal(startStorageResources.StorageList, storageResources.StorageList);
+            // 179 Assert.Equal(startStorageResources.StorageList, storageResources.StorageList);
             Assert.NotEqual(startStorageResources.StorageList, storageResources.StorageList);
 
-            // 179 Assert.Equal(startEnergyStorage.CurrentStorage, energyStorage.CurrentStorage);
+            // 182 Assert.Equal(startEnergyStorage.CurrentStorage, energyStorage.CurrentStorage);
             Assert.NotEqual(startEnergyStorage.CurrentStorage, energyStorage.CurrentStorage);
         }
 
@@ -186,11 +189,13 @@ namespace TycooniaTest
             foreach (var factory in factories)
             {
                 factory.ProductionTime = startProductionTimeFactory;
+                factory.ProductionTimePerIteration = 10m;
                 TimeSubtractionBuilding.TimeSubtraction(factory);
-                int resultProductionTimeFactory = factory.ProductionTime;
+                decimal resultProductionTimeFactory = factory.ProductionTime;
 
-                // 192 Assert.Equal(startProductionTimeFactory, resultProductionTimeFactory);
+                // 196 Assert.Equal(startProductionTimeFactory, resultProductionTimeFactory);
                 Assert.NotEqual(startProductionTimeFactory, resultProductionTimeFactory);
+                Assert.Equal(0, resultProductionTimeFactory);
             }
         }
 
@@ -210,16 +215,16 @@ namespace TycooniaTest
             foreach (var factory in factories)
             {
                 UpgradeBuilding.UpgradeSubtraction(factory, storageResources, player);
-                foreach (var item in factory.ReceipeUpgradeList)
+                foreach (var item in factory.RecipeUpgradeList)
                 {
                     if (item.Key == "Money")
                     {
-                        // 217 Assert.Equal(startBallance, resultPlayerBallance);
+                        // 222 Assert.Equal(startBallance, resultPlayerBallance);
                         Assert.NotEqual(startBallance, player.Ballance);
                     }
                     else
                     {
-                        // 222 Assert.Equal(startClay, resultStorageResourcesProductionItem);
+                        // 227 Assert.Equal(startClay, resultStorageResourcesProductionItem);
                         Assert.NotEqual(startStorageResources.StorageList[item.Key].CurrentQuantity, storageResources.StorageList[item.Key].CurrentQuantity);
                     }
                 }
@@ -232,19 +237,19 @@ namespace TycooniaTest
             foreach (var factory in factories)
             {
                 UpgradeBuilding.Upgrade(factory, storageResources, player);
-                foreach (var item in factory.ReceipeUpgradeList)
+                foreach (var item in factory.RecipeUpgradeList)
                 {
                     if (item.Key == "Money")
                     {
-                        // 239 Assert.Equal(startBallance, resultPlayerBallance);
+                        // 244 Assert.Equal(startBallance, resultPlayerBallance);
                         Assert.NotEqual(startBallance, player.Ballance);
-                        Assert.Equal(200, factory.ReceipeUpgradeList["Money"]);
+                        Assert.Equal(200, factory.RecipeUpgradeList["Money"]);
                     }
                     else
                     {
-                        // 245 Assert.Equal(startStorageResorces.StorageList[item.Key].CurrentQuantity, storageResources.StorageList[item.Key].CurrentQuantity);
+                        // 250 Assert.Equal(startStorageResorces.StorageList[item.Key].CurrentQuantity, storageResources.StorageList[item.Key].CurrentQuantity);
                         Assert.NotEqual(startStorageResources.StorageList[item.Key].CurrentQuantity, storageResources.StorageList[item.Key].CurrentQuantity);
-                        Assert.Equal(2, factory.ReceipeUpgradeList[item.Key]);
+                        Assert.Equal(2, factory.RecipeUpgradeList[item.Key]);
                     }
                 }
                 Assert.False(factory.CanUpgrade);
@@ -258,19 +263,32 @@ namespace TycooniaTest
             foreach (var factory in factories)
             {
                 UpgradeBuilding.UpdateUpgradeAmount(factory);
-                foreach (var item in factory.ReceipeUpgradeList)
+                foreach (var item in factory.RecipeUpgradeList)
                 {
                     if (item.Key == "Money")
                     {
-                        Assert.Equal(200, factory.ReceipeUpgradeList["Money"]);
+                        Assert.Equal(200, factory.RecipeUpgradeList["Money"]);
                     }
                     else
                     {
-                        Assert.Equal(2, factory.ReceipeUpgradeList[item.Key]);
+                        Assert.Equal(2, factory.RecipeUpgradeList[item.Key]);
                     }
                 }
                 Assert.False(factory.CanUpgrade);
                 Assert.Equal(2, factory.Level);
+            }
+        }
+
+        [Fact]
+        public void CorrectUpdateMaximumExpectedOutput()
+        {
+            foreach (var factory in factories)
+            {
+                MaximumPossibleExpectedOtput.UpdateMaximumPossibleExpectedOtput(factory, storageResources, player);
+                long resultMaxxpectedOutput = factory.MaxExpectedOtput;
+
+                // 290 Assert.NotEqual(startMaxExpectedOtput, resultMaxxpectedOutput);
+                Assert.NotEqual(startMaxExpectedOtput, resultMaxxpectedOutput);
             }
         }
     }

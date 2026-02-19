@@ -1,5 +1,4 @@
-﻿using Tycoonia.Application.ApplicationExceptions;
-using Tycoonia.Domain.Buildings.Factory;
+﻿using Tycoonia.Domain.Buildings.Factory;
 using Tycoonia.Domain.Resources.Storage;
 
 namespace Tycoonia.Application.Factory
@@ -10,14 +9,7 @@ namespace Tycoonia.Application.Factory
         {
             foreach (var item in factory.ProductionItemList)
             {
-                if (storageResources.StorageList.ContainsKey(item.Key))
-                {
-                    storageResources.StorageList[item.Key].CurrentQuantity += item.Value;
-                }
-                else
-                {
-                    throw new StorageException();
-                }
+                storageResources.AddResourceSafe(item.Key, item.Value);
             }
         }
     }

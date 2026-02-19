@@ -4,9 +4,9 @@
     {
         public static void TimeSubtraction(dynamic building)
         {
-            if (building.ProductionTime > 0)
+            if (building.ProductionTime > 0m)
             {
-                building.ProductionTime -= 1;
+                building.ProductionTime -= building.ProductionTimePerIteration;
             }
             else
             {

@@ -7,7 +7,7 @@ namespace Tycoonia.Domain.Buildings.Factory
         public FactoryThoriumRod()
         {
             Name = "Thorium Rod Factory";
-            ReceipeUpgradeList = new Dictionary<string, long>
+            RecipeUpgradeList = new Dictionary<string, long>
             {
                 { "Money", 100 },
                 { "Bricks", 1 }

@@ -48,8 +48,8 @@ namespace TycooniaTest
             EnergyStorageUpgrade.UpdateUpgradeAmount(energyStorage);
 
             Assert.False(energyStorage.CanUpgrade);
-            Assert.Equal(20, energyStorage.ReceipeUpgradeList["Money"]);
-            Assert.Equal(2, energyStorage.ReceipeUpgradeList["Bricks"]);
+            Assert.Equal(20, energyStorage.RecipeUpgradeList["Money"]);
+            Assert.Equal(2, energyStorage.RecipeUpgradeList["Bricks"]);
             Assert.Equal(2, energyStorage.Level);
         }
 
