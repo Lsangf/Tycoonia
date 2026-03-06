@@ -2,7 +2,7 @@
 
 namespace Tycoonia.Domain.Buildings.Factory
 {
-    public abstract class FactoryBase
+    public abstract class FactoryBase : EntityBase
     {
         private string _name;
         private short _level;

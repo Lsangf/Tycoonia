@@ -15,11 +15,16 @@
     <Folder Include="Domain\Map\" />
     <Folder Include="Domain\Market\NPC\" />
     <Folder Include="Domain\DomainExceptions\" />
-    <Folder Include="Infrastructure\SQL\" />
+    <Folder Include="Infrastructure\JSON\" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="Domain\Buildings\Factory\FactoryPurifiedLithium.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.72" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.4" />
   </ItemGroup>
 
 </Project>
