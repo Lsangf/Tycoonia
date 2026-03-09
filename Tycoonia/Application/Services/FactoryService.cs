@@ -17,7 +17,7 @@ namespace Tycoonia.Application.Services
             await _factoryRepository.UpgradeFactoryAsync(id);
         }
 
-        public async Task<IEnumerable<FactoryBase>> GetAllFactories()
+        public async Task<IEnumerable<FactoryBase>> GetAllFactoriesAsync()
         {
             return await _factoryRepository.GetAllAsync();
         }

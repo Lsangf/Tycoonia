@@ -21,31 +21,29 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
                WHERE Id = @Id
              """, connection);
 
+            selectFactoryCmd.Parameters.Add("@Id", SqlDbType.Int).Value = id;
+
             await connection.OpenAsync();
             using SqlDataReader reader = await selectFactoryCmd.ExecuteReaderAsync();
 
             int factoryIdIndex = reader.GetOrdinal("Id");
             int factoryLevelIndex = reader.GetOrdinal("Level");
             int factoryProductionRateIndex = reader.GetOrdinal("ProductionRate");
+            int factoryEnergyConsumptionIndex = reader.GetOrdinal("EnergyConsumption");
+            int factoryWorkFlagIndex = reader.GetOrdinal("WorkFlag");
 
             if (!reader.Read()) return null;
 
-            //int factoryId = reader.GetInt32(factoryIdIndex);
-
-            //factories[factoryId] = new FactoryAluminum
-            //{
-            //    Id = factoryId,
-            //    Level = reader.GetInt16(factoryLevelIndex),
-            //    ProductionRate = reader.GetInt32(factoryProductionRateIndex)
-            //};
-
-            //return factories[factoryId];
-            return new FactoryAluminum
+            var factory = new FactoryAluminum
             {
-                Id = reader.GetInt32(factoryIdIndex),
-                Level = reader.GetInt16(factoryLevelIndex),
-                ProductionRate = reader.GetInt32(factoryProductionRateIndex)
+                
             };
+            Id = reader.GetInt32(factoryIdIndex);
+                Level = reader.GetInt16(factoryLevelIndex),
+                ProductionRate = reader.GetInt32(factoryProductionRateIndex),
+                EnergyConsumption = reader.GetDecimal(factoryEnergyConsumptionIndex),
+                WorkFlag = reader.GetBoolean(factoryWorkFlagIndex)
+            return factory;
         }
 
         public async Task<IEnumerable<FactoryBase>> GetAllAsync()
@@ -64,15 +62,20 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
             int factoryIdIndex = reader.GetOrdinal("Id");
             int factoryLevelIndex = reader.GetOrdinal("Level");
             int factoryProductionRateIndex = reader.GetOrdinal("ProductionRate");
+            int factoryEnergyConsumptionIndex = reader.GetOrdinal("EnergyConsumption");
+            int factoryWorkFlagIndex = reader.GetOrdinal("WorkFlag");
 
             while (reader.Read())
             {
-                listFactories.Add(new FactoryAluminum
+                var factory = new FactoryAluminum
                 {
                     Id = reader.GetInt32(factoryIdIndex),
                     Level = reader.GetInt16(factoryLevelIndex),
-                    ProductionRate = reader.GetInt32(factoryProductionRateIndex)
-                });
+                    ProductionRate = reader.GetInt32(factoryProductionRateIndex),
+                    EnergyConsumption = reader.GetDecimal(factoryEnergyConsumptionIndex),
+                    WorkFlag = reader.GetBoolean(factoryWorkFlagIndex)
+                };
+                listFactories.Add(factory);
             }
             return listFactories;
         }
@@ -80,18 +83,21 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
         public async Task AddAsync(FactoryBase factory)
         {
             using var connection = _connectionProvider.CreateConnection();
-            using SqlTransaction transaction = connection.BeginTransaction();
             await connection.OpenAsync();
+            using SqlTransaction transaction = connection.BeginTransaction();
             try
             {
                 SqlCommand insertFactoryCmd = new
                 ("""
-                    INSERT INTO Factories (Level, ProductionRate) 
-                    VALUES (@Level, @ProductionRate)
+                    INSERT INTO Factories (Name, Level, ProductionRate, EnergyConsumption, WorkFlag) 
+                    VALUES (@Name, @Level, @ProductionRate, @EnergyConsumption, @WorkFlag)
                  """, connection, transaction);
 
+                insertFactoryCmd.Parameters.Add("@Name", SqlDbType.NVarChar, 150).Value = factory.Name;
                 insertFactoryCmd.Parameters.Add("@Level", SqlDbType.SmallInt).Value = factory.Level;
                 insertFactoryCmd.Parameters.Add("@ProductionRate", SqlDbType.Int).Value = factory.ProductionRate;
+                insertFactoryCmd.Parameters.Add("@EnergyConsumption", SqlDbType.Decimal).Value = factory.EnergyConsumption;
+                insertFactoryCmd.Parameters.Add("@WorkFlag", SqlDbType.Bit).Value = factory.WorkFlag;
 
                 await insertFactoryCmd.ExecuteNonQueryAsync();
                 await transaction.CommitAsync();
@@ -106,19 +112,22 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
         public async Task UpdateAsync(FactoryBase factory)
         {
             using var connection = _connectionProvider.CreateConnection();
-            using SqlTransaction transaction = connection.BeginTransaction();
             await connection.OpenAsync();
+            using SqlTransaction transaction = connection.BeginTransaction();
             try
             {
                 SqlCommand updateFactoryCmd = new
                  ("""
                     UPDATE Factories 
-                    SET Level=@Level, ProductionRate=@ProductionRate 
+                    SET Name=@Name, Level=@Level, ProductionRate=@ProductionRate, EnergyConsumption=@EnergyConsumption, WorkFlag=@WorkFlag 
                     WHERE Id=@Id
                  """, connection, transaction);
 
+                updateFactoryCmd.Parameters.Add("@Name", SqlDbType.NVarChar, 150).Value = factory.Name;
                 updateFactoryCmd.Parameters.Add("@Level", SqlDbType.SmallInt).Value = factory.Level;
                 updateFactoryCmd.Parameters.Add("@ProductionRate", SqlDbType.Int).Value = factory.ProductionRate;
+                updateFactoryCmd.Parameters.Add("@EnergyConsumption", SqlDbType.Decimal).Value = factory.EnergyConsumption;
+                updateFactoryCmd.Parameters.Add("@WorkFlag", SqlDbType.Bit).Value = factory.WorkFlag;
                 updateFactoryCmd.Parameters.Add("@Id", SqlDbType.Int).Value = factory.Id;
 
                 await updateFactoryCmd.ExecuteNonQueryAsync();
@@ -134,8 +143,8 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
         public async Task DeleteAsync(int id)
         {
             using var connection = _connectionProvider.CreateConnection();
-            using SqlTransaction transaction = connection.BeginTransaction();
             await connection.OpenAsync();
+            using SqlTransaction transaction = connection.BeginTransaction();
             try
             {
                 SqlCommand deleteFactoryCmd = new
@@ -158,8 +167,8 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
         public async Task UpgradeFactoryAsync(int factoryId)
         {
             using var connection = _connectionProvider.CreateConnection();
-            using SqlTransaction transaction = connection.BeginTransaction();
             await connection.OpenAsync();
+            using SqlTransaction transaction = connection.BeginTransaction();
             try
             {
                 SqlCommand updateFactoryLvlCmd = new
@@ -179,6 +188,21 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
                 await transaction.RollbackAsync();
                 throw;
             }
+        }
+
+        public async Task<bool> AnyAsync()
+        {
+            using var connection = _connectionProvider.CreateConnection();
+
+            SqlCommand checkAnyCmd = new
+            ("""
+                SELECT TOP 1 Id FROM Factories
+             """, connection);
+            
+            await connection.OpenAsync();
+
+            using var reader = await checkAnyCmd.ExecuteReaderAsync();
+            return reader.Read();
         }
     }
 }

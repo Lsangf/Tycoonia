@@ -2,48 +2,17 @@
 
 namespace Tycoonia.Domain.Buildings.Factory
 {
-    public abstract class FactoryBase : EntityBase
+    public abstract class FactoryBase : GameEntityBase
     {
-        private string _name;
-        private short _level;
-        private bool _canUpgrade;
-        private Dictionary<string, long> _recipeUpgradeList = [];
-        private int _productionRate;
         private long _maxExpectedOtput;
-        private decimal energyConsumption;
+        private decimal _energyConsumption;
         private decimal _productionTime;
         private decimal _productionTimePerIteration;
         private Dictionary<string, byte> _recipeList = [];
         private Dictionary<string, StorageResourcesBase> _resourceBuffer = [];
         private Dictionary<string, int> _productionItemList = [];
-        private bool _workFlag;
         private bool _cancelFlag;
 
-        public string Name
-        {
-            get => _name;
-            protected set => _name = value;
-        }
-        public short Level
-        {
-            get => _level;
-            set => _level = value;
-        }
-        public bool CanUpgrade
-        {
-            get => _canUpgrade;
-            set => _canUpgrade = value;
-        }
-        public Dictionary<string, long> RecipeUpgradeList
-        {
-            get => _recipeUpgradeList;
-            set => _recipeUpgradeList = value;
-        }
-        public int ProductionRate
-        {
-            get => _productionRate;
-            set => _productionRate = value;
-        }
         public long MaxExpectedOtput
         {
             get => _maxExpectedOtput;
@@ -51,8 +20,8 @@ namespace Tycoonia.Domain.Buildings.Factory
         }
         public decimal EnergyConsumption
         {
-            get => energyConsumption;
-            set => energyConsumption = value;
+            get => _energyConsumption;
+            set => _energyConsumption = value;
         }
         public decimal ProductionTime
         {
@@ -78,11 +47,6 @@ namespace Tycoonia.Domain.Buildings.Factory
         {
             get => _productionItemList;
             set => _productionItemList = value;
-        } 
-        public bool WorkFlag
-        {
-            get => _workFlag;
-            set => _workFlag = value;
         }
         public bool CancelFlag
         {

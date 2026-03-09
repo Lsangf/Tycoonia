@@ -1,4 +1,6 @@
-﻿using Tycoonia.Domain.Buildings.EnergyPlant;
+﻿using Tycoonia.Application.Interfaces;
+using Tycoonia.Application.Services;
+using Tycoonia.Domain.Buildings.EnergyPlant;
 using Tycoonia.Domain.Buildings.EnergyPlant.NPP;
 using Tycoonia.Domain.Buildings.EnergyPlant.TPP;
 using Tycoonia.Domain.Buildings.Factory;
@@ -9,83 +11,19 @@ using Tycoonia.Domain.Resources.ProcessedResources;
 using Tycoonia.Domain.Resources.ProducedResources;
 using Tycoonia.Domain.Resources.RawResources;
 using Tycoonia.Domain.Resources.Storage;
+using Tycoonia.Infrastructure.SQL;
+using Tycoonia.Infrastructure.SQL.Database;
+using Tycoonia.Infrastructure.SQL.Repositories;
 
 namespace Tycoonia.Core
 {
     public class InitializationCore
     {
         private static Random random = new();
-        public static void Main()
+        public static async Task Main()
         {
             PlayerReal player = CreatePlayer();
 
-            // raw resources
-            Bauxite bauxite = new();
-            Clay clay = new();
-            Coal coal= new();
-            Copper copper = new();
-            Gold gold = new();
-            Gravel gravel = new();
-            Iron iron = new();
-            Limenite limenite = new();
-            Limestone limestone = new();
-            Lithium lithium = new();
-            Oil oil = new();
-            QuartzSand quartzSand = new();
-            RoughDiamonds roughDiamonds = new();
-            Silver silver = new();
-            Thorium232 thorium232 = new();
-            Uranium uranium = new();
-            Water water = new();
-
-            // produced resources
-            Aluminum aluminum = new();
-            Batteries batteries = new();
-            Bricks bricks = new();
-            Concrete concrete = new();
-            CopperWire copperWire = new();
-            Diamonds diamonds = new();
-            ElectronicComponents electronicComponents = new();
-            Domain.Resources.ProducedResources.EnergyStorage energyStorageProduced = new ();
-            Fuel fuel = new();
-            Glass glass = new();
-            GoldBars goldBars = new();
-            Plastic plastic = new();
-            Plutonium239 plutonium239 = new();
-            PurifiedLithium purifiedLithium = new();
-            Silicon silicon = new();
-            SilverBars silverBars = new();
-            SolidFuel solidFuel = new();
-            Steel steel = new();
-            ThoriumRod thoriumRod = new();
-            Titanium titanium = new();
-            Uranium235 uranium235 = new();
-            Uranium238 uranium238 = new();
-            UraniumRod uraniumRod = new();
-
-            Energy energy = new();
-
-            // factories and plants
-            FactoryAluminum factoryAluminum = new();
-            FactoryBatteries factoryBatteries = new();
-            FactoryBricks factoryBricks = new();
-            FactoryConcrete factoryConcrete = new();
-            FactoryCopperWire factoryCopperWire = new();
-            FactoryDiamonds factoryDiamonds = new();
-            FactoryElectronicComponents factoryElectronicComponents = new();
-            FactoryEnergyStorage factoryEnergyStorage = new();
-            FactoryFuel factoryFuel = new();
-            FactoryGlass factoryGlass = new();
-            FactoryGoldBars factoryGoldBars = new();
-            FactoryPlastic factoryPlastic = new();
-            FactoryPurifiedLithium factoryPurifiedLithium = new();
-            FactorySilicon factorySilicon = new();
-            FactorySilverBars factorySilverBars = new();
-            FactorySolidFuel factorySolidFuel = new();
-            FactorySteel factorySteel = new();
-            FactoryThoriumRod factoryThoriumRod = new();
-            FactoryTitanium factoryTitanium = new();
-            FactoryUraniumRod factoryUraniumRod = new();
 
             CoalTPP coalTPP = new();
             FuelTPP fuelTPP = new();
@@ -101,14 +39,27 @@ namespace Tycoonia.Core
 
             List<MineBase> mines = null;
 
-            List<FactoryBase> factories =
-                [
-                factoryAluminum, factoryBatteries, factoryBricks, factoryConcrete,
-                factoryCopperWire, factoryDiamonds, factoryElectronicComponents, factoryEnergyStorage,
-                factoryFuel, factoryGlass, factoryGoldBars, factoryPlastic,
-                factoryPurifiedLithium, factorySilicon, factorySilverBars, factorySolidFuel,
-                factorySteel, factoryThoriumRod, factoryTitanium, factoryUraniumRod
-                ];
+
+            string connectionString = await SQLInitializer.InitializeAsync();
+
+            DbConnectionProvider connectionProvider =
+                new DbConnectionProvider(connectionString);
+
+            IFactoryRepository factoryRepository =
+                new FactoryRepository(connectionProvider);
+
+            DataInitializer dataInitializer =
+                new DataInitializer(factoryRepository);
+
+            await dataInitializer.Initialize();
+
+            FactoryService factoryService =
+                new FactoryService(factoryRepository);
+
+            GameLoop gameLoop = new GameLoop(factoryService);
+
+            await gameLoop.StartAsync();
+
 
             List<EnergyPlantBase> energyPlants =
             [
@@ -116,7 +67,6 @@ namespace Tycoonia.Core
             ];
 
 
-            GameLoop.StartGameLoop(mines, player, factories, energyPlants, storageResources, energyStorage);
         }
 
         public static PlayerReal CreatePlayer()
