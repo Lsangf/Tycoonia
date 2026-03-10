@@ -41,12 +41,12 @@ namespace Tycoonia.Infrastructure.SQL
             using var connection = new SqlConnection(connectionString);
             await connection.OpenAsync();
 
-            string createTablesQuery !!=
+            string createTablesQuery = 
             """
             IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Factories' AND xtype='U')
             CREATE TABLE Factories (
                 Id INT PRIMARY KEY IDENTITY,
-                FactoryType NVARCHAR(100) NOT NULL,
+                Type NVARCHAR(100) NOT NULL,
                 Name NVARCHAR(150) NOT NULL,
                 Level SMALLINT NOT NULL,
                 ProductionRate INT NOT NULL,

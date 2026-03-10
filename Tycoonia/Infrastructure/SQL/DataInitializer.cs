@@ -25,6 +25,7 @@ namespace Tycoonia.Infrastructure.SQL
             await _factoryRepository.AddAsync(new FactoryDiamonds());
             await _factoryRepository.AddAsync(new FactoryElectronicComponents());
             await _factoryRepository.AddAsync(new FactoryEnergyStorage());
+            await _factoryRepository.AddAsync(new FactoryEnrichmentUranium());
             await _factoryRepository.AddAsync(new FactoryFuel());
             await _factoryRepository.AddAsync(new FactoryGlass());
             await _factoryRepository.AddAsync(new FactoryGoldBars());

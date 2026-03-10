@@ -4,6 +4,7 @@ namespace Tycoonia.Domain.Buildings.Factory
     {
         public FactorySilverBars()
         {
+            Type = "Silver Bars";
             Name = "Silver Bars Factory";
             RecipeUpgradeList = new Dictionary<string, long>
             {

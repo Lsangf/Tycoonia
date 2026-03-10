@@ -6,6 +6,7 @@ namespace Tycoonia.Domain.Buildings.Factory
     {
         public FactoryThoriumRod()
         {
+            Type = "Thorium Rod";
             Name = "Thorium Rod Factory";
             RecipeUpgradeList = new Dictionary<string, long>
             {

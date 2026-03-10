@@ -12,7 +12,6 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
 
         public async Task<FactoryBase?> GetByIdAsync(int id)
         {
-            //Dictionary<int, FactoryBase> factories = [];
             using var connection = _connectionProvider.CreateConnection();
 
             SqlCommand selectFactoryCmd = new
@@ -34,15 +33,38 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
 
             if (!reader.Read()) return null;
 
-            var factory = new FactoryAluminum
+            string factoryType = reader.GetString(reader.GetOrdinal("Type"));
+            FactoryBase factory = factoryType switch
             {
-                
+                "Aluminum" => new FactoryAluminum(),
+                "Batteries" => new FactoryBatteries(),
+                "Bricks" => new FactoryBricks(),
+                "Concrete" => new FactoryConcrete(),
+                "Copper Wire" => new FactoryCopperWire(),
+                "Diamonds" => new FactoryDiamonds(),
+                "Electronic Components" => new FactoryElectronicComponents(),
+                "Energy Storage" => new FactoryEnergyStorage(),
+                "Uranium X" => new FactoryEnrichmentUranium(),
+                "Fuel" => new FactoryFuel(),
+                "Glass" => new FactoryGlass(),
+                "Gold Bars" => new FactoryGoldBars(),
+                "Plastic" => new FactoryPlastic(),
+                "Purified Lithium" => new FactoryPurifiedLithium(),
+                "Silicon" => new FactorySilicon(),
+                "Silver Bars" => new FactorySilverBars(),
+                "Solid Fuel" => new FactorySolidFuel(),
+                "Steel" => new FactorySteel(),
+                "Thorium Rod" => new FactoryThoriumRod(),
+                "Titanium" => new FactoryTitanium(),
+                "Uranium Rod" => new FactoryUraniumRod(),
+                _ => throw new InvalidOperationException($"Unknown factory type: {factoryType}")
             };
-            Id = reader.GetInt32(factoryIdIndex);
-                Level = reader.GetInt16(factoryLevelIndex),
-                ProductionRate = reader.GetInt32(factoryProductionRateIndex),
-                EnergyConsumption = reader.GetDecimal(factoryEnergyConsumptionIndex),
-                WorkFlag = reader.GetBoolean(factoryWorkFlagIndex)
+            factory.Id = reader.GetInt32(factoryIdIndex);
+            factory.Level = reader.GetInt16(factoryLevelIndex);
+            factory.ProductionRate = reader.GetInt32(factoryProductionRateIndex);
+            factory.EnergyConsumption = reader.GetDecimal(factoryEnergyConsumptionIndex);
+            factory.WorkFlag = reader.GetBoolean(factoryWorkFlagIndex);
+
             return factory;
         }
 
@@ -67,14 +89,37 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
 
             while (reader.Read())
             {
-                var factory = new FactoryAluminum
+                string factoryType = reader.GetString(reader.GetOrdinal("Type"));
+                FactoryBase factory = factoryType switch
                 {
-                    Id = reader.GetInt32(factoryIdIndex),
-                    Level = reader.GetInt16(factoryLevelIndex),
-                    ProductionRate = reader.GetInt32(factoryProductionRateIndex),
-                    EnergyConsumption = reader.GetDecimal(factoryEnergyConsumptionIndex),
-                    WorkFlag = reader.GetBoolean(factoryWorkFlagIndex)
+                    "Aluminum" => new FactoryAluminum(),
+                    "Batteries" => new FactoryBatteries(),
+                    "Bricks" => new FactoryBricks(),
+                    "Concrete" => new FactoryConcrete(),
+                    "Copper Wire" => new FactoryCopperWire(),
+                    "Diamonds" => new FactoryDiamonds(),
+                    "Electronic Components" => new FactoryElectronicComponents(),
+                    "Energy Storage" => new FactoryEnergyStorage(),
+                    "Uranium X" => new FactoryEnrichmentUranium(),
+                    "Fuel" => new FactoryFuel(),
+                    "Glass" => new FactoryGlass(),
+                    "Gold Bars" => new FactoryGoldBars(),
+                    "Plastic" => new FactoryPlastic(),
+                    "Purified Lithium" => new FactoryPurifiedLithium(),
+                    "Silicon" => new FactorySilicon(),
+                    "Silver Bars" => new FactorySilverBars(),
+                    "Solid Fuel" => new FactorySolidFuel(),
+                    "Steel" => new FactorySteel(),
+                    "Thorium Rod" => new FactoryThoriumRod(),
+                    "Titanium" => new FactoryTitanium(),
+                    "Uranium Rod" => new FactoryUraniumRod(),
+                    _ => throw new InvalidOperationException($"Unknown factory type: {factoryType}")
                 };
+                factory.Id = reader.GetInt32(factoryIdIndex);
+                factory.Level = reader.GetInt16(factoryLevelIndex);
+                factory.ProductionRate = reader.GetInt32(factoryProductionRateIndex);
+                factory.EnergyConsumption = reader.GetDecimal(factoryEnergyConsumptionIndex);
+                factory.WorkFlag = reader.GetBoolean(factoryWorkFlagIndex);
                 listFactories.Add(factory);
             }
             return listFactories;
@@ -89,10 +134,11 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
             {
                 SqlCommand insertFactoryCmd = new
                 ("""
-                    INSERT INTO Factories (Name, Level, ProductionRate, EnergyConsumption, WorkFlag) 
-                    VALUES (@Name, @Level, @ProductionRate, @EnergyConsumption, @WorkFlag)
+                    INSERT INTO Factories (Type, Name, Level, ProductionRate, EnergyConsumption, WorkFlag) 
+                    VALUES (@Type, @Name, @Level, @ProductionRate, @EnergyConsumption, @WorkFlag)
                  """, connection, transaction);
 
+                insertFactoryCmd.Parameters.Add("@Type", SqlDbType.NVarChar, 100).Value = factory.Type; 
                 insertFactoryCmd.Parameters.Add("@Name", SqlDbType.NVarChar, 150).Value = factory.Name;
                 insertFactoryCmd.Parameters.Add("@Level", SqlDbType.SmallInt).Value = factory.Level;
                 insertFactoryCmd.Parameters.Add("@ProductionRate", SqlDbType.Int).Value = factory.ProductionRate;
@@ -119,10 +165,11 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
                 SqlCommand updateFactoryCmd = new
                  ("""
                     UPDATE Factories 
-                    SET Name=@Name, Level=@Level, ProductionRate=@ProductionRate, EnergyConsumption=@EnergyConsumption, WorkFlag=@WorkFlag 
+                    SET Type=@Type, Name=@Name, Level=@Level, ProductionRate=@ProductionRate, EnergyConsumption=@EnergyConsumption, WorkFlag=@WorkFlag 
                     WHERE Id=@Id
                  """, connection, transaction);
 
+                updateFactoryCmd.Parameters.Add("@Type", SqlDbType.NVarChar, 100).Value = factory.Type;
                 updateFactoryCmd.Parameters.Add("@Name", SqlDbType.NVarChar, 150).Value = factory.Name;
                 updateFactoryCmd.Parameters.Add("@Level", SqlDbType.SmallInt).Value = factory.Level;
                 updateFactoryCmd.Parameters.Add("@ProductionRate", SqlDbType.Int).Value = factory.ProductionRate;

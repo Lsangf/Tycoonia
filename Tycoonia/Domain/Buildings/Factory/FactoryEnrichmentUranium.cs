@@ -4,6 +4,7 @@
     {
         public FactoryEnrichmentUranium()
         {
+            Type = "Uranium X";
             Name = "Enrichment Factory";
             RecipeUpgradeList = new Dictionary<string, long>
             {

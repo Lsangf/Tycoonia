@@ -4,6 +4,7 @@
     {
         public FactoryBricks()
         {
+            Type = "Bricks";
             Name = "Bricks Factory";
             RecipeUpgradeList = new Dictionary<string, long>
             {
