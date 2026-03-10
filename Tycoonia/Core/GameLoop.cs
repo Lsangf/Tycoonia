@@ -11,49 +11,57 @@ namespace Tycoonia.Core
     public class GameLoop
     {
         private readonly FactoryService _factoryService;
+        private PlayerReal _player;
+        private StorageResources _storageResources;
+        private EnergyStorage _energyStorage;
+        private List<MineBase> _mines;
+        private List<EnergyPlantBase> _energyPlants;
 
-        public GameLoop(FactoryService factoryService)
+        public GameLoop(FactoryService factoryService, PlayerReal player, StorageResources storageResources, EnergyStorage energyStorage, List<MineBase> mines, List<EnergyPlantBase> energyPlants)
         {
             _factoryService = factoryService;
+            _player = player;
+            _storageResources = storageResources;
+            _energyStorage = energyStorage;
+            _mines = mines;
+            _energyPlants = energyPlants;
         }
 
         public async Task StartAsync()
         {
-            bool running = true;
+            ConsoleChoiceSystem.ConsoleChoice(_mines, _player, (List<FactoryBase>)await _factoryService.GetAllFactoriesAsync(), _energyPlants, _storageResources, _energyStorage);
 
-            while (running)
-            {
-                Console.Clear();
+            //bool running = true;
 
-                Console.WriteLine("=== FACTORIES ===");
+            //while (running)
+            //{
+            //    Console.Clear();
 
-               var factories = await _factoryService.GetAllFactoriesAsync();
+            //    Console.WriteLine("=== FACTORIES ===");
 
-                foreach (var factory in factories)
-                {
-                    Console.WriteLine($"{factory.Id} | {factory.Name} | Level: {factory.Level}");
-                }
+            //   var factories = await _factoryService.GetAllFactoriesAsync();
 
-                Console.WriteLine();
-                Console.WriteLine("1 - Upgrade factory (Soon(local))");
-                //Console.WriteLine("2 - Update factory in database");
-                Console.WriteLine("2 - Exit");
+            //    foreach (var factory in factories)
+            //    {
+            //        Console.WriteLine($"{factory.Id} | {factory.Name} | Level: {factory.Level}");
+            //    }
 
-                string input = Console.ReadLine();
+            //    Console.WriteLine();
+            //    Console.WriteLine("1 - Upgrade factory (Soon(local))");
+            //    Console.WriteLine("2 - Exit");
 
-                switch (input)
-                {
-                    case "1":
-                        await UpgradeFactoryAsync();
-                        break;
-                    //case "2":
-                    //    await UpdateByIdFactoryAsync();
-                    //    break;
-                    case "2":
-                        running = false;
-                        break;
-                }
-            }
+            //    string input = Console.ReadLine();
+
+            //    switch (input)
+            //    {
+            //        case "1":
+            //            await UpgradeFactoryAsync();
+            //            break;
+            //        case "2":
+            //            running = false;
+            //            break;
+            //    }
+            //}
         }
 
         private async Task UpgradeFactoryAsync()
@@ -68,15 +76,5 @@ namespace Tycoonia.Core
                 await _factoryService.UpdateFactory(factory);
             }
         }
-
-        //private async Task UpdateByIdFactoryAsync()
-        //{
-        //    Console.WriteLine("Enter factory id:");
-
-        //    if (int.TryParse(Console.ReadLine(), out int id))
-        //    {
-        //        await _factoryService.UpdateByIdFactory(id);
-        //    }
-        //}
     }
 }

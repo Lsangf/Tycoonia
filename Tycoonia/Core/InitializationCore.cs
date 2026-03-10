@@ -24,7 +24,6 @@ namespace Tycoonia.Core
         {
             PlayerReal player = CreatePlayer();
 
-
             CoalTPP coalTPP = new();
             FuelTPP fuelTPP = new();
             SolidFuelTPP solidFuelTPP = new();
@@ -39,34 +38,23 @@ namespace Tycoonia.Core
 
             List<MineBase> mines = null;
 
-
-            string connectionString = await SQLInitializer.InitializeAsync();
-
-            DbConnectionProvider connectionProvider =
-                new DbConnectionProvider(connectionString);
-
-            IRepository<FactoryBase> factoryRepository =
-                new FactoryRepository(connectionProvider);
-
-            DataInitializer dataInitializer =
-                new DataInitializer(factoryRepository);
-
-            await dataInitializer.Initialize();
-
-            FactoryService factoryService =
-                new FactoryService(factoryRepository);
-
-            GameLoop gameLoop = new GameLoop(factoryService);
-
-            await gameLoop.StartAsync();
-
-
             List<EnergyPlantBase> energyPlants =
             [
                 coalTPP, fuelTPP, solidFuelTPP, uraniumNPP, thoriumNPP
             ];
 
+            string connectionString = await SQLInitializer.InitializeAsync();
+            DbConnectionProvider connectionProvider = new(connectionString);
 
+            IRepository<FactoryBase> factoryRepository = new FactoryRepository(connectionProvider);
+
+            DataInitializer dataInitializer = new(factoryRepository);
+            await dataInitializer.Initialize();
+
+            FactoryService factoryService = new(factoryRepository);
+
+            GameLoop gameLoop = new(factoryService, player, storageResources, energyStorage, mines, energyPlants);
+            await gameLoop.StartAsync();
         }
 
         public static PlayerReal CreatePlayer()

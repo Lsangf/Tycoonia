@@ -64,6 +64,10 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
             factory.ProductionRate = reader.GetInt32(factoryProductionRateIndex);
             factory.EnergyConsumption = reader.GetDecimal(factoryEnergyConsumptionIndex);
             factory.WorkFlag = reader.GetBoolean(factoryWorkFlagIndex);
+            factory.ProductionItemList = new Dictionary<string, int>
+            {
+                { factory.Type, factory.ProductionRate }
+            };
 
             return factory;
         }
@@ -120,6 +124,10 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
                 factory.ProductionRate = reader.GetInt32(factoryProductionRateIndex);
                 factory.EnergyConsumption = reader.GetDecimal(factoryEnergyConsumptionIndex);
                 factory.WorkFlag = reader.GetBoolean(factoryWorkFlagIndex);
+                factory.ProductionItemList = new Dictionary<string, int>
+                {
+                    { factory.Type, factory.ProductionRate }
+                };
                 listFactories.Add(factory);
             }
             return listFactories;
