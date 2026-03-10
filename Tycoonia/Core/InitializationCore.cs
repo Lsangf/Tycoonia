@@ -45,7 +45,7 @@ namespace Tycoonia.Core
             DbConnectionProvider connectionProvider =
                 new DbConnectionProvider(connectionString);
 
-            IFactoryRepository factoryRepository =
+            IRepository<FactoryBase> factoryRepository =
                 new FactoryRepository(connectionProvider);
 
             DataInitializer dataInitializer =

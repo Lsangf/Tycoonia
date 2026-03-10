@@ -8,6 +8,7 @@ namespace Tycoonia.Application.Interfaces
         Task<IEnumerable<T>> GetAllAsync();
         Task AddAsync(T entity);
         Task UpdateAsync(T entity);
+        //Task UpdateByIdAsync(int id);
         Task DeleteAsync(int id);
         Task<bool> AnyAsync();
     }

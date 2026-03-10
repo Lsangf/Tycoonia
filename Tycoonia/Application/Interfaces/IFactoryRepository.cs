@@ -2,8 +2,8 @@
 
 namespace Tycoonia.Application.Interfaces
 {
-    public interface IFactoryRepository : IRepository<FactoryBase>
-    {
-        Task UpgradeFactoryAsync(int factoryId);
-    }
+    //public interface IFactoryRepository : IRepository<FactoryBase>
+    //{
+    //    Task UpgradeFactoryAsync(int factoryId);
+    //}
 }

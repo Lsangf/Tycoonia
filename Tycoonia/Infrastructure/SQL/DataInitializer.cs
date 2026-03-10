@@ -5,9 +5,9 @@ namespace Tycoonia.Infrastructure.SQL
 {
     public class DataInitializer
     {
-        private readonly IFactoryRepository _factoryRepository;
+        private readonly IRepository<FactoryBase> _factoryRepository;
 
-        public DataInitializer(IFactoryRepository factoryRepository)
+        public DataInitializer(IRepository<FactoryBase> factoryRepository)
         {
             _factoryRepository = factoryRepository;
         }

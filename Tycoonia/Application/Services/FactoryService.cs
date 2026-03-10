@@ -5,17 +5,27 @@ namespace Tycoonia.Application.Services
 {
     public class FactoryService
     {
-        private readonly IFactoryRepository _factoryRepository;
+        private readonly IRepository<FactoryBase> _factoryRepository;
 
-        public FactoryService(IFactoryRepository factoryRepository)
+        public FactoryService(IRepository<FactoryBase> factoryRepository)
         {
             _factoryRepository = factoryRepository;
         }
 
-        public async Task UpgradeFactory(int id)
+        public async Task<FactoryBase> GetByIdFactory(int id)
         {
-            await _factoryRepository.UpgradeFactoryAsync(id);
+            return await _factoryRepository.GetByIdAsync(id);
         }
+
+        public async Task UpdateFactory(FactoryBase factory)
+        {
+            await _factoryRepository.UpdateAsync(factory);
+        }
+
+        //public async Task UpdateByIdFactory(int id)
+        //{
+        //    await _factoryRepository.UpdateByIdAsync(id);
+        //}
 
         public async Task<IEnumerable<FactoryBase>> GetAllFactoriesAsync()
         {

@@ -6,7 +6,7 @@ using Tycoonia.Infrastructure.SQL.Database;
 
 namespace Tycoonia.Infrastructure.SQL.Repositories
 {
-    public class FactoryRepository : Repository<FactoryBase>, IFactoryRepository
+    public class FactoryRepository : Repository<FactoryBase>, IRepository<FactoryBase>
     {
         public FactoryRepository(DbConnectionProvider provider) : base(provider) { }
 
@@ -148,7 +148,7 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
                 await insertFactoryCmd.ExecuteNonQueryAsync();
                 await transaction.CommitAsync();
             }
-            catch (Exception ex)
+            catch
             {
                 await transaction.RollbackAsync();
                 throw;
@@ -180,7 +180,7 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
                 await updateFactoryCmd.ExecuteNonQueryAsync();
                 await transaction.CommitAsync();
             }
-            catch (Exception ex)
+            catch
             {
                 await transaction.RollbackAsync();
                 throw;
@@ -204,7 +204,7 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
                 await deleteFactoryCmd.ExecuteNonQueryAsync();
                 await transaction.CommitAsync();
             }
-            catch (Exception ex)
+            catch
             {
                 await transaction.RollbackAsync();
                 throw;
@@ -230,7 +230,7 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
                 await updateFactoryLvlCmd.ExecuteNonQueryAsync();
                 await transaction.CommitAsync();
             }
-            catch (Exception ex)
+            catch
             {
                 await transaction.RollbackAsync();
                 throw;
@@ -251,5 +251,39 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
             using var reader = await checkAnyCmd.ExecuteReaderAsync();
             return reader.Read();
         }
+
+        //public async Task UpdateByIdAsync(int id)
+        //{
+        //    using var connection = _connectionProvider.CreateConnection();
+        //    await connection.OpenAsync();
+        //    using SqlTransaction transaction = connection.BeginTransaction();
+        //    try
+        //    {
+        //        SqlCommand updateByIdFactoryCmd = new
+        //         ("""
+        //            UPDATE Factories 
+        //            SET Type=@Type, Name=@Name, Level=@Level, ProductionRate=@ProductionRate, EnergyConsumption=@EnergyConsumption, WorkFlag=@WorkFlag 
+        //            WHERE Id=@Id
+        //         """, connection, transaction);
+
+        //        var factory = await GetByIdAsync(id);
+
+        //        updateByIdFactoryCmd.Parameters.Add("@Type", SqlDbType.NVarChar, 100).Value = factory.Type;
+        //        updateByIdFactoryCmd.Parameters.Add("@Name", SqlDbType.NVarChar, 150).Value = factory.Name;
+        //        updateByIdFactoryCmd.Parameters.Add("@Level", SqlDbType.SmallInt).Value = factory.Level;
+        //        updateByIdFactoryCmd.Parameters.Add("@ProductionRate", SqlDbType.Int).Value = factory.ProductionRate;
+        //        updateByIdFactoryCmd.Parameters.Add("@EnergyConsumption", SqlDbType.Decimal).Value = factory.EnergyConsumption;
+        //        updateByIdFactoryCmd.Parameters.Add("@WorkFlag", SqlDbType.Bit).Value = factory.WorkFlag;
+        //        updateByIdFactoryCmd.Parameters.Add("@Id", SqlDbType.Int).Value = factory.Id;
+
+        //        await updateByIdFactoryCmd.ExecuteNonQueryAsync();
+        //        await transaction.CommitAsync();
+        //    }
+        //    catch
+        //    {
+        //        await transaction.RollbackAsync();
+        //        throw;
+        //    }
+        //}
     }
 }

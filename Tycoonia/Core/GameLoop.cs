@@ -27,7 +27,7 @@ namespace Tycoonia.Core
 
                 Console.WriteLine("=== FACTORIES ===");
 
-                var factories = _factoryService.GetAllFactoriesAsync().GetAwaiter().GetResult();
+               var factories = await _factoryService.GetAllFactoriesAsync();
 
                 foreach (var factory in factories)
                 {
@@ -35,7 +35,8 @@ namespace Tycoonia.Core
                 }
 
                 Console.WriteLine();
-                Console.WriteLine("1 - Upgrade factory");
+                Console.WriteLine("1 - Upgrade factory (Soon(local))");
+                //Console.WriteLine("2 - Update factory in database");
                 Console.WriteLine("2 - Exit");
 
                 string input = Console.ReadLine();
@@ -45,7 +46,9 @@ namespace Tycoonia.Core
                     case "1":
                         await UpgradeFactoryAsync();
                         break;
-
+                    //case "2":
+                    //    await UpdateByIdFactoryAsync();
+                    //    break;
                     case "2":
                         running = false;
                         break;
@@ -59,8 +62,21 @@ namespace Tycoonia.Core
 
             if (int.TryParse(Console.ReadLine(), out int id))
             {
-                await _factoryService.UpgradeFactory(id);
+                var factory = await _factoryService.GetByIdFactory(id);
+                factory.Level+=2;
+                factory.ProductionRate+=5;
+                await _factoryService.UpdateFactory(factory);
             }
         }
+
+        //private async Task UpdateByIdFactoryAsync()
+        //{
+        //    Console.WriteLine("Enter factory id:");
+
+        //    if (int.TryParse(Console.ReadLine(), out int id))
+        //    {
+        //        await _factoryService.UpdateByIdFactory(id);
+        //    }
+        //}
     }
 }
