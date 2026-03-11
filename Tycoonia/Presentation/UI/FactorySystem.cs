@@ -1,6 +1,7 @@
 ﻿using Tycoonia.Application;
 using Tycoonia.Application.ApplicationExceptions;
 using Tycoonia.Application.Factory;
+using Tycoonia.Application.Services;
 using Tycoonia.Domain.Buildings.Factory;
 using Tycoonia.Domain.Player;
 using Tycoonia.Domain.Resources.Storage;
@@ -10,8 +11,10 @@ namespace Tycoonia.Presentation.UI
 {
     public class FactorySystem
     {
-        public static void ActionsFactory(List<FactoryBase> factories, StorageResources storageResources, EnergyStorage energyStorage, PlayerReal player)
+        public static async Task ActionsFactoryAsync(/*List<FactoryBase> factories*/ FactoryService factoryService, StorageResources storageResources, EnergyStorage energyStorage, PlayerReal player)
         {
+            List<FactoryBase> factories = factoryService.GetAllFactoriesAsync().Result.ToList();
+            
             for (int index = 1; (index - 1) < factories.Count; index++)
             {
                 Console.WriteLine($"[{index}] {factories[index - 1].Name}");
@@ -35,11 +38,11 @@ namespace Tycoonia.Presentation.UI
             }
             MaximumPossibleExpectedOtput.UpdateMaximumPossibleExpectedOtput(currentFactory, storageResources, player);
             Console.WriteLine($"Max exception output: {currentFactory.MaxExpectedOtput}");
-            ChoiceFactoryActions(currentFactory, storageResources, energyStorage, player);
+            await ChoiceFactoryActionsAsync(factoryService, currentFactory, storageResources, energyStorage, player);
             // Console.Clear();
         }
 
-        public static void ChoiceFactoryActions(FactoryBase currentFactory, StorageResources storageResources, EnergyStorage energyStorage, PlayerReal player)
+        public static async Task ChoiceFactoryActionsAsync(FactoryService factoryService, FactoryBase currentFactory, StorageResources storageResources, EnergyStorage energyStorage, PlayerReal player)
         {
             Console.WriteLine("\nChoose an actions:");
             Console.WriteLine("1. Start of production");
@@ -58,7 +61,7 @@ namespace Tycoonia.Presentation.UI
                     }
                     Console.WriteLine("Write ");
                     int choiceProductYield = (int)ConsoleInput.ConsoleChoice();
-                    if (choiceProductYield < currentFactory.ProductionRate) 
+                    if (choiceProductYield < currentFactory.ProductionRate)
                     {
                         throw new InputException();
                     }
@@ -74,6 +77,7 @@ namespace Tycoonia.Presentation.UI
                     try
                     {
                         UpgradeBuilding.Upgrade(currentFactory, storageResources, player);
+                        await factoryService.UpdateFactory(currentFactory);
                         Console.WriteLine($"Upgrade completed | LVL {currentFactory.Level} |\n");
                     }
                     catch (Exception ex)

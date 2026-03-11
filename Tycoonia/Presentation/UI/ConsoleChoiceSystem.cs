@@ -1,4 +1,5 @@
-﻿using Tycoonia.Domain.Buildings.EnergyPlant;
+﻿using Tycoonia.Application.Services;
+using Tycoonia.Domain.Buildings.EnergyPlant;
 using Tycoonia.Domain.Buildings.Factory;
 using Tycoonia.Domain.Buildings.Mine;
 using Tycoonia.Domain.Player;
@@ -8,10 +9,11 @@ namespace Tycoonia.Presentation.UI
 {
     public class ConsoleChoiceSystem
     {
-        public static void ConsoleChoice(
+        public static async Task ConsoleChoiceAsync(
             List<MineBase> mines,
             PlayerReal player,
-            List<FactoryBase> factories,
+            //List<FactoryBase> factories,
+            FactoryService factoryService,
             List<EnergyPlantBase> energyPlants,
             StorageResources storageResources, EnergyStorage energyStorage)
         {
@@ -44,7 +46,7 @@ namespace Tycoonia.Presentation.UI
                             break;
                         case 3:
                             Console.WriteLine("\nManaging Factories...");
-                            FactorySystem.ActionsFactory(factories, storageResources, energyStorage, player);
+                            await FactorySystem.ActionsFactoryAsync(/*factories*/ factoryService, storageResources, energyStorage, player);
                             break;
                         case 4:
                             Console.WriteLine("\nManaging Energy Plants...");

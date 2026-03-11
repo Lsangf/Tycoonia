@@ -1,5 +1,4 @@
 ﻿using Tycoonia.Application.ApplicationExceptions;
-using Tycoonia.Application.Services;
 using Tycoonia.Domain.Player;
 using Tycoonia.Domain.Resources.Storage;
 
@@ -57,7 +56,6 @@ namespace Tycoonia.Application
 
         public static void UpdateUpgradeAmount(dynamic building)
         {
-            _ = FactoryService.UpdateFactory(building);
             foreach (var item in building.RecipeUpgradeList)
             {
                 building.RecipeUpgradeList[item.Key] = item.Value * 2;

@@ -29,7 +29,7 @@ namespace Tycoonia.Core
 
         public async Task StartAsync()
         {
-            ConsoleChoiceSystem.ConsoleChoice(_mines, _player, (List<FactoryBase>)await _factoryService.GetAllFactoriesAsync(), _energyPlants, _storageResources, _energyStorage);
+            await ConsoleChoiceSystem.ConsoleChoiceAsync(_mines, _player, /*(List<FactoryBase>)await _factoryService.GetAllFactoriesAsync()*/ _factoryService, _energyPlants, _storageResources, _energyStorage);
 
             //bool running = true;
 

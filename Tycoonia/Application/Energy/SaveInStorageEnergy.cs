@@ -1,5 +1,4 @@
-﻿using Tycoonia.Application.ApplicationExceptions;
-using Tycoonia.Domain.Buildings.EnergyPlant;
+﻿using Tycoonia.Domain.Buildings.EnergyPlant;
 using Tycoonia.Domain.Resources.Storage;
 
 namespace Tycoonia.Application.Energy
