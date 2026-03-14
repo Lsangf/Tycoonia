@@ -22,11 +22,6 @@ namespace Tycoonia.Application.Services
             await _factoryRepository.UpdateAsync(factory);
         }
 
-        //public async Task UpdateByIdFactory(int id)
-        //{
-        //    await _factoryRepository.UpdateByIdAsync(id);
-        //}
-
         public async Task<IEnumerable<FactoryBase>> GetAllFactoriesAsync()
         {
             return await _factoryRepository.GetAllAsync();

@@ -4,7 +4,7 @@ namespace Tycoonia.Domain.Buildings.Factory
     {
         public FactoryElectronicComponents()
         {
-            Type = "Electronic Components";
+            Type.Add("Electronic Components");
             Name = "Electronic Components Factory";
             RecipeUpgradeList = new Dictionary<string, long>
             {

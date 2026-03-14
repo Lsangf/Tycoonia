@@ -4,7 +4,7 @@ namespace Tycoonia.Domain.Buildings.Factory
     {
         public FactoryPurifiedLithium()
         {
-            Type = "Purified Lithium";
+            Type.Add("Purified Lithium");
             Name = "Purified Lithium Factory";
             RecipeUpgradeList = new Dictionary<string, long>
             {

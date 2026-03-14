@@ -4,7 +4,7 @@
     {
         public FactoryCopperWire()
         {
-            Type = "Copper Wire";
+            Type.Add("Copper Wire");
             Name = "Copper Wire Factory";
             RecipeUpgradeList = new Dictionary<string, long>
             {

@@ -5,10 +5,10 @@
         private string _name;
         private short _level;
         private bool _canUpgrade;
-        private Dictionary<string, long> _recipeUpgradeList = [];
+        private Dictionary<string, long> _recipeUpgradeList = new();
         private int _productionRate;
         private bool _workFlag;
-
+        
         public string Name
         {
             get => _name;

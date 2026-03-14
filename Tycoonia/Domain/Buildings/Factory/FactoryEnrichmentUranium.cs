@@ -4,7 +4,8 @@
     {
         public FactoryEnrichmentUranium()
         {
-            Type = "Uranium X";
+            Type.Add("Uranium-238");
+            Type.Add("Uranium-235");
             Name = "Enrichment Factory";
             RecipeUpgradeList = new Dictionary<string, long>
             {

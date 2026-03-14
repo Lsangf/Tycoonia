@@ -2,7 +2,7 @@
 
 namespace Tycoonia.Domain.Buildings.Factory
 {
-    public abstract class FactoryBase : GameEntityBase
+    public abstract class FactoryBase : GameEntityBase, IUpgradableBuilding
     {
         private long _maxExpectedOtput;
         private decimal _energyConsumption;

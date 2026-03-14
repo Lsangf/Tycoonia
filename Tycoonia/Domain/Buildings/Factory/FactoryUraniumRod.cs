@@ -4,7 +4,7 @@
     {
         public FactoryUraniumRod()
         {
-            Type = "Uranium Rod";
+            Type.Add("Uranium Rod");
             Name = "Uranium Rod Factory";
             RecipeUpgradeList = new Dictionary<string, long>
             {

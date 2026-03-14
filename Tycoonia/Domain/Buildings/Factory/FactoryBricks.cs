@@ -4,7 +4,7 @@
     {
         public FactoryBricks()
         {
-            Type = "Bricks";
+            Type.Add("Bricks");
             Name = "Bricks Factory";
             RecipeUpgradeList = new Dictionary<string, long>
             {

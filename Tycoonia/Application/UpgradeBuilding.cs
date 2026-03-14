@@ -1,4 +1,5 @@
 ﻿using Tycoonia.Application.ApplicationExceptions;
+using Tycoonia.Domain.Buildings;
 using Tycoonia.Domain.Player;
 using Tycoonia.Domain.Resources.Storage;
 
@@ -6,7 +7,7 @@ namespace Tycoonia.Application
 {
     public class UpgradeBuilding
     {
-        public static void Upgrade(dynamic building, StorageResources storageResources, PlayerReal player)
+        public static void Upgrade(IUpgradableBuilding building, StorageResources storageResources, PlayerReal player)
         {
             CanUpgrade(building, storageResources, player);
             if (!building.CanUpgrade)
@@ -20,7 +21,7 @@ namespace Tycoonia.Application
             }
         }
 
-        public static void CanUpgrade(dynamic building, StorageResources storageResources, PlayerReal player)
+        public static void CanUpgrade(IUpgradableBuilding building, StorageResources storageResources, PlayerReal player)
         {
             foreach (var item in building.RecipeUpgradeList)
             {
@@ -39,7 +40,7 @@ namespace Tycoonia.Application
             }
         }
 
-        public static void UpgradeSubtraction(dynamic building, StorageResources storageResources, PlayerReal player)
+        public static void UpgradeSubtraction(IUpgradableBuilding building, StorageResources storageResources, PlayerReal player)
         {
             foreach (var item in building.RecipeUpgradeList)
             {
@@ -54,7 +55,7 @@ namespace Tycoonia.Application
             }
         }
 
-        public static void UpdateUpgradeAmount(dynamic building)
+        public static void UpdateUpgradeAmount(IUpgradableBuilding building)
         {
             foreach (var item in building.RecipeUpgradeList)
             {

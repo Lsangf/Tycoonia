@@ -2,12 +2,12 @@
 
 namespace Tycoonia.Domain.Buildings.EnergyPlant
 {
-    public abstract class EnergyPlantBase : GameEntityBase
+    public abstract class EnergyPlantBase : GameEntityBase, IUpgradableBuilding
     {
         private long _maxExpectedOtput;
         private decimal _productionTime;
         private decimal _productionTimePerIteration;
-        private int _energyConsumption;
+        private decimal _energyConsumption;
         private Dictionary<string, short> _recipeList = [];
         private Dictionary<string, StorageResourcesBase> _resourceBuffer = [];
         private Dictionary<string, int> _productionItemList = [];
@@ -27,7 +27,7 @@ namespace Tycoonia.Domain.Buildings.EnergyPlant
             get => _productionTimePerIteration;
             set => _productionTimePerIteration = value;
         }
-        public int EnergyConsumption
+        public decimal EnergyConsumption
         {
             get => _energyConsumption;
             set => _energyConsumption = value;

@@ -4,7 +4,7 @@ namespace Tycoonia.Domain.Buildings.Factory
     {
         public FactoryFuel()
         {
-            Type = "Fuel";
+            Type.Add("Fuel");
             Name = "Fuel Factory";
             RecipeUpgradeList = new Dictionary<string, long>
             {

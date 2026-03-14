@@ -1,6 +1,5 @@
 ﻿using Tycoonia.Application.Services;
 using Tycoonia.Domain.Buildings.EnergyPlant;
-using Tycoonia.Domain.Buildings.Factory;
 using Tycoonia.Domain.Buildings.Mine;
 using Tycoonia.Domain.Player;
 using Tycoonia.Domain.Resources.Storage;
