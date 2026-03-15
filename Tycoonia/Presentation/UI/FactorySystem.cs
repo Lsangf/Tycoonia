@@ -66,7 +66,7 @@ namespace Tycoonia.Presentation.UI
                         throw new InputException();
                     }
                     LaunchControleCenterFactory.PreparationLaunchFactory(currentFactory, storageResources, energyStorage, player, choiceProductYield);
-                    _ = UpdateFactoryCalculations(storageResources, currentFactory, energyStorage, player);
+                    _ = UpdateFactoryCalculations(factoryService, storageResources, currentFactory, energyStorage, player);
                     break;
                 case 2:
                     LaunchControleCenterFactory.StopFactory(currentFactory, storageResources, player);
@@ -94,7 +94,7 @@ namespace Tycoonia.Presentation.UI
             }
         }
 
-        public async static Task UpdateFactoryCalculations(StorageResources storageResources, FactoryBase currentFactory, EnergyStorage energyStorage, PlayerReal player)
+        public async static Task UpdateFactoryCalculations(FactoryService factoryService, StorageResources storageResources, FactoryBase currentFactory, EnergyStorage energyStorage, PlayerReal player)
         {
             try
             {
@@ -102,6 +102,7 @@ namespace Tycoonia.Presentation.UI
                 while (currentFactory.ProductionTime > 0 && currentFactory.WorkFlag)
                 {
                     ProductionCalculation.ProductionCalculationFactory(storageResources, currentFactory, energyStorage);
+                    //await factoryService.UpdateFactory(currentFactory);
                     await Task.Delay(6000);
                 }
             }

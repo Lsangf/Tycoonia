@@ -15,7 +15,7 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
         {
             using var connection = _connectionProvider.CreateConnection();
 
-            SqlCommand selectFactoryCmd = new
+            SqlCommand cmd = new
             ("""
                SELECT 
                     Factories.Id,
@@ -26,44 +26,38 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
                     Factories.ProductionTime,
                     Factories.ProductionTimePerIteration,
                     Factories.WorkFlag,
-             
-                    FactoriesTypes.Id AS FactoryTypeId,
-                    FactoriesTypes.Type,
+     
+                    FactoriesTypes.Type AS FactoryType,
 
-                    FactoriesRecipeUpgradeList.Id AS FactoryRecipeUpgradeListId,
-                    FactoriesRecipeUpgradeList.Name AS FactoryRecipeUpgradeListName,
-                    FactoriesRecipeUpgradeList.Amount AS FactoryRecipeUpgradeListAmount,
+                    FactoriesRecipeUpgradeList.Name AS RecipeName,
+                    FactoriesRecipeUpgradeList.Amount AS RecipeAmount,
 
-                    FactoriesResourceBuffer.Id AS FactoryResourceBufferId,
-                    FactoriesResourceBuffer.Name AS FactoryResourceBufferName,
+                    FactoriesResourceBuffer.Name AS BufferName,
 
-                    FRBStorageResourcesBase.Id AS FRBStorageResourcesBaseId,
-                    FRBStorageResourcesBase.CurrentQuantity AS FRBStorageResourcesBaseCurrentQuantity,
-                    FRBStorageResourcesBase.MaxCapacity AS FRBStorageResourcesBaseMaxCapacity,
-                    FRBStorageResourcesBase.UpgradeCost AS FRBStorageResourcesBaseUpgradeCost,
-                    FRBStorageResourcesBase.Level AS FRBStorageResourcesBaseLevel,
-                    FRBStorageResourcesBase.Price AS FRBStorageResourcesBasePrice,
+                    FRBStorageResourcesBase.CurrentQuantity,
+                    FRBStorageResourcesBase.MaxCapacity,
+                    FRBStorageResourcesBase.UpgradeCost,
+                    FRBStorageResourcesBase.Level AS BufferLevel,
+                    FRBStorageResourcesBase.Price,
 
-                    FactoriesProductionItemList.Id AS FactoryProductionItemListId,
-                    FactoriesProductionItemList.Name AS FactoryProductionItemListName,
-                    FactoriesProductionItemList.Amount AS FactoryProductionItemListAmount
-             
+                    FactoriesProductionItemList.Name AS ProductionName,
+                    FactoriesProductionItemList.Amount AS ProductionAmount
+     
                FROM Factories
                JOIN FactoriesTypes ON FactoriesTypes.FactoryId = Factories.Id
                JOIN FactoriesRecipeUpgradeList ON FactoriesRecipeUpgradeList.FactoryId = Factories.Id
                LEFT JOIN FactoriesResourceBuffer ON FactoriesResourceBuffer.FactoryId = Factories.Id
                LEFT JOIN FRBStorageResourcesBase ON FRBStorageResourcesBase.ResourceBufferId = FactoriesResourceBuffer.Id
                JOIN FactoriesProductionItemList ON FactoriesProductionItemList.FactoryId = Factories.Id
-               WHERE Id = @Id
+               WHERE Factories.Id = @Id
              """, connection);
 
-            selectFactoryCmd.Parameters.Add("@Id", SqlDbType.Int).Value = id;
+            cmd.Parameters.Add("@Id", SqlDbType.Int).Value = id;
 
             await connection.OpenAsync();
-            using SqlDataReader reader = await selectFactoryCmd.ExecuteReaderAsync();
+            using var reader = await cmd.ExecuteReaderAsync();
 
             int factoryIdIndex = reader.GetOrdinal("Id");
-            int factoryNameIndex = reader.GetOrdinal("Name");
             int factoryLevelIndex = reader.GetOrdinal("Level");
             int factoryProductionRateIndex = reader.GetOrdinal("ProductionRate");
             int factoryEnergyConsumptionIndex = reader.GetOrdinal("EnergyConsumption");
@@ -71,104 +65,104 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
             int factoryProductionTimePerIterationIndex = reader.GetOrdinal("ProductionTimePerIteration");
             int factoryWorkFlagIndex = reader.GetOrdinal("WorkFlag");
 
-            int factoryTypeTypeIndex = reader.GetOrdinal("Type");
+            int factoryTypeIndex = reader.GetOrdinal("FactoryType");
 
-            int factoryRecipeUpgradeListIdIndex = reader.GetOrdinal("FactoryRecipeUpgradeListId");
-            int factoryRecipeUpgradeListNameIndex = reader.GetOrdinal("FactoryRecipeUpgradeListName");
-            int factoryRecipeUpgradeListAmountIndex = reader.GetOrdinal("FactoryRecipeUpgradeListAmount");
+            int recipeNameIndex = reader.GetOrdinal("RecipeName");
+            int recipeAmountIndex = reader.GetOrdinal("RecipeAmount");
 
-            int factoryResourceBufferIdIndex = reader.GetOrdinal("FactoryResourceBufferId");
-            int factoryResourceBufferNameIndex = reader.GetOrdinal("FactoryResourceBufferName");
+            int bufferNameIndex = reader.GetOrdinal("BufferName");
 
-            int frbStorageResourcesBaseIdIndex = reader.GetOrdinal("FRBStorageResourcesBaseId");
-            int frbStorageResourcesBaseCurrentQuantityIndex = reader.GetOrdinal("FRBStorageResourcesBaseCurrentQuantity");
-            int frbStorageResourcesBaseMaxCapacityIndex = reader.GetOrdinal("FRBStorageResourcesBaseMaxCapacity");
-            int frbStorageResourcesBaseUpgradeCostIndex = reader.GetOrdinal("FRBStorageResourcesBaseUpgradeCost");
-            int frbStorageResourcesBaseLevelIndex = reader.GetOrdinal("FRBStorageResourcesBaseLevel");
-            int frbStorageResourcesBasePriceIndex = reader.GetOrdinal("FRBStorageResourcesBasePrice");
+            int bufferCurrentIndex = reader.GetOrdinal("CurrentQuantity");
+            int bufferMaxIndex = reader.GetOrdinal("MaxCapacity");
+            int bufferUpgradeCostIndex = reader.GetOrdinal("UpgradeCost");
+            int bufferLevelIndex = reader.GetOrdinal("BufferLevel");
+            int bufferPriceIndex = reader.GetOrdinal("Price");
 
-            int factoryProductionItemListIdIndex = reader.GetOrdinal("FactoryProductionItemListId");
-            int factoryProductionItemListNameIndex = reader.GetOrdinal("FactoryProductionItemListName");
-            int factoryProductionItemListAmountIndex = reader.GetOrdinal("FactoryProductionItemListAmount");
+            int productionNameIndex = reader.GetOrdinal("ProductionName");
+            int productionAmountIndex = reader.GetOrdinal("ProductionAmount");
 
-            if (!reader.Read()) return null;
-
-            string factoryType = reader.GetString(reader.GetOrdinal("Type"));
-            FactoryBase factory = factoryType switch
-            {
-                "Aluminum" => new FactoryAluminum(),
-                "Batteries" => new FactoryBatteries(),
-                "Bricks" => new FactoryBricks(),
-                "Concrete" => new FactoryConcrete(),
-                "Copper Wire" => new FactoryCopperWire(),
-                "Diamonds" => new FactoryDiamonds(),
-                "Electronic Components" => new FactoryElectronicComponents(),
-                "Energy Storage" => new FactoryEnergyStorage(),
-                "Uranium-235" => new FactoryEnrichmentUranium(),
-                "Uranium-238" => new FactoryEnrichmentUranium(),
-                "Fuel" => new FactoryFuel(),
-                "Glass" => new FactoryGlass(),
-                "Gold Bars" => new FactoryGoldBars(),
-                "Plastic" => new FactoryPlastic(),
-                "Purified Lithium" => new FactoryPurifiedLithium(),
-                "Silicon" => new FactorySilicon(),
-                "Silver Bars" => new FactorySilverBars(),
-                "Solid Fuel" => new FactorySolidFuel(),
-                "Steel" => new FactorySteel(),
-                "Thorium Rod" => new FactoryThoriumRod(),
-                "Titanium" => new FactoryTitanium(),
-                "Uranium Rod" => new FactoryUraniumRod(),
-                _ => throw new InvalidOperationException($"Unknown factory type: {factoryType}")
-            };
-            factory.Id = reader.GetInt32(factoryIdIndex);
-            factory.Level = reader.GetInt16(factoryLevelIndex);
-            factory.ProductionRate = reader.GetInt32(factoryProductionRateIndex);
-            factory.EnergyConsumption = reader.GetDecimal(factoryEnergyConsumptionIndex);
-            factory.ProductionTime = reader.GetDecimal(factoryProductionTimeIndex);
-            factory.ProductionTimePerIteration = reader.GetDecimal(factoryProductionTimePerIterationIndex);
-            factory.WorkFlag = reader.GetBoolean(factoryWorkFlagIndex);
+            FactoryBase? factory = null;
 
             while (await reader.ReadAsync())
             {
-                factory.RecipeUpgradeList[reader.GetString(factoryRecipeUpgradeListNameIndex)] = reader.GetInt64(factoryRecipeUpgradeListAmountIndex);
-                if (!reader.IsDBNull(factoryResourceBufferNameIndex))
+                if (factory == null)
                 {
-                    string bufferName = reader.GetString(factoryResourceBufferNameIndex);
+                    string factoryType = reader.GetString(factoryTypeIndex);
 
-                    factory.ResourceBuffer.Add(bufferName,
-                        new StorageResourcesBase
-                        {
-                            CurrentQuantity = reader.IsDBNull(frbStorageResourcesBaseCurrentQuantityIndex)
-                                ? 0
-                                : reader.GetInt64(frbStorageResourcesBaseCurrentQuantityIndex),
+                    factory = factoryType switch
+                    {
+                        "Aluminum" => new FactoryAluminum(),
+                        "Batteries" => new FactoryBatteries(),
+                        "Bricks" => new FactoryBricks(),
+                        "Concrete" => new FactoryConcrete(),
+                        "Copper Wire" => new FactoryCopperWire(),
+                        "Diamonds" => new FactoryDiamonds(),
+                        "Electronic Components" => new FactoryElectronicComponents(),
+                        "Energy Storage" => new FactoryEnergyStorage(),
+                        "Uranium-235" => new FactoryEnrichmentUranium(),
+                        "Uranium-238" => new FactoryEnrichmentUranium(),
+                        "Fuel" => new FactoryFuel(),
+                        "Glass" => new FactoryGlass(),
+                        "Gold Bars" => new FactoryGoldBars(),
+                        "Plastic" => new FactoryPlastic(),
+                        "Purified Lithium" => new FactoryPurifiedLithium(),
+                        "Silicon" => new FactorySilicon(),
+                        "Silver Bars" => new FactorySilverBars(),
+                        "Solid Fuel" => new FactorySolidFuel(),
+                        "Steel" => new FactorySteel(),
+                        "Thorium Rod" => new FactoryThoriumRod(),
+                        "Titanium" => new FactoryTitanium(),
+                        "Uranium Rod" => new FactoryUraniumRod(),
+                        _ => throw new InvalidOperationException($"Unknown factory type: {factoryType}")
+                    };
 
-                            MaxCapacity = reader.IsDBNull(frbStorageResourcesBaseMaxCapacityIndex)
-                                ? 0
-                                : reader.GetInt64(frbStorageResourcesBaseMaxCapacityIndex),
-
-                            UpgradeCost = reader.IsDBNull(frbStorageResourcesBaseUpgradeCostIndex)
-                                ? 0
-                                : reader.GetInt64(frbStorageResourcesBaseUpgradeCostIndex),
-
-                            Level = reader.IsDBNull(frbStorageResourcesBaseLevelIndex)
-                                ? (short)0
-                                : reader.GetInt16(frbStorageResourcesBaseLevelIndex),
-
-                            Price = reader.IsDBNull(frbStorageResourcesBasePriceIndex)
-                                ? 0
-                                : reader.GetInt32(frbStorageResourcesBasePriceIndex)
-                        });
+                    factory.Id = reader.GetInt32(factoryIdIndex);
+                    factory.Level = reader.GetInt16(factoryLevelIndex);
+                    factory.ProductionRate = reader.GetInt32(factoryProductionRateIndex);
+                    factory.EnergyConsumption = reader.GetDecimal(factoryEnergyConsumptionIndex);
+                    factory.ProductionTime = reader.GetDecimal(factoryProductionTimeIndex);
+                    factory.ProductionTimePerIteration = reader.GetDecimal(factoryProductionTimePerIterationIndex);
+                    factory.WorkFlag = reader.GetBoolean(factoryWorkFlagIndex);
                 }
-                factory.ProductionItemList[reader.GetString(factoryProductionItemListNameIndex)] = reader.GetInt32(factoryProductionItemListAmountIndex);
+
+                string recipeName = reader.GetString(recipeNameIndex);
+                long recipeAmount = reader.GetInt64(recipeAmountIndex);
+
+                factory.RecipeUpgradeList[recipeName] = recipeAmount;
+
+                if (!reader.IsDBNull(bufferNameIndex))
+                {
+                    string bufferName = reader.GetString(bufferNameIndex);
+
+                    if (!factory.ResourceBuffer.ContainsKey(bufferName))
+                    {
+                        factory.ResourceBuffer[bufferName] = new StorageResourcesBase
+                        {
+                            CurrentQuantity = reader.IsDBNull(bufferCurrentIndex) ? 0 : reader.GetInt64(bufferCurrentIndex),
+                            MaxCapacity = reader.IsDBNull(bufferMaxIndex) ? 0 : reader.GetInt64(bufferMaxIndex),
+                            UpgradeCost = reader.IsDBNull(bufferUpgradeCostIndex) ? 0 : reader.GetInt64(bufferUpgradeCostIndex),
+                            Level = reader.IsDBNull(bufferLevelIndex) ? (short)0 : reader.GetInt16(bufferLevelIndex),
+                            Price = reader.IsDBNull(bufferPriceIndex) ? 0 : reader.GetInt32(bufferPriceIndex)
+                        };
+                    }
+                }
+
+                string productionName = reader.GetString(productionNameIndex);
+                int productionAmount = reader.GetInt32(productionAmountIndex);
+
+                factory.ProductionItemList[productionName] = productionAmount;
             }
+
             return factory;
         }
 
         public async Task<IEnumerable<FactoryBase>> GetAllAsync()
         {
-            List<FactoryBase> listFactories = [];
+            Dictionary<int, FactoryBase> factories = new();
+
             using var connection = _connectionProvider.CreateConnection();
-            SqlCommand selectFactoriesCmd = new
+
+            SqlCommand cmd = new
             ("""
                 SELECT 
                     Factories.Id,
@@ -179,28 +173,23 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
                     Factories.ProductionTime,
                     Factories.ProductionTimePerIteration,
                     Factories.WorkFlag,
-             
-                    FactoriesTypes.Id AS FactoryTypeId,
-                    FactoriesTypes.Type,
-             
-                    FactoriesRecipeUpgradeList.Id AS FactoryRecipeUpgradeListId,
+     
+                    FactoriesTypes.Type AS FactoryType,
+     
                     FactoriesRecipeUpgradeList.Name AS FactoryRecipeUpgradeListName,
                     FactoriesRecipeUpgradeList.Amount AS FactoryRecipeUpgradeListAmount,
-             
-                    FactoriesResourceBuffer.Id AS FactoryResourceBufferId,
+     
                     FactoriesResourceBuffer.Name AS FactoryResourceBufferName,
-             
-                    FRBStorageResourcesBase.Id AS FRBStorageResourcesBaseId,
-                    FRBStorageResourcesBase.CurrentQuantity AS FRBStorageResourcesBaseCurrentQuantity,
-                    FRBStorageResourcesBase.MaxCapacity AS FRBStorageResourcesBaseMaxCapacity,
-                    FRBStorageResourcesBase.UpgradeCost AS FRBStorageResourcesBaseUpgradeCost,
-                    FRBStorageResourcesBase.Level AS FRBStorageResourcesBaseLevel,
-                    FRBStorageResourcesBase.Price AS FRBStorageResourcesBasePrice,
-             
-                    FactoriesProductionItemList.Id AS FactoryProductionItemListId,
+     
+                    FRBStorageResourcesBase.CurrentQuantity,
+                    FRBStorageResourcesBase.MaxCapacity,
+                    FRBStorageResourcesBase.UpgradeCost,
+                    FRBStorageResourcesBase.Level AS BufferLevel,
+                    FRBStorageResourcesBase.Price,
+     
                     FactoriesProductionItemList.Name AS FactoryProductionItemListName,
                     FactoriesProductionItemList.Amount AS FactoryProductionItemListAmount
-             
+     
                FROM Factories
                JOIN FactoriesTypes ON FactoriesTypes.FactoryId = Factories.Id
                JOIN FactoriesRecipeUpgradeList ON FactoriesRecipeUpgradeList.FactoryId = Factories.Id
@@ -211,7 +200,7 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
              """, connection);
 
             await connection.OpenAsync();
-            using var reader = await selectFactoriesCmd.ExecuteReaderAsync();
+            using var reader = await cmd.ExecuteReaderAsync();
 
             int factoryIdIndex = reader.GetOrdinal("Id");
             int factoryNameIndex = reader.GetOrdinal("Name");
@@ -222,99 +211,97 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
             int factoryProductionTimePerIterationIndex = reader.GetOrdinal("ProductionTimePerIteration");
             int factoryWorkFlagIndex = reader.GetOrdinal("WorkFlag");
 
-            int factoryTypeTypeIndex = reader.GetOrdinal("Type");
+            int factoryTypeIndex = reader.GetOrdinal("FactoryType");
 
-            int factoryRecipeUpgradeListIdIndex = reader.GetOrdinal("FactoryRecipeUpgradeListId");
-            int factoryRecipeUpgradeListNameIndex = reader.GetOrdinal("FactoryRecipeUpgradeListName");
-            int factoryRecipeUpgradeListAmountIndex = reader.GetOrdinal("FactoryRecipeUpgradeListAmount");
+            int recipeNameIndex = reader.GetOrdinal("FactoryRecipeUpgradeListName");
+            int recipeAmountIndex = reader.GetOrdinal("FactoryRecipeUpgradeListAmount");
 
-            int factoryResourceBufferIdIndex = reader.GetOrdinal("FactoryResourceBufferId");
-            int factoryResourceBufferNameIndex = reader.GetOrdinal("FactoryResourceBufferName");
+            int bufferNameIndex = reader.GetOrdinal("FactoryResourceBufferName");
 
-            int frbStorageResourcesBaseIdIndex = reader.GetOrdinal("FRBStorageResourcesBaseId");
-            int frbStorageResourcesBaseCurrentQuantityIndex = reader.GetOrdinal("FRBStorageResourcesBaseCurrentQuantity");
-            int frbStorageResourcesBaseMaxCapacityIndex = reader.GetOrdinal("FRBStorageResourcesBaseMaxCapacity");
-            int frbStorageResourcesBaseUpgradeCostIndex = reader.GetOrdinal("FRBStorageResourcesBaseUpgradeCost");
-            int frbStorageResourcesBaseLevelIndex = reader.GetOrdinal("FRBStorageResourcesBaseLevel");
-            int frbStorageResourcesBasePriceIndex = reader.GetOrdinal("FRBStorageResourcesBasePrice");
+            int bufferCurrentIndex = reader.GetOrdinal("CurrentQuantity");
+            int bufferMaxIndex = reader.GetOrdinal("MaxCapacity");
+            int bufferUpgradeCostIndex = reader.GetOrdinal("UpgradeCost");
+            int bufferLevelIndex = reader.GetOrdinal("BufferLevel");
+            int bufferPriceIndex = reader.GetOrdinal("Price");
 
-            int factoryProductionItemListIdIndex = reader.GetOrdinal("FactoryProductionItemListId");
-            int factoryProductionItemListNameIndex = reader.GetOrdinal("FactoryProductionItemListName");
-            int factoryProductionItemListAmountIndex = reader.GetOrdinal("FactoryProductionItemListAmount");
+            int productionNameIndex = reader.GetOrdinal("FactoryProductionItemListName");
+            int productionAmountIndex = reader.GetOrdinal("FactoryProductionItemListAmount");
 
             while (await reader.ReadAsync())
             {
-                string factoryType = reader.GetString(reader.GetOrdinal("Type"));
-                FactoryBase factory = factoryType switch
-                {
-                    "Aluminum" => new FactoryAluminum(),
-                    "Batteries" => new FactoryBatteries(),
-                    "Bricks" => new FactoryBricks(),
-                    "Concrete" => new FactoryConcrete(),
-                    "Copper Wire" => new FactoryCopperWire(),
-                    "Diamonds" => new FactoryDiamonds(),
-                    "Electronic Components" => new FactoryElectronicComponents(),
-                    "Energy Storage" => new FactoryEnergyStorage(),
-                    "Uranium-235" => new FactoryEnrichmentUranium(),
-                    "Uranium-238" => new FactoryEnrichmentUranium(),
-                    "Fuel" => new FactoryFuel(),
-                    "Glass" => new FactoryGlass(),
-                    "Gold Bars" => new FactoryGoldBars(),
-                    "Plastic" => new FactoryPlastic(),
-                    "Purified Lithium" => new FactoryPurifiedLithium(),
-                    "Silicon" => new FactorySilicon(),
-                    "Silver Bars" => new FactorySilverBars(),
-                    "Solid Fuel" => new FactorySolidFuel(),
-                    "Steel" => new FactorySteel(),
-                    "Thorium Rod" => new FactoryThoriumRod(),
-                    "Titanium" => new FactoryTitanium(),
-                    "Uranium Rod" => new FactoryUraniumRod(),
-                    _ => throw new InvalidOperationException($"Unknown factory type: {factoryType}")
-                };
-                factory.Id = reader.GetInt32(factoryIdIndex);
-                factory.Level = reader.GetInt16(factoryLevelIndex);
-                factory.ProductionRate = reader.GetInt32(factoryProductionRateIndex);
-                factory.EnergyConsumption = reader.GetDecimal(factoryEnergyConsumptionIndex);
-                factory.ProductionTime = reader.GetDecimal(factoryProductionTimeIndex);
-                factory.ProductionTimePerIteration = reader.GetDecimal(factoryProductionTimePerIterationIndex);
-                factory.WorkFlag = reader.GetBoolean(factoryWorkFlagIndex);
+                int factoryId = reader.GetInt32(factoryIdIndex);
 
-                while (await reader.ReadAsync())
+                if (!factories.TryGetValue(factoryId, out FactoryBase factory))
                 {
-                    factory.RecipeUpgradeList[reader.GetString(factoryRecipeUpgradeListNameIndex)] = reader.GetInt64(factoryRecipeUpgradeListAmountIndex);
-                    if (!reader.IsDBNull(factoryResourceBufferNameIndex))
+                    string factoryType = reader.GetString(factoryTypeIndex);
+
+                    factory = factoryType switch
                     {
-                        string bufferName = reader.GetString(factoryResourceBufferNameIndex);
+                        "Aluminum" => new FactoryAluminum(),
+                        "Batteries" => new FactoryBatteries(),
+                        "Bricks" => new FactoryBricks(),
+                        "Concrete" => new FactoryConcrete(),
+                        "Copper Wire" => new FactoryCopperWire(),
+                        "Diamonds" => new FactoryDiamonds(),
+                        "Electronic Components" => new FactoryElectronicComponents(),
+                        "Energy Storage" => new FactoryEnergyStorage(),
+                        "Uranium-235" => new FactoryEnrichmentUranium(),
+                        "Uranium-238" => new FactoryEnrichmentUranium(),
+                        "Fuel" => new FactoryFuel(),
+                        "Glass" => new FactoryGlass(),
+                        "Gold Bars" => new FactoryGoldBars(),
+                        "Plastic" => new FactoryPlastic(),
+                        "Purified Lithium" => new FactoryPurifiedLithium(),
+                        "Silicon" => new FactorySilicon(),
+                        "Silver Bars" => new FactorySilverBars(),
+                        "Solid Fuel" => new FactorySolidFuel(),
+                        "Steel" => new FactorySteel(),
+                        "Thorium Rod" => new FactoryThoriumRod(),
+                        "Titanium" => new FactoryTitanium(),
+                        "Uranium Rod" => new FactoryUraniumRod(),
+                        _ => throw new InvalidOperationException($"Unknown factory type: {factoryType}")
+                    };
 
-                        factory.ResourceBuffer.Add(bufferName,
-                            new StorageResourcesBase
-                            {
-                                CurrentQuantity = reader.IsDBNull(frbStorageResourcesBaseCurrentQuantityIndex)
-                                    ? 0
-                                    : reader.GetInt64(frbStorageResourcesBaseCurrentQuantityIndex),
+                    factory.Id = factoryId;
+                    factory.Level = reader.GetInt16(factoryLevelIndex);
+                    factory.ProductionRate = reader.GetInt32(factoryProductionRateIndex);
+                    factory.EnergyConsumption = reader.GetDecimal(factoryEnergyConsumptionIndex);
+                    factory.ProductionTime = reader.GetDecimal(factoryProductionTimeIndex);
+                    factory.ProductionTimePerIteration = reader.GetDecimal(factoryProductionTimePerIterationIndex);
+                    factory.WorkFlag = reader.GetBoolean(factoryWorkFlagIndex);
 
-                                MaxCapacity = reader.IsDBNull(frbStorageResourcesBaseMaxCapacityIndex)
-                                    ? 0
-                                    : reader.GetInt64(frbStorageResourcesBaseMaxCapacityIndex),
-
-                                UpgradeCost = reader.IsDBNull(frbStorageResourcesBaseUpgradeCostIndex)
-                                    ? 0
-                                    : reader.GetInt64(frbStorageResourcesBaseUpgradeCostIndex),
-
-                                Level = reader.IsDBNull(frbStorageResourcesBaseLevelIndex)
-                                    ? (short)0
-                                    : reader.GetInt16(frbStorageResourcesBaseLevelIndex),
-
-                                Price = reader.IsDBNull(frbStorageResourcesBasePriceIndex)
-                                    ? 0
-                                    : reader.GetInt32(frbStorageResourcesBasePriceIndex)
-                            });
-                    }
-                    factory.ProductionItemList[reader.GetString(factoryProductionItemListNameIndex)] = reader.GetInt32(factoryProductionItemListAmountIndex);
+                    factories.Add(factoryId, factory);
                 }
-                listFactories.Add(factory);
+
+                string recipeName = reader.GetString(recipeNameIndex);
+                long recipeAmount = reader.GetInt64(recipeAmountIndex);
+
+                factory.RecipeUpgradeList[recipeName] = recipeAmount;
+
+                if (!reader.IsDBNull(bufferNameIndex))
+                {
+                    string bufferName = reader.GetString(bufferNameIndex);
+
+                    if (!factory.ResourceBuffer.ContainsKey(bufferName))
+                    {
+                        factory.ResourceBuffer[bufferName] = new StorageResourcesBase
+                        {
+                            CurrentQuantity = reader.IsDBNull(bufferCurrentIndex) ? 0 : reader.GetInt64(bufferCurrentIndex),
+                            MaxCapacity = reader.IsDBNull(bufferMaxIndex) ? 0 : reader.GetInt64(bufferMaxIndex),
+                            UpgradeCost = reader.IsDBNull(bufferUpgradeCostIndex) ? 0 : reader.GetInt64(bufferUpgradeCostIndex),
+                            Level = reader.IsDBNull(bufferLevelIndex) ? (short)0 : reader.GetInt16(bufferLevelIndex),
+                            Price = reader.IsDBNull(bufferPriceIndex) ? 0 : reader.GetInt32(bufferPriceIndex)
+                        };
+                    }
+                }
+
+                string productionName = reader.GetString(productionNameIndex);
+                int productionAmount = reader.GetInt32(productionAmountIndex);
+
+                factory.ProductionItemList[productionName] = productionAmount;
             }
-            return listFactories;
+
+            return factories.Values;
         }
 
         public async Task AddAsync(FactoryBase factory)
@@ -441,19 +428,54 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
                 SqlCommand updateFactoryCmd = new
                  ("""
                     UPDATE Factories 
-                    SET Name=@Name, Level=@Level, EnergyConsumption=@EnergyConsumption, WorkFlag=@WorkFlag 
+                    SET Level=@Level, ProductionRate=@ProductionRate, EnergyConsumption=@EnergyConsumption, WorkFlag=@WorkFlag, ProductionTime=@ProductionTime, ProductionTimePerIteration=@ProductionTimePerIteration 
                     WHERE Id=@Id
                  """, connection, transaction);
 
-                //updateFactoryCmd.Parameters.Add("@Type", SqlDbType.NVarChar, 100).Value = factory.Type;
-                updateFactoryCmd.Parameters.Add("@Name", SqlDbType.NVarChar, 150).Value = factory.Name;
                 updateFactoryCmd.Parameters.Add("@Level", SqlDbType.SmallInt).Value = factory.Level;
-                //updateFactoryCmd.Parameters.Add("@ProductionRate", SqlDbType.Int).Value = factory.ProductionRate;
+                updateFactoryCmd.Parameters.Add("@ProductionRate", SqlDbType.Int).Value = factory.ProductionRate;
                 updateFactoryCmd.Parameters.Add("@EnergyConsumption", SqlDbType.Decimal).Value = factory.EnergyConsumption;
-                updateFactoryCmd.Parameters.Add("@WorkFlag", SqlDbType.Bit).Value = factory.WorkFlag;
                 updateFactoryCmd.Parameters.Add("@Id", SqlDbType.Int).Value = factory.Id;
-
+                updateFactoryCmd.Parameters.Add("@WorkFlag", SqlDbType.Bit).Value = factory.WorkFlag;
+                updateFactoryCmd.Parameters.Add("@ProductionTime", SqlDbType.Decimal).Value = factory.ProductionTime;
+                updateFactoryCmd.Parameters.Add("@ProductionTimePerIteration", SqlDbType.Decimal).Value = factory.ProductionTimePerIteration;
                 await updateFactoryCmd.ExecuteNonQueryAsync();
+
+                SqlCommand updateFactoryRecipeUpgradeListCmd = new
+                ("""
+                    UPDATE FactoriesRecipeUpgradeList 
+                    SET Amount=@Amount
+                    WHERE FactoryId=@Id AND Name=@Name
+                 """, connection, transaction);
+
+                updateFactoryRecipeUpgradeListCmd.Parameters.Add("@Name", SqlDbType.NVarChar, 100);
+                updateFactoryRecipeUpgradeListCmd.Parameters.Add("@Amount", SqlDbType.Int);
+                updateFactoryRecipeUpgradeListCmd.Parameters.Add("@Id", SqlDbType.Int).Value = factory.Id;
+
+                foreach (var item in factory.RecipeUpgradeList)
+                {
+                    updateFactoryRecipeUpgradeListCmd.Parameters["@Name"].Value = item.Key;
+                    updateFactoryRecipeUpgradeListCmd.Parameters["@Amount"].Value = item.Value;
+                    await updateFactoryRecipeUpgradeListCmd.ExecuteNonQueryAsync();
+                }
+
+                SqlCommand updateFactoryProductionItemListCmd = new
+                ("""
+                    UPDATE FactoriesProductionItemList 
+                    SET Amount=@Amount
+                    WHERE FactoryId=@Id AND Name=@Name
+                 """, connection, transaction);
+
+                updateFactoryProductionItemListCmd.Parameters.Add("@Name", SqlDbType.NVarChar, 100);
+                updateFactoryProductionItemListCmd.Parameters.Add("@Amount", SqlDbType.Int);
+                updateFactoryProductionItemListCmd.Parameters.Add("@Id", SqlDbType.Int).Value = factory.Id;
+
+                foreach (var item in factory.ProductionItemList)
+                {
+                    updateFactoryProductionItemListCmd.Parameters["@Name"].Value = item.Key;
+                    updateFactoryProductionItemListCmd.Parameters["@Amount"].Value = item.Value;
+                    await updateFactoryProductionItemListCmd.ExecuteNonQueryAsync();
+                }
                 await transaction.CommitAsync();
             }
             catch
