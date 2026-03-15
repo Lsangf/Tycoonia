@@ -66,6 +66,7 @@ namespace Tycoonia.Presentation.UI
                         throw new InputException();
                     }
                     LaunchControleCenterFactory.PreparationLaunchFactory(currentFactory, storageResources, energyStorage, player, choiceProductYield);
+                    await factoryService.UpdateFactory(currentFactory);
                     _ = UpdateFactoryCalculations(factoryService, storageResources, currentFactory, energyStorage, player);
                     break;
                 case 2:
@@ -102,7 +103,7 @@ namespace Tycoonia.Presentation.UI
                 while (currentFactory.ProductionTime > 0 && currentFactory.WorkFlag)
                 {
                     ProductionCalculation.ProductionCalculationFactory(storageResources, currentFactory, energyStorage);
-                    //await factoryService.UpdateFactory(currentFactory);
+                    await factoryService.UpdateFactory(currentFactory);
                     await Task.Delay(6000);
                 }
             }
@@ -111,12 +112,16 @@ namespace Tycoonia.Presentation.UI
                 Console.WriteLine($"\n[SYSTEM ERROR] Factory {currentFactory.Name} halted!");
                 Console.WriteLine($"Reason: {ex.Message}");
                 currentFactory.WorkFlag = false;
+                currentFactory.ResourceBuffer.Clear();
+                currentFactory.ProductionTime = 0m;
+                await factoryService.UpdateFactory(currentFactory);
             }
             finally
             {
                 currentFactory.WorkFlag = false;
                 currentFactory.ResourceBuffer.Clear();
                 currentFactory.ProductionTime = 0m;
+                await factoryService.UpdateFactory(currentFactory);
             }
         }
     }

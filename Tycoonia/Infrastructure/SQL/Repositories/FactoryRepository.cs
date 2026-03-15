@@ -426,7 +426,7 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
             try
             {
                 SqlCommand updateFactoryCmd = new
-                 ("""
+                ("""
                     UPDATE Factories 
                     SET Level=@Level, ProductionRate=@ProductionRate, EnergyConsumption=@EnergyConsumption, WorkFlag=@WorkFlag, ProductionTime=@ProductionTime, ProductionTimePerIteration=@ProductionTimePerIteration 
                     WHERE Id=@Id
@@ -476,6 +476,99 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
                     updateFactoryProductionItemListCmd.Parameters["@Amount"].Value = item.Value;
                     await updateFactoryProductionItemListCmd.ExecuteNonQueryAsync();
                 }
+
+                SqlCommand updateFactoryResourceBufferCmd = new
+                ("""
+                    UPDATE FactoriesResourceBuffer 
+                    SET Name=@Name
+                    OUTPUT INSERTED.Id
+                    WHERE FactoryId=@Id AND Name=@Name
+                 """, connection, transaction);
+
+                updateFactoryResourceBufferCmd.Parameters.Add("@Name", SqlDbType.NVarChar, 100);
+                updateFactoryResourceBufferCmd.Parameters.Add("@Id", SqlDbType.Int).Value = factory.Id;
+
+                SqlCommand insertFactoryResourceBufferCmd = new
+                ("""
+                    INSERT INTO FactoriesResourceBuffer (FactoryId, Name)
+                    OUTPUT INSERTED.Id
+                    VALUES (@Id, @Name)
+                 """, connection, transaction);
+
+                insertFactoryResourceBufferCmd.Parameters.Add("@Id", SqlDbType.Int);
+                insertFactoryResourceBufferCmd.Parameters.Add("@Name", SqlDbType.NVarChar, 100);
+
+                SqlCommand updateFRBStorageResourcesBaseCmd = new
+                ("""
+                    UPDATE FRBStorageResourcesBase 
+                    SET CurrentQuantity=@CurrentQuantity, MaxCapacity=@MaxCapacity, UpgradeCost=@UpgradeCost, Level=@Level, Price=@Price
+                    WHERE ResourceBufferId=@Id
+                 """, connection, transaction);
+
+                updateFRBStorageResourcesBaseCmd.Parameters.Add("@CurrentQuantity", SqlDbType.BigInt);
+                updateFRBStorageResourcesBaseCmd.Parameters.Add("@MaxCapacity", SqlDbType.BigInt);
+                updateFRBStorageResourcesBaseCmd.Parameters.Add("@UpgradeCost", SqlDbType.BigInt);
+                updateFRBStorageResourcesBaseCmd.Parameters.Add("@Level", SqlDbType.SmallInt);
+                updateFRBStorageResourcesBaseCmd.Parameters.Add("@Price", SqlDbType.Int);
+                updateFRBStorageResourcesBaseCmd.Parameters.Add("@Id", SqlDbType.Int);
+
+                SqlCommand insertFRBStorageResourcesBaseCmd = new
+                ("""
+                    INSERT INTO FRBStorageResourcesBase
+                    (ResourceBufferId, CurrentQuantity, MaxCapacity, UpgradeCost, Level, Price)
+                    VALUES
+                    (@Id, @CurrentQuantity, @MaxCapacity, @UpgradeCost, @Level, @Price)
+                 """, connection, transaction);
+
+                insertFRBStorageResourcesBaseCmd.Parameters.Add("@CurrentQuantity", SqlDbType.BigInt);
+                insertFRBStorageResourcesBaseCmd.Parameters.Add("@MaxCapacity", SqlDbType.BigInt);
+                insertFRBStorageResourcesBaseCmd.Parameters.Add("@UpgradeCost", SqlDbType.BigInt);
+                insertFRBStorageResourcesBaseCmd.Parameters.Add("@Level", SqlDbType.SmallInt);
+                insertFRBStorageResourcesBaseCmd.Parameters.Add("@Price", SqlDbType.Int);
+                insertFRBStorageResourcesBaseCmd.Parameters.Add("@Id", SqlDbType.Int);
+
+                foreach (var item in factory.ResourceBuffer)
+                {
+                    updateFactoryResourceBufferCmd.Parameters["@Name"].Value = item.Key;
+
+                    object result = await updateFactoryResourceBufferCmd.ExecuteScalarAsync();
+
+                    int bufferId;
+
+                    if (result == null)
+                    {
+                        insertFactoryResourceBufferCmd.Parameters["@Id"].Value = factory.Id;
+                        insertFactoryResourceBufferCmd.Parameters["@Name"].Value = item.Key;
+
+                        bufferId = (int)await insertFactoryResourceBufferCmd.ExecuteScalarAsync();
+                    }
+                    else
+                    {
+                        bufferId = (int)result;
+                    }
+
+                    updateFRBStorageResourcesBaseCmd.Parameters["@Id"].Value = bufferId;
+                    updateFRBStorageResourcesBaseCmd.Parameters["@CurrentQuantity"].Value = item.Value.CurrentQuantity;
+                    updateFRBStorageResourcesBaseCmd.Parameters["@MaxCapacity"].Value = item.Value.MaxCapacity;
+                    updateFRBStorageResourcesBaseCmd.Parameters["@UpgradeCost"].Value = item.Value.UpgradeCost;
+                    updateFRBStorageResourcesBaseCmd.Parameters["@Level"].Value = item.Value.Level;
+                    updateFRBStorageResourcesBaseCmd.Parameters["@Price"].Value = item.Value.Price;
+
+                    int affected = await updateFRBStorageResourcesBaseCmd.ExecuteNonQueryAsync();
+
+                    if (affected == 0)
+                    {
+                        insertFRBStorageResourcesBaseCmd.Parameters["@Id"].Value = bufferId;
+                        insertFRBStorageResourcesBaseCmd.Parameters["@CurrentQuantity"].Value = item.Value.CurrentQuantity;
+                        insertFRBStorageResourcesBaseCmd.Parameters["@MaxCapacity"].Value = item.Value.MaxCapacity;
+                        insertFRBStorageResourcesBaseCmd.Parameters["@UpgradeCost"].Value = item.Value.UpgradeCost;
+                        insertFRBStorageResourcesBaseCmd.Parameters["@Level"].Value = item.Value.Level;
+                        insertFRBStorageResourcesBaseCmd.Parameters["@Price"].Value = item.Value.Price;
+
+                        await insertFRBStorageResourcesBaseCmd.ExecuteNonQueryAsync();
+                    }
+                }
+
                 await transaction.CommitAsync();
             }
             catch

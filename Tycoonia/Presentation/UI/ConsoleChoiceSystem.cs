@@ -17,6 +17,15 @@ namespace Tycoonia.Presentation.UI
             List<EnergyPlantBase> energyPlants,
             StorageResources storageResources, EnergyStorage energyStorage)
         {
+            List<FactoryBase> factories = factoryService.GetAllFactoriesAsync().Result.ToList();
+            foreach (FactoryBase factory in factories)
+            {
+                if (factory.WorkFlag)
+                {
+                    _ = FactorySystem.UpdateFactoryCalculations(factoryService, storageResources, factory, energyStorage, player);
+                }
+            }
+
             bool _isRunning = true;
             while (_isRunning)
             {
