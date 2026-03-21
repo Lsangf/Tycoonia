@@ -1,4 +1,5 @@
-﻿using Tycoonia.Application.Services;
+﻿using Tycoonia.Application.Factory;
+using Tycoonia.Application.Services;
 using Tycoonia.Domain.Buildings.EnergyPlant;
 using Tycoonia.Domain.Buildings.Factory;
 using Tycoonia.Domain.Buildings.Mine;
@@ -18,9 +19,24 @@ namespace Tycoonia.Presentation.UI
             StorageResources storageResources, EnergyStorage energyStorage)
         {
             List<FactoryBase> factories = factoryService.GetAllFactoriesAsync().Result.ToList();
+            
+            long currentTimeSeconds = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            long timeStartSeconds = 0;
+            long differenceSeconds = 0;
+
             foreach (FactoryBase factory in factories)
             {
                 if (factory.WorkFlag)
+                {
+                    timeStartSeconds = new DateTimeOffset(factory.TimeStart).ToUnixTimeSeconds();
+                    differenceSeconds = currentTimeSeconds - timeStartSeconds;
+                }
+
+                if (factory.WorkFlag && differenceSeconds >= (long)factory.ProductionTime)
+                {
+                    await SaveOfflineInStorage.SaveOffline(factoryService, storageResources, factory);
+                }
+                else if (factory.WorkFlag && differenceSeconds < (long)factory.ProductionTime)
                 {
                     _ = FactorySystem.UpdateFactoryCalculations(factoryService, storageResources, factory, energyStorage, player);
                 }

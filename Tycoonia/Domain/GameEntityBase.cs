@@ -8,6 +8,7 @@
         private Dictionary<string, long> _recipeUpgradeList = new();
         private int _productionRate;
         private bool _workFlag;
+        private DateTime _timeStart;
         
         public string Name
         {
@@ -38,6 +39,11 @@
         {
             get => _workFlag;
             set => _workFlag = value;
+        }
+        public DateTime TimeStart
+        {
+            get => _timeStart;
+            set => _timeStart = value;
         }
     }
 }

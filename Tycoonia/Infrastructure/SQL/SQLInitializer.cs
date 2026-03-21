@@ -49,7 +49,8 @@ namespace Tycoonia.Infrastructure.SQL
                 EnergyConsumption DECIMAL(10, 3) NOT NULL,
                 ProductionTime DECIMAL(10, 3) NOT NULL,
                 ProductionTimePerIteration DECIMAL(10, 3) NOT NULL,
-                WorkFlag BIT NOT NULL
+                WorkFlag BIT NOT NULL,
+                TimeStart DATETIME2 NOT NULL
             );
             """;// CTF
 

@@ -22,6 +22,7 @@ namespace Tycoonia.Application.Factory
                 {
                     BufferSubtraction(factory, storageResources, player);
                     factory.WorkFlag = true;
+                    factory.TimeStart = DateTime.UtcNow;
                 }
             }
             catch
