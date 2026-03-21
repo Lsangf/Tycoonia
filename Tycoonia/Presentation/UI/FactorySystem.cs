@@ -1,4 +1,5 @@
-﻿using Tycoonia.Application;
+﻿using Microsoft.Data.SqlClient;
+using Tycoonia.Application;
 using Tycoonia.Application.ApplicationExceptions;
 using Tycoonia.Application.Factory;
 using Tycoonia.Application.Services;
@@ -11,6 +12,8 @@ namespace Tycoonia.Presentation.UI
 {
     public class FactorySystem
     {
+        private static readonly SemaphoreSlim _dbSemaphore = new(1, 1);
+
         public static async Task ActionsFactoryAsync(/*List<FactoryBase> factories*/ FactoryService factoryService, StorageResources storageResources, EnergyStorage energyStorage, PlayerReal player)
         {
             List<FactoryBase> factories = factoryService.GetAllFactoriesAsync().Result.ToList();
@@ -88,6 +91,7 @@ namespace Tycoonia.Presentation.UI
                     break;
                 case 4:
                     Console.WriteLine("Exiting factory actions.");
+                    await factoryService.UpdateFactory(currentFactory);
                     break;
                 default:
                     Console.WriteLine("Invalid choice. Please try again.");
@@ -103,14 +107,40 @@ namespace Tycoonia.Presentation.UI
                 while (currentFactory.ProductionTime > 0 && currentFactory.WorkFlag)
                 {
                     ProductionCalculation.ProductionCalculationFactory(storageResources, currentFactory, energyStorage);
-                    await factoryService.UpdateFactory(currentFactory);
-                    await Task.Delay(6000);
+                    //await factoryService.UpdateFactory(currentFactory);
+                    //await SafeUpdateFactory(factoryService, currentFactory);
+                    await _dbSemaphore.WaitAsync();
+                    try
+                    {
+                        await SafeUpdateFactory(factoryService, currentFactory);
+                    }
+                    finally
+                    {
+                        _dbSemaphore.Release();
+                    }
+                    await Task.Delay(6000 + Random.Shared.Next(0, 500));
                 }
+
+                
+                //while (currentFactory.ProductionTime > 0 && currentFactory.WorkFlag)
+                //{
+                //    ProductionCalculation.ProductionCalculationFactory(storageResources, currentFactory, energyStorage);
+
+                //    
+                //    // await factoryService.UpdateFactory(currentFactory); -- 
+
+                //    await Task.Delay(6000);
+                //}
+
+                //// only
+                //await factoryService.UpdateFactory(currentFactory);
+
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"\n[SYSTEM ERROR] Factory {currentFactory.Name} halted!");
                 Console.WriteLine($"Reason: {ex.Message}");
+                Console.WriteLine(ex.ToString());
                 currentFactory.WorkFlag = false;
                 currentFactory.ResourceBuffer.Clear();
                 currentFactory.ProductionTime = 0m;
@@ -124,5 +154,28 @@ namespace Tycoonia.Presentation.UI
                 await factoryService.UpdateFactory(currentFactory);
             }
         }
+
+        public static async Task SafeUpdateFactory(FactoryService factoryService, FactoryBase factory)
+        {
+            int retries = 3;
+
+            for (int i = 0; i < retries; i++)
+            {
+                try
+                {
+                    await factoryService.UpdateFactory(factory);
+                    return;
+                }
+                catch (SqlException ex) when (ex.Number == 1205)
+                {
+                    Console.WriteLine($"Deadlock factory {factory.Name}, number1 {i + 1}");
+                    await Task.Delay(100);
+                }
+            }
+
+            throw new Exception("deadlock");
+        }
+
+
     }
 }

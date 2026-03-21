@@ -34,10 +34,24 @@ namespace Tycoonia.Application.Factory
 
         public static Dictionary<string, StorageResourcesBase> CreateBufferCheck(FactoryBase factory, StorageResources storageResources, PlayerReal player, int expectedOutput)
         {
-            foreach (var item in factory.RecipeList)
+            if (factory.ResourceBuffer.Count == 0)
             {
-                factory.ResourceBuffer.Add(item.Key, new StorageResourcesBase { CurrentQuantity = item.Value * expectedOutput });
+                foreach (var item in factory.RecipeList)
+                {
+                    factory.ResourceBuffer.Add(item.Key, new StorageResourcesBase { CurrentQuantity = item.Value * expectedOutput });
+                }
             }
+            else
+            {
+                foreach (var item in factory.ResourceBuffer)
+                {
+                    if (item.Value.CurrentQuantity == 0)
+                    {
+                        factory.ResourceBuffer[item.Key].CurrentQuantity = factory.RecipeList[item.Key] * expectedOutput;
+                    }
+                }
+            }
+
             return factory.ResourceBuffer;
         }
 
