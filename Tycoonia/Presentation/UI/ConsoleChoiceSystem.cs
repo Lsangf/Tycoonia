@@ -19,25 +19,31 @@ namespace Tycoonia.Presentation.UI
             StorageResources storageResources, EnergyStorage energyStorage)
         {
             List<FactoryBase> factories = factoryService.GetAllFactoriesAsync().Result.ToList();
-            
+
             long currentTimeSeconds = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             long timeStartSeconds = 0;
-            long differenceSeconds = 0;
+            decimal differenceSeconds = 0;
 
             foreach (FactoryBase factory in factories)
             {
                 if (factory.WorkFlag)
                 {
-                    timeStartSeconds = new DateTimeOffset(factory.TimeStart).ToUnixTimeSeconds();
-                    differenceSeconds = currentTimeSeconds - timeStartSeconds;
+                    differenceSeconds = (decimal)(DateTime.UtcNow - factory.TimeStart).TotalSeconds;
                 }
 
-                if (factory.WorkFlag && differenceSeconds >= (long)factory.ProductionTime)
+                if (factory.WorkFlag && differenceSeconds >= factory.ProductionTime)
                 {
                     await SaveOfflineInStorage.SaveOffline(factoryService, storageResources, factory);
                 }
-                else if (factory.WorkFlag && differenceSeconds < (long)factory.ProductionTime)
+                else if (factory.WorkFlag && differenceSeconds < factory.ProductionTime && differenceSeconds > 0)
                 {
+                    decimal timeReduction = differenceSeconds * factory.ProductionTimePerIteration;
+
+                    factory.ProductionTime -= timeReduction;
+
+                    if (factory.ProductionTime < 0)
+                        factory.ProductionTime = 0;
+
                     _ = FactorySystem.UpdateFactoryCalculations(factoryService, storageResources, factory, energyStorage, player);
                 }
             }

@@ -8,10 +8,11 @@ namespace Tycoonia.Application.Factory
     {
         public static async Task SaveOffline(FactoryService factoryService, StorageResources storageResources, FactoryBase factory)
         {
-            long amountItteration = (long)Math.Ceiling(factory.ProductionTime * factory.ProductionTimePerIteration);
+            decimal amountIterations = factory.ProductionTime * factory.ProductionTimePerIteration;
+            amountIterations = Math.Ceiling(amountIterations);
             foreach (var item in factory.ProductionItemList)
             {
-                storageResources.AddResourceSafe(item.Key, item.Value * amountItteration);
+                storageResources.AddResourceSafe(item.Key, (long)Math.Ceiling(item.Value * amountIterations));
             }
             factory.ProductionTime = 0m;
             factory.ResourceBuffer.Clear();

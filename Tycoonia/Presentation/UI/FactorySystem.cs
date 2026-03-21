@@ -118,7 +118,7 @@ namespace Tycoonia.Presentation.UI
                     {
                         _dbSemaphore.Release();
                     }
-                    await Task.Delay(6000 + Random.Shared.Next(0, 500));
+                    await Task.Delay(5000 + Random.Shared.Next(0, 500));
                 }
 
                 
