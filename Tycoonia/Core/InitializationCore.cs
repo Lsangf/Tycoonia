@@ -54,6 +54,7 @@ namespace Tycoonia.Core
             FactoryService factoryService = new(factoryRepository);
 
             GameLoop gameLoop = new(factoryService, player, storageResources, energyStorage, mines, energyPlants);
+            await Task.Delay(2000); // Simulate some initialization delay
             await gameLoop.StartAsync();
         }
 

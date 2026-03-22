@@ -17,7 +17,7 @@ namespace Tycoonia.Presentation.UI
         public static async Task ActionsFactoryAsync(/*List<FactoryBase> factories*/ FactoryService factoryService, StorageResources storageResources, EnergyStorage energyStorage, PlayerReal player)
         {
             List<FactoryBase> factories = factoryService.GetAllFactoriesAsync().Result.ToList();
-            
+
             for (int index = 1; (index - 1) < factories.Count; index++)
             {
                 Console.WriteLine($"[{index}] {factories[index - 1].Name}");
@@ -91,7 +91,7 @@ namespace Tycoonia.Presentation.UI
                     break;
                 case 4:
                     Console.WriteLine("Exiting factory actions.");
-                    await factoryService.UpdateFactory(currentFactory);
+                    //await factoryService.UpdateFactory(currentFactory);
                     break;
                 default:
                     Console.WriteLine("Invalid choice. Please try again.");
@@ -109,30 +109,25 @@ namespace Tycoonia.Presentation.UI
                     ProductionCalculation.ProductionCalculationFactory(storageResources, currentFactory, energyStorage);
                     //await factoryService.UpdateFactory(currentFactory);
                     //await SafeUpdateFactory(factoryService, currentFactory);
-                    await _dbSemaphore.WaitAsync();
-                    try
+                    //await _dbSemaphore.WaitAsync();
+                    //try
+                    //{
+                    //    await SafeUpdateFactory(factoryService, currentFactory);
+                    //}
+                    //finally
+                    //{
+                    //    _dbSemaphore.Release();
+                    //}
+                    foreach (var item in currentFactory.ProductionItemList)
                     {
-                        await SafeUpdateFactory(factoryService, currentFactory);
+                        Console.WriteLine($"{item.Key}: {storageResources.StorageList[item.Key].CurrentQuantity}");
                     }
-                    finally
-                    {
-                        _dbSemaphore.Release();
-                    }
-                    await Task.Delay(5000 + Random.Shared.Next(0, 500));
+                    await Task.Delay(1000 /*+ Random.Shared.Next(0, 500)*/);
                 }
-
-                
-                //while (currentFactory.ProductionTime > 0 && currentFactory.WorkFlag)
-                //{
-                //    ProductionCalculation.ProductionCalculationFactory(storageResources, currentFactory, energyStorage);
-
-                //    
-                //    // await factoryService.UpdateFactory(currentFactory); -- 
-
-                //    await Task.Delay(6000);
-                //}
-
-                //// only
+                //Console.WriteLine("F clear1");
+                //currentFactory.WorkFlag = false;
+                //currentFactory.ResourceBuffer.Clear();
+                //currentFactory.ProductionTime = 0m;
                 //await factoryService.UpdateFactory(currentFactory);
 
             }
@@ -148,6 +143,7 @@ namespace Tycoonia.Presentation.UI
             }
             finally
             {
+                Console.WriteLine("Finaly clear");
                 currentFactory.WorkFlag = false;
                 currentFactory.ResourceBuffer.Clear();
                 currentFactory.ProductionTime = 0m;
@@ -155,26 +151,26 @@ namespace Tycoonia.Presentation.UI
             }
         }
 
-        public static async Task SafeUpdateFactory(FactoryService factoryService, FactoryBase factory)
-        {
-            int retries = 3;
+        //public static async Task SafeUpdateFactory(FactoryService factoryService, FactoryBase factory)
+        //{
+        //    int retries = 3;
 
-            for (int i = 0; i < retries; i++)
-            {
-                try
-                {
-                    await factoryService.UpdateFactory(factory);
-                    return;
-                }
-                catch (SqlException ex) when (ex.Number == 1205)
-                {
-                    Console.WriteLine($"Deadlock factory {factory.Name}, number1 {i + 1}");
-                    await Task.Delay(100);
-                }
-            }
+        //    for (int i = 0; i < retries; i++)
+        //    {
+        //        try
+        //        {
+        //            await factoryService.UpdateFactory(factory);
+        //            return;
+        //        }
+        //        catch (SqlException ex) when (ex.Number == 1205)
+        //        {
+        //            Console.WriteLine($"Deadlock factory {factory.Name}, number1 {i + 1}");
+        //            await Task.Delay(100);
+        //        }
+        //    }
 
-            throw new Exception("deadlock");
-        }
+        //    throw new Exception("deadlock");
+        //}
 
 
     }

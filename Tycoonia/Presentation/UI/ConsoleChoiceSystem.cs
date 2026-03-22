@@ -1,4 +1,5 @@
-﻿using Tycoonia.Application.Factory;
+﻿using Tycoonia.Application.ApplicationExceptions;
+using Tycoonia.Application.Factory;
 using Tycoonia.Application.Services;
 using Tycoonia.Domain.Buildings.EnergyPlant;
 using Tycoonia.Domain.Buildings.Factory;
@@ -21,8 +22,8 @@ namespace Tycoonia.Presentation.UI
             List<FactoryBase> factories = factoryService.GetAllFactoriesAsync().Result.ToList();
 
             long currentTimeSeconds = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            long timeStartSeconds = 0;
-            decimal differenceSeconds = 0;
+            //long timeStartSeconds = 0;
+            decimal differenceSeconds = 0m;
 
             foreach (FactoryBase factory in factories)
             {
@@ -35,14 +36,9 @@ namespace Tycoonia.Presentation.UI
                 {
                     await SaveOfflineInStorage.SaveOffline(factoryService, storageResources, factory);
                 }
-                else if (factory.WorkFlag && differenceSeconds < factory.ProductionTime && differenceSeconds > 0)
+                else if (factory.WorkFlag && differenceSeconds < factory.ProductionTime)
                 {
-                    decimal timeReduction = differenceSeconds * factory.ProductionTimePerIteration;
-
-                    factory.ProductionTime -= timeReduction;
-
-                    if (factory.ProductionTime < 0)
-                        factory.ProductionTime = 0;
+                    await SaveOfflineInStorage.SaveOfflinePartially(factoryService, storageResources, energyStorage, factory, differenceSeconds);
 
                     _ = FactorySystem.UpdateFactoryCalculations(factoryService, storageResources, factory, energyStorage, player);
                 }
