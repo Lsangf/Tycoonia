@@ -13,10 +13,16 @@ namespace Tycoonia.Presentation.UI
     public class FactorySystem
     {
         private static readonly SemaphoreSlim _dbSemaphore = new(1, 1);
+        static FactoryBase currentFactory;
 
         public static async Task ActionsFactoryAsync(/*List<FactoryBase> factories*/ FactoryService factoryService, StorageResources storageResources, EnergyStorage energyStorage, PlayerReal player)
         {
-            List<FactoryBase> factories = factoryService.GetAllFactoriesAsync().Result.ToList();
+            if (currentFactory != null)
+            {
+                await factoryService.UpdateFactory(currentFactory);
+            }
+
+            List<FactoryBase> factories = (await factoryService.GetAllFactoriesAsync()).ToList();
 
             for (int index = 1; (index - 1) < factories.Count; index++)
             {
@@ -24,7 +30,7 @@ namespace Tycoonia.Presentation.UI
             }
             Console.WriteLine("\nChoice number factory...");
             byte choiceNumberFactory = (byte)ConsoleInput.ConsoleChoice();
-            FactoryBase currentFactory = factories[choiceNumberFactory - 1];
+            currentFactory = factories[choiceNumberFactory - 1];
 
             FactoryInfo.ShowFactoryInfo(currentFactory);
             Console.WriteLine("| Current |");
@@ -75,6 +81,7 @@ namespace Tycoonia.Presentation.UI
                 case 2:
                     LaunchControleCenterFactory.StopFactory(currentFactory, storageResources, player);
                     StorageResourcesInfo.ShowStorageResourcesInfo(storageResources);
+                    await factoryService.UpdateFactory(currentFactory);
                     Console.WriteLine("Production stopped.");
                     break;
                 case 3:
@@ -137,17 +144,26 @@ namespace Tycoonia.Presentation.UI
                 Console.WriteLine($"Reason: {ex.Message}");
                 Console.WriteLine(ex.ToString());
                 currentFactory.WorkFlag = false;
-                currentFactory.ResourceBuffer.Clear();
+                foreach (var item in currentFactory.ResourceBuffer)
+                {
+                    item.Value.CurrentQuantity = 0;
+                }
                 currentFactory.ProductionTime = 0m;
                 await factoryService.UpdateFactory(currentFactory);
             }
             finally
             {
-                Console.WriteLine("Finaly clear");
+                Console.WriteLine("Finaly stop factory");
+
                 currentFactory.WorkFlag = false;
-                currentFactory.ResourceBuffer.Clear();
                 currentFactory.ProductionTime = 0m;
+
                 await factoryService.UpdateFactory(currentFactory);
+
+                foreach (var item in currentFactory.ResourceBuffer)
+                {
+                    item.Value.CurrentQuantity = 0;
+                }
             }
         }
 

@@ -14,9 +14,13 @@ namespace Tycoonia.Application.Factory
             {
                 storageResources.AddResourceSafe(item.Key, (long)(item.Value * amountIterations));
             }
+            foreach (var item in factory.ResourceBuffer)
+            {
+                item.Value.CurrentQuantity = 0;
+            }
 
             factory.ProductionTime = 0m;
-            factory.ResourceBuffer.Clear();
+            //factory.ResourceBuffer.Clear();
             factory.WorkFlag = false;
 
             await factoryService.UpdateFactory(factory);

@@ -10,32 +10,41 @@ namespace Tycoonia.Application
         public static void Upgrade(IUpgradableBuilding building, StorageResources storageResources, PlayerReal player)
         {
             CanUpgrade(building, storageResources, player);
-            if (!building.CanUpgrade)
-            {
-                throw new StorageException();
-            }
-            else
+            if (building.CanUpgrade)
             {
                 UpgradeSubtraction(building, storageResources, player);
                 UpdateUpgradeAmount(building);
+                
+            }
+            else
+            {
+                Console.WriteLine("87g87g87g7g87g87g78g8g7g8g87g87g8g87gg87g7g87g87g87g87");
+                throw new StorageException();
             }
         }
 
         public static void CanUpgrade(IUpgradableBuilding building, StorageResources storageResources, PlayerReal player)
         {
-            foreach (var item in building.RecipeUpgradeList)
+            if (building.WorkFlag)
             {
-                if (item.Key == "Money" && player.Ballance >= item.Value)
+                building.CanUpgrade = false;
+            }
+            else
+            {
+                foreach (var item in building.RecipeUpgradeList)
                 {
-                    building.CanUpgrade = true;
-                }
-                else if (storageResources.StorageList[item.Key].CurrentQuantity >= item.Value)
-                {
-                    building.CanUpgrade = true;
-                }
-                else
-                {
-                    building.CanUpgrade = false;
+                    if (item.Key == "Money" && player.Ballance >= item.Value)
+                    {
+                        building.CanUpgrade = true;
+                    }
+                    else if (storageResources.StorageList[item.Key].CurrentQuantity >= item.Value)
+                    {
+                        building.CanUpgrade = true;
+                    }
+                    else
+                    {
+                        building.CanUpgrade = false;
+                    }
                 }
             }
         }

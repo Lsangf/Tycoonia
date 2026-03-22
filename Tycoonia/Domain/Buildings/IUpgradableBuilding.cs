@@ -8,5 +8,6 @@
         decimal EnergyConsumption {  get; set; }
         Dictionary<string, int> ProductionItemList { get; set; }
         bool CanUpgrade { get; set; }
+        bool WorkFlag { get; set; }
     }
 }
