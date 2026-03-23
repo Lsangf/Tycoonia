@@ -6,7 +6,7 @@ namespace Tycoonia.Application
     {
         public static void TimeSubtraction(IUpgradableBuilding building)
         {
-            if (building.ProgressTime.TotalSeconds > 0)
+            if (building.ProgressTime.TotalSeconds > 0d)
             {
                 building.ProgressTime -= TimeSpan.FromSeconds(1);
             }

@@ -117,11 +117,14 @@ namespace Tycoonia.Presentation.UI
                 FactoryInfo.ShowFactoryInfo(currentFactory);
                 while (DateTime.UtcNow < currentFactory.TimeEnd && currentFactory.WorkFlag)
                 {
+                    //FactoryInfo.ShowFactoryInfo(currentFactory);
                     ProductionCalculation.ProductionCalculationFactory(storageResources, currentFactory, energyStorage);
                     foreach (var item in currentFactory.ProductionItemList)
                     {
                         Console.WriteLine($"{item.Key}: {storageResources.StorageList[item.Key].CurrentQuantity}");
                     }
+                    FactoryInfo.ShowFactoryInfo(currentFactory);
+                    Console.WriteLine(DateTime.UtcNow);
                     await Task.Delay(1000);
                 }
             }

@@ -34,14 +34,14 @@ namespace Tycoonia.Core
 
         public async Task StartAsync()
         {
-            long currentTimeSeconds = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            DateTime currentTimeSeconds = DateTime.UtcNow;
             decimal differenceSeconds = 0m;
 
             foreach (FactoryBase factory in _factories)
             {
                 if (factory.WorkFlag)
                 {
-                    differenceSeconds = (decimal)(DateTime.UtcNow - factory.TimeStart).TotalSeconds;
+                    differenceSeconds = (decimal)(currentTimeSeconds - factory.TimeStart).TotalSeconds;
                 }
 
                 if (factory.WorkFlag && differenceSeconds >= factory.ProductionTime)

@@ -91,6 +91,7 @@ namespace Tycoonia.Application.Factory
             factory.TimeStart = DateTime.UtcNow;
             factory.TimeEnd = factory.TimeStart.AddSeconds((double)factory.ProductionTime);
             factory.ProgressTime = factory.TimeEnd - factory.TimeStart;
+            //factory.ProgressTime = TimeSpan.FromSeconds(Math.Ceiling((factory.TimeEnd - factory.TimeStart).TotalSeconds));
         }
 
         public static void StopFactory(FactoryBase factory, StorageResources storageResources, PlayerReal player)

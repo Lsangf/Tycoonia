@@ -68,7 +68,7 @@ namespace Tycoonia.Application.Energy
 			energyPlant.ProductionTime = (decimal)expectedOutput / (decimal)energyPlant.ProductionRate;
             energyPlant.TimeStart = DateTime.UtcNow;
             energyPlant.TimeEnd = energyPlant.TimeStart.AddSeconds((double)energyPlant.ProductionTime);
-            energyPlant.ProgressTime = energyPlant.TimeEnd - energyPlant.TimeStart;
+            energyPlant.ProgressTime = TimeSpan.FromSeconds(Math.Ceiling((energyPlant.TimeEnd - energyPlant.TimeStart).TotalSeconds));
         }
 	}
 }

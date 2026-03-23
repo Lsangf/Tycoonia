@@ -35,7 +35,7 @@ namespace Tycoonia.Presentation.UI.Info
             Console.WriteLine($"Production Rate:      {energyPlant.ProductionRate}");
             Console.WriteLine($"Energy Consumption:   {energyPlant.EnergyConsumption}");
             Console.WriteLine($"Production Time:      {energyPlant.ProductionTime}");
-            Console.WriteLine($"Progress Time:        {energyPlant.ProductionTime}");
+            Console.WriteLine($"Progress Time:        {energyPlant.ProgressTime}");
             Console.WriteLine($"Recipe List:          {RecipeListString}");
             Console.WriteLine($"Resource Buffer:      {ResourceBufferString}");
             Console.WriteLine($"Production Item List: {ProductionItemListString}");
