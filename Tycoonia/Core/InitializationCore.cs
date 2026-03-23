@@ -38,7 +38,9 @@ namespace Tycoonia.Core
 
             List<MineBase> mines = null;
 
-            List<EnergyPlantBase> energyPlants =
+            List<FactoryBase> factories = null;
+
+            List <EnergyPlantBase> energyPlants =
             [
                 coalTPP, fuelTPP, solidFuelTPP, uraniumNPP, thoriumNPP
             ];
@@ -53,7 +55,81 @@ namespace Tycoonia.Core
 
             FactoryService factoryService = new(factoryRepository);
 
-            GameLoop gameLoop = new(factoryService, player, storageResources, energyStorage, mines, energyPlants);
+            List<FactoryBase> factoriesDB = (await factoryService.GetAllFactoriesAsync()).ToList();
+            foreach (var factory in factoriesDB)
+            {
+                switch (factory.Name)
+                {
+                    case "Aluminum Factory":
+                        FactoryAluminum factoryAluminumDb = new();
+                        break;
+                    case "Batteries Factory":
+                        FactoryBatteries factoryBatteriesDb = new();
+                        break;
+                    case "Bricks Factory":
+                        FactoryBricks factoryBricksDb = new();
+                        break;
+                    case "Concrete Factory":
+                        FactoryConcrete factoryConcreteDb = new();
+                        break;
+                    case "Copper Wire Factory":
+                        FactoryCopperWire factoryCopperWireDb = new();
+                        break;
+                    case "Diamond Refinery":
+                        FactoryDiamonds factoryDiamondsDb = new();
+                        break;
+                    case "Electronic Components Factory":
+                        FactoryElectronicComponents factoryElectronicComponentsDb = new();
+                        break;
+                    case "Storage Factory":
+                        FactoryEnergyStorage factoryEnergyStorageDb = new();
+                        break;
+                    case "Enrichment Factory":
+                        FactoryEnrichmentUranium factoryEnrichmentUraniumDb = new();
+                        break;
+                    case "Fuel Factory":
+                        FactoryFuel factoryFuelDb = new();
+                        break;
+                    case "Glass Factory":
+                        FactoryGlass factoryGlassDb = new();
+                        break;
+                    case "Gold Bars Factory":
+                        FactoryGoldBars factoryGoldBarsDb = new();
+                        break;
+                    case "Plastic Factory":
+                        FactoryPlastic factoryPlasticDb = new();
+                        break;
+                    case "Purified Lithium Factory":
+                        FactoryPurifiedLithium factoryPurifiedLithiumDb = new();
+                        break;
+                    case "Silicon Factory":
+                        FactorySilicon factorySiliconDb = new();
+                        break;
+                    case "Silver Bars Factory":
+                        FactorySilverBars factorySilverBarsDb = new();
+                        break;
+                    case "Solid Fuel Factory":
+                        FactorySolidFuel factorySolidFuelDb = new();
+                        break;
+                    case "Steel Factory":
+                        FactorySteel factorySteelDb = new();
+                        break;
+                    case "Thorium Rod Factory":
+                        FactoryThoriumRod factoryThoriumRodDb = new();
+                        break;
+                    case "Titanium Factory":
+                        FactoryTitanium factoryTitaniumDb = new();
+                        break;
+                    case "Uranium Rod Factory":
+                        FactoryUraniumRod factoryUraniumRodDb = new();
+                        break;
+                    default:
+                        throw new InvalidOperationException($"Unknown factory name: {factory.Name}");
+                };
+            }
+            factories = factoriesDB;
+
+            GameLoop gameLoop = new(factories, factoryService, player, storageResources, energyStorage, mines, energyPlants);
             await Task.Delay(2000); // Simulate some initialization delay
             await gameLoop.StartAsync();
         }

@@ -6,8 +6,11 @@ namespace Tycoonia.Domain.Buildings.Factory
     {
         private long _maxExpectedOtput;
         private decimal _energyConsumption;
+        //private DateTime _timeStart;
+        //private DateTime _timeEnd;
         private decimal _productionTime;
-        private decimal _productionTimePerIteration;
+        private TimeSpan _progressTime;
+        //private decimal _productionTimePerIteration;
         private Dictionary<string, byte> _recipeList = [];
         private Dictionary<string, StorageResourcesBase> _resourceBuffer = [];
         private Dictionary<string, int> _productionItemList = [];
@@ -23,16 +26,31 @@ namespace Tycoonia.Domain.Buildings.Factory
             get => _energyConsumption;
             set => _energyConsumption = value;
         }
+        //public DateTime TimeStart
+        //{
+        //    get => _timeStart;
+        //    set => _timeStart = value;
+        //}
+        //public DateTime TimeEnd
+        //{
+        //    get => _timeEnd;
+        //    set => _timeEnd = value;
+        //}
         public decimal ProductionTime
         {
             get => _productionTime;
             set => _productionTime = value;
         }
-        public decimal ProductionTimePerIteration
+        public TimeSpan ProgressTime
         {
-            get => _productionTimePerIteration;
-            set => _productionTimePerIteration = value;
+            get => _progressTime;
+            set => _progressTime = value;
         }
+        //public decimal ProductionTimePerIteration
+        //{
+        //    get => _productionTimePerIteration;
+        //    set => _productionTimePerIteration = value;
+        //}
         public Dictionary<string, byte> RecipeList
         {
             get => _recipeList;

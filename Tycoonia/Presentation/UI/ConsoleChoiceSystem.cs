@@ -12,38 +12,13 @@ namespace Tycoonia.Presentation.UI
     public class ConsoleChoiceSystem
     {
         public static async Task ConsoleChoiceAsync(
+            List<FactoryBase> factories,
             List<MineBase> mines,
             PlayerReal player,
-            //List<FactoryBase> factories,
             FactoryService factoryService,
             List<EnergyPlantBase> energyPlants,
             StorageResources storageResources, EnergyStorage energyStorage)
         {
-            List<FactoryBase> factories = factoryService.GetAllFactoriesAsync().Result.ToList();
-
-            long currentTimeSeconds = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            //long timeStartSeconds = 0;
-            decimal differenceSeconds = 0m;
-
-            foreach (FactoryBase factory in factories)
-            {
-                if (factory.WorkFlag)
-                {
-                    differenceSeconds = (decimal)(DateTime.UtcNow - factory.TimeStart).TotalSeconds;
-                }
-
-                if (factory.WorkFlag && differenceSeconds >= factory.ProductionTime)
-                {
-                    await SaveOfflineInStorage.SaveOffline(factoryService, storageResources, factory);
-                }
-                else if (factory.WorkFlag && differenceSeconds < factory.ProductionTime)
-                {
-                    await SaveOfflineInStorage.SaveOfflinePartially(factoryService, storageResources, energyStorage, factory, differenceSeconds);
-
-                    _ = FactorySystem.UpdateFactoryCalculations(factoryService, storageResources, factory, energyStorage, player);
-                }
-            }
-
             bool _isRunning = true;
             while (_isRunning)
             {
@@ -73,7 +48,7 @@ namespace Tycoonia.Presentation.UI
                             break;
                         case 3:
                             Console.WriteLine("\nManaging Factories...");
-                            await FactorySystem.ActionsFactoryAsync(/*factories*/ factoryService, storageResources, energyStorage, player);
+                            await FactorySystem.ActionsFactoryAsync(factories, factoryService, storageResources, energyStorage, player);
                             break;
                         case 4:
                             Console.WriteLine("\nManaging Energy Plants...");
@@ -98,6 +73,7 @@ namespace Tycoonia.Presentation.UI
                         case 9:
                             Console.WriteLine("\nExiting...");
                             _isRunning = false;
+                            await factoryService.UpdateAllFactories(factories);
                             break;
                         default:
                             Console.Clear();

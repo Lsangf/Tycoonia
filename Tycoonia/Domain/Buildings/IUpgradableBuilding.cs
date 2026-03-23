@@ -5,9 +5,13 @@
         short Level { get; set; }
         Dictionary<string, long> RecipeUpgradeList { get; set; }
         int ProductionRate { get; set; }
+        decimal ProductionTime { get; set; }
+        TimeSpan ProgressTime { get; set; }
         decimal EnergyConsumption {  get; set; }
         Dictionary<string, int> ProductionItemList { get; set; }
         bool CanUpgrade { get; set; }
         bool WorkFlag { get; set; }
+        DateTime TimeStart { get; set; }
+        DateTime TimeEnd { get; set; }
     }
 }

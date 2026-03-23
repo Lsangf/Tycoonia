@@ -5,8 +5,10 @@ namespace Tycoonia.Domain.Buildings.EnergyPlant
     public abstract class EnergyPlantBase : GameEntityBase, IUpgradableBuilding
     {
         private long _maxExpectedOtput;
+        //private DateTime _timeStart;
+        //private DateTime _timeEnd;
         private decimal _productionTime;
-        private decimal _productionTimePerIteration;
+        private TimeSpan _progressTime;
         private decimal _energyConsumption;
         private Dictionary<string, short> _recipeList = [];
         private Dictionary<string, StorageResourcesBase> _resourceBuffer = [];
@@ -17,16 +19,31 @@ namespace Tycoonia.Domain.Buildings.EnergyPlant
             get => _maxExpectedOtput;
             set => _maxExpectedOtput = value;
         }
+        //public DateTime TimeStart
+        //{
+        //    get => _timeStart;
+        //    set => _timeStart = value;
+        //}
+        //public DateTime TimeEnd
+        //{
+        //    get => _timeEnd;
+        //    set => _timeEnd = value;
+        //}
         public decimal ProductionTime
         {
             get => _productionTime;
             set => _productionTime = value;
         }
-        public decimal ProductionTimePerIteration
+        public TimeSpan ProgressTime
         {
-            get => _productionTimePerIteration;
-            set => _productionTimePerIteration = value;
+            get => _progressTime;
+            set => _progressTime = value;
         }
+        //public decimal ProductionTimePerIteration
+        //{
+        //    get => _productionTimePerIteration;
+        //    set => _productionTimePerIteration = value;
+        //}
         public decimal EnergyConsumption
         {
             get => _energyConsumption;

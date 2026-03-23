@@ -48,9 +48,10 @@ namespace Tycoonia.Infrastructure.SQL
                 ProductionRate INT NOT NULL,
                 EnergyConsumption DECIMAL(10, 3) NOT NULL,
                 ProductionTime DECIMAL(10, 3) NOT NULL,
-                ProductionTimePerIteration DECIMAL(10, 3) NOT NULL,
+                ProgressTime BIGINT NOT NULL,
                 WorkFlag BIT NOT NULL,
-                TimeStart DATETIME2 NOT NULL
+                TimeStart DATETIME2 NOT NULL,
+                TimeEnd DATETIME2 NOT NULL
             );
             """;// CTF
 

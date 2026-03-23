@@ -9,7 +9,8 @@
         private int _productionRate;
         private bool _workFlag;
         private DateTime _timeStart;
-        
+        private DateTime _timeEnd;
+
         public string Name
         {
             get => _name;
@@ -44,6 +45,11 @@
         {
             get => _timeStart;
             set => _timeStart = value;
+        }
+        public DateTime TimeEnd
+        {
+            get => _timeEnd;
+            set => _timeEnd = value;
         }
     }
 }

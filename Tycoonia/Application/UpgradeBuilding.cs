@@ -18,7 +18,6 @@ namespace Tycoonia.Application
             }
             else
             {
-                Console.WriteLine("87g87g87g7g87g87g78g8g7g8g87g87g8g87gg87g7g87g87g87g87");
                 throw new StorageException();
             }
         }

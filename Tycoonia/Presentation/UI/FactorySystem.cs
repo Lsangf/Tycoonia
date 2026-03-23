@@ -15,14 +15,14 @@ namespace Tycoonia.Presentation.UI
         private static readonly SemaphoreSlim _dbSemaphore = new(1, 1);
         static FactoryBase currentFactory;
 
-        public static async Task ActionsFactoryAsync(/*List<FactoryBase> factories*/ FactoryService factoryService, StorageResources storageResources, EnergyStorage energyStorage, PlayerReal player)
+        public static async Task ActionsFactoryAsync(List<FactoryBase> factories, FactoryService factoryService, StorageResources storageResources, EnergyStorage energyStorage, PlayerReal player)
         {
-            if (currentFactory != null)
-            {
-                await factoryService.UpdateFactory(currentFactory);
-            }
+            //if (currentFactory != null)
+            //{
+            //    await factoryService.UpdateFactory(currentFactory);
+            //}
 
-            List<FactoryBase> factories = (await factoryService.GetAllFactoriesAsync()).ToList();
+            //List<FactoryBase> factories = (await factoryService.GetAllFactoriesAsync()).ToList();
 
             for (int index = 1; (index - 1) < factories.Count; index++)
             {
@@ -88,8 +88,12 @@ namespace Tycoonia.Presentation.UI
                     try
                     {
                         UpgradeBuilding.Upgrade(currentFactory, storageResources, player);
-                        await factoryService.UpdateFactory(currentFactory);
-                        Console.WriteLine($"Upgrade completed | LVL {currentFactory.Level} |\n");
+                        if (!currentFactory.WorkFlag)
+                        {
+                            await factoryService.UpdateFactory(currentFactory);
+                            Console.WriteLine($"Upgrade completed | LVL {currentFactory.Level} |\n");
+                        }
+                        Console.WriteLine($"Upgrade NOT completed");
                     }
                     catch (Exception ex)
                     {
@@ -111,32 +115,15 @@ namespace Tycoonia.Presentation.UI
             try
             {
                 FactoryInfo.ShowFactoryInfo(currentFactory);
-                while (currentFactory.ProductionTime > 0 && currentFactory.WorkFlag)
+                while (DateTime.UtcNow < currentFactory.TimeEnd && currentFactory.WorkFlag)
                 {
                     ProductionCalculation.ProductionCalculationFactory(storageResources, currentFactory, energyStorage);
-                    //await factoryService.UpdateFactory(currentFactory);
-                    //await SafeUpdateFactory(factoryService, currentFactory);
-                    //await _dbSemaphore.WaitAsync();
-                    //try
-                    //{
-                    //    await SafeUpdateFactory(factoryService, currentFactory);
-                    //}
-                    //finally
-                    //{
-                    //    _dbSemaphore.Release();
-                    //}
                     foreach (var item in currentFactory.ProductionItemList)
                     {
                         Console.WriteLine($"{item.Key}: {storageResources.StorageList[item.Key].CurrentQuantity}");
                     }
-                    await Task.Delay(1000 /*+ Random.Shared.Next(0, 500)*/);
+                    await Task.Delay(1000);
                 }
-                //Console.WriteLine("F clear1");
-                //currentFactory.WorkFlag = false;
-                //currentFactory.ResourceBuffer.Clear();
-                //currentFactory.ProductionTime = 0m;
-                //await factoryService.UpdateFactory(currentFactory);
-
             }
             catch (Exception ex)
             {
@@ -149,6 +136,7 @@ namespace Tycoonia.Presentation.UI
                     item.Value.CurrentQuantity = 0;
                 }
                 currentFactory.ProductionTime = 0m;
+                currentFactory.ProgressTime = TimeSpan.Zero;
                 await factoryService.UpdateFactory(currentFactory);
             }
             finally
@@ -157,6 +145,7 @@ namespace Tycoonia.Presentation.UI
 
                 currentFactory.WorkFlag = false;
                 currentFactory.ProductionTime = 0m;
+                currentFactory.ProgressTime = TimeSpan.Zero;
 
                 await factoryService.UpdateFactory(currentFactory);
 

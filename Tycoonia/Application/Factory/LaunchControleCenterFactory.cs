@@ -88,7 +88,9 @@ namespace Tycoonia.Application.Factory
         public static void CreateProductionTime(FactoryBase factory, int expectedOutput)
         {
             factory.ProductionTime = (decimal)expectedOutput/(decimal)factory.ProductionRate;
-            factory.ProductionTimePerIteration = (decimal)factory.ProductionTime / (decimal)Math.Ceiling(factory.ProductionTime);
+            factory.TimeStart = DateTime.UtcNow;
+            factory.TimeEnd = factory.TimeStart.AddSeconds((double)factory.ProductionTime);
+            factory.ProgressTime = factory.TimeEnd - factory.TimeStart;
         }
 
         public static void StopFactory(FactoryBase factory, StorageResources storageResources, PlayerReal player)

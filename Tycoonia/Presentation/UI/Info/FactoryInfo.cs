@@ -35,11 +35,23 @@ namespace Tycoonia.Presentation.UI.Info
             Console.WriteLine($"Production Rate:      {factory.ProductionRate}");
             Console.WriteLine($"Energy Consumption:   {factory.EnergyConsumption}");
             Console.WriteLine($"Production Time:      {factory.ProductionTime}");
+            Console.WriteLine($"Progress Time:        {factory.ProductionTime}");
             Console.WriteLine($"Recipe List:          {RecipeListString}");
             Console.WriteLine($"Resource Buffer:      {ResourceBufferString}");
             Console.WriteLine($"Production Item List: {ProductionItemListString}");
             Console.WriteLine($"Work Flag:            {factory.WorkFlag}");
             Console.WriteLine($"Cancel Flag:          {factory.CancelFlag}");
+            if (factory.WorkFlag)
+            {
+                Console.WriteLine($"Start Time:           {factory.TimeStart}");
+                Console.WriteLine($"End Time:             {factory.TimeEnd}");
+            }
+            else
+            {
+                Console.WriteLine($"Start Time:           None");
+                Console.WriteLine($"End Time:             None");
+            }
+            
         }
     }
 }

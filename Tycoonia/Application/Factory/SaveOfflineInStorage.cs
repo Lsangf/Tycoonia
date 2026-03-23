@@ -8,7 +8,8 @@ namespace Tycoonia.Application.Factory
     {
         public static async Task SaveOffline(FactoryService factoryService, StorageResources storageResources, FactoryBase factory)
         {
-            decimal amountIterations = Math.Ceiling(factory.ProductionTime / factory.ProductionTimePerIteration);
+            //decimal amountIterations = Math.Ceiling(factory.ProductionTime / factory.ProductionTimePerIteration);
+            decimal amountIterations = factory.ProductionTime;
 
             foreach (var item in factory.ProductionItemList)
             {
@@ -20,7 +21,7 @@ namespace Tycoonia.Application.Factory
             }
 
             factory.ProductionTime = 0m;
-            //factory.ResourceBuffer.Clear();
+            factory.ProgressTime = TimeSpan.Zero;
             factory.WorkFlag = false;
 
             await factoryService.UpdateFactory(factory);
@@ -28,13 +29,13 @@ namespace Tycoonia.Application.Factory
 
         public static async Task SaveOfflinePartially(FactoryService factoryService, StorageResources storageResources, EnergyStorage energyStorage, FactoryBase factory, decimal differenceSeconds)
         {
-            decimal amountIterations = Math.Ceiling(factory.ProductionTime / factory.ProductionTimePerIteration);
+            //decimal amountIterations = Math.Ceiling(factory.ProductionTime / factory.ProductionTimePerIteration);
+            decimal amountIterations = factory.ProductionTime;
             decimal amountOfflineIterations = amountIterations - differenceSeconds;
 
             foreach (var itemProduction in factory.ProductionItemList)
             {
                 storageResources.AddResourceSafe(itemProduction.Key, (long)(itemProduction.Value * amountOfflineIterations));
-
             }
             foreach (var item in factory.ResourceBuffer)
             {
@@ -47,7 +48,8 @@ namespace Tycoonia.Application.Factory
                 }
             }
 
-            factory.ProductionTime -= factory.ProductionTimePerIteration * amountOfflineIterations;
+            factory.ProgressTime -= TimeSpan.FromSeconds((double)differenceSeconds);
+            //factory.ProductionTime -= factory.ProductionTimePerIteration * amountOfflineIterations;
             energyStorage.SubtractSafe(factory.EnergyConsumption * amountOfflineIterations);
             await factoryService.UpdateFactory(factory);
         }
