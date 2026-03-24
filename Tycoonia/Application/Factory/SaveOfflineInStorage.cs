@@ -29,7 +29,7 @@ namespace Tycoonia.Application.Factory
         public static async Task SaveOfflinePartially(FactoryService factoryService, StorageResources storageResources, EnergyStorage energyStorage, FactoryBase factory, decimal differenceSeconds)
         {
             decimal amountIterations = factory.ProductionTime;
-            decimal amountOfflineIterations = amountIterations - differenceSeconds;
+            decimal amountOfflineIterations = Math.Floor(differenceSeconds);
 
             foreach (var itemProduction in factory.ProductionItemList)
             {

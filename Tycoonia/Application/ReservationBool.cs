@@ -7,27 +7,21 @@ namespace Tycoonia.Application
     {
         public static bool ResourcesReservation(Dictionary<string, StorageResourcesBase> resourcesBuffer, StorageResources storageResources, PlayerReal player)
         {
-            bool checkValue = false;
             foreach (var item in resourcesBuffer)
             {
-                if (item.Key == "Money" && player.Ballance >= item.Value.CurrentQuantity)
+                if (item.Key == "Money")
                 {
-                    checkValue = true;
-                }
-                else if(item.Key == "Money" && player.Ballance < item.Value.CurrentQuantity)
-                {
-                    checkValue = false;
-                }
-                else if (storageResources.StorageList[item.Key].CurrentQuantity >= item.Value.CurrentQuantity)
-                {
-                    checkValue = true;
+                    if (player.Ballance < item.Value.CurrentQuantity)
+                        return false;
                 }
                 else
                 {
-                    checkValue = false;
+                    if (storageResources.StorageList[item.Key].CurrentQuantity < item.Value.CurrentQuantity)
+                        return false;
                 }
             }
-            return checkValue;
+
+            return true;
         }
 
         public static bool EnergyReservation(decimal energyConsumption, EnergyStorage energyStorage)

@@ -87,7 +87,7 @@ namespace Tycoonia.Application.Factory
 
         public static void CreateProductionTime(FactoryBase factory, int expectedOutput)
         {
-            factory.ProductionTime = (decimal)expectedOutput/(decimal)factory.ProductionRate;
+            factory.ProductionTime = Math.Ceiling((decimal)expectedOutput / factory.ProductionRate);
             factory.TimeStart = DateTime.UtcNow;
             factory.TimeEnd = factory.TimeStart.AddSeconds((double)factory.ProductionTime);
             factory.ProgressTime = factory.TimeEnd - factory.TimeStart;

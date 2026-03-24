@@ -20,21 +20,21 @@ namespace Tycoonia.Application.Factory
             }
             else
             {
-                ResourcesSubtraction(resorcesBuffer, recipeListNeeded);
-                EnergySubtraction(energyStorage, energyNeeded);
+                ResourcesSubtraction(resorcesBuffer, recipeListNeeded, factory);
+                EnergySubtraction(energyStorage, energyNeeded, factory);
                 TimeSubtractionBuilding.TimeSubtraction(factory);
                 SaveInStorage.Save(storageResources, factory);
             }
             return factory.ProductionRate;
         }
 
-        public static void ResourcesSubtraction(Dictionary<string, StorageResourcesBase> resorcesBuffer, Dictionary<string, byte> recipeListNeeded)
+        public static void ResourcesSubtraction(Dictionary<string, StorageResourcesBase> resorcesBuffer, Dictionary<string, byte> recipeListNeeded, FactoryBase factory)
         {
             foreach (var item in recipeListNeeded)
             {
-                if (resorcesBuffer[item.Key].CurrentQuantity >= item.Value)
+                if (resorcesBuffer[item.Key].CurrentQuantity >= item.Value * factory.ProductionRate)
                 {
-                    resorcesBuffer[item.Key].CurrentQuantity -= item.Value;
+                    resorcesBuffer[item.Key].CurrentQuantity -= item.Value * factory.ProductionRate;
                 }
                 else
                 {
@@ -43,9 +43,9 @@ namespace Tycoonia.Application.Factory
             }
         }
 
-        public static void EnergySubtraction(EnergyStorage energyStorage, decimal energyNeeded)
+        public static void EnergySubtraction(EnergyStorage energyStorage, decimal energyNeeded, FactoryBase factory)
         {
-            energyStorage.SubtractSafe(energyNeeded);
+            energyStorage.SubtractSafe(energyNeeded * factory.ProductionRate);
         }
     }
 }
