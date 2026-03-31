@@ -87,11 +87,33 @@ namespace Tycoonia.Application.Factory
 
         public static void CreateProductionTime(FactoryBase factory, int expectedOutput)
         {
-            factory.ProductionTime = Math.Ceiling((decimal)expectedOutput / factory.ProductionRate);
+            //factory.ProductionTime = expectedOutput / factory.ProductionRate;
+            ////factory.ProductionTimePerIteration = 1m / factory.ProductionTime;
+            //factory.ProductionTimePerIteration = factory.ProductionTime / expectedOutput;
+            //factory.TimeStart = DateTime.UtcNow;
+            //factory.TimeEnd = factory.TimeStart.AddSeconds((double)factory.ProductionTime);
+
+            ////double seconds = Math.Ceiling((factory.TimeEnd - factory.TimeStart).TotalSeconds);
+            ////factory.ProgressTime = TimeSpan.FromSeconds(seconds);
+            //factory.ProgressTime = TimeSpan.FromSeconds((factory.TimeEnd - factory.TimeStart).TotalSeconds);
+            //double seconds = Math.Ceiling((factory.TimeEnd - factory.TimeStart).TotalSeconds);
+            //factory.ProgressTimeUi = TimeSpan.FromSeconds(seconds);
+
+
+            //factory.ProductionTime = expectedOutput / factory.ProductionRate;
+            //factory.ProductionTimePerIteration = factory.ProductionTime / expectedOutput;
+
+            //factory.TimeStart = DateTime.UtcNow;
+            //factory.TimeEnd = factory.TimeStart.AddSeconds((double)factory.ProductionTime);
+
+            
+            factory.ProductionTime = expectedOutput / factory.ProductionRate;
+
             factory.TimeStart = DateTime.UtcNow;
             factory.TimeEnd = factory.TimeStart.AddSeconds((double)factory.ProductionTime);
-            factory.ProgressTime = factory.TimeEnd - factory.TimeStart;
-            //factory.ProgressTime = TimeSpan.FromSeconds(Math.Ceiling((factory.TimeEnd - factory.TimeStart).TotalSeconds));
+
+            factory.ProgressTime = TimeSpan.FromSeconds((double)factory.ProductionTime);
+            factory.ProgressTimeUi = TimeSpan.FromSeconds(Math.Ceiling((double)factory.ProductionTime));
         }
 
         public static void StopFactory(FactoryBase factory, StorageResources storageResources, PlayerReal player)
@@ -100,7 +122,7 @@ namespace Tycoonia.Application.Factory
             {
                 if (item.Key == "Money")
                 {
-                    player.AddSafe(item.Value.CurrentQuantity);
+                    player.AddSafe((long)Math.Floor(item.Value.CurrentQuantity));
                 }
                 else
                 {

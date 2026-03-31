@@ -7,12 +7,12 @@ namespace Tycoonia.Application
     {
         public static void UpdateMaximumPossibleExpectedOtput(dynamic building, StorageResources storageResources, PlayerReal player)
         {
-            List<long> resultProduction = [];
+            List<decimal> resultProduction = [];
             foreach(var item in building.RecipeList)
             {
                 if (item.Key == "Money")
                 {
-                    resultProduction.Add((long)(player.Ballance / item.Value));
+                    resultProduction.Add(player.Ballance / item.Value);
                 }
                 else
                 {

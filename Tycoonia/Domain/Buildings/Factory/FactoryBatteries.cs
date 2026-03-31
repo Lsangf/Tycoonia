@@ -11,7 +11,7 @@ namespace Tycoonia.Domain.Buildings.Factory
                 { "Money", 100 },
                 { "Bricks", 1 }
             };
-            ProductionRate = 1;
+            ProductionRate = 1m;
             EnergyConsumption = 0.5m;
             RecipeList = new Dictionary<string, byte>
             {
@@ -20,7 +20,7 @@ namespace Tycoonia.Domain.Buildings.Factory
                 { "Copper Wire", 1 },
                 { "Titanium", 1 }
             };
-            ProductionItemList = new Dictionary<string, int>
+            ProductionItemList = new Dictionary<string, decimal>
             {
                 { "Batteries", ProductionRate }
             };

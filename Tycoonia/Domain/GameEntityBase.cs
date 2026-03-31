@@ -6,7 +6,7 @@
         private short _level;
         private bool _canUpgrade;
         private Dictionary<string, long> _recipeUpgradeList = new();
-        private int _productionRate;
+        private decimal _productionRate;
         private bool _workFlag;
         private DateTime _timeStart;
         private DateTime _timeEnd;
@@ -31,7 +31,7 @@
             get => _recipeUpgradeList;
             set => _recipeUpgradeList = value;
         }
-        public int ProductionRate
+        public decimal ProductionRate
         {
             get => _productionRate;
             set => _productionRate = value;

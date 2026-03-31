@@ -11,14 +11,14 @@ namespace Tycoonia.Domain.Buildings.Factory
                 { "Money", 100 },
                 { "Bricks", 1 }
             };
-            ProductionRate = 1;
+            ProductionRate = 1m;
             EnergyConsumption = 0.5m;
             RecipeList = new Dictionary<string, byte>
             {
                 { "Money", 10 },
                 { "Gold", 3 }
             };
-            ProductionItemList = new Dictionary<string, int>
+            ProductionItemList = new Dictionary<string, decimal>
             {
                 { "Gold Bars", ProductionRate }
             };

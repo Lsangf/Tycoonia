@@ -4,20 +4,20 @@ namespace Tycoonia.Domain.Resources.Storage
 {
     public class StorageResourcesBase
     {
-        private long _currentQuantity;
-        private long _maxCapacity;
+        private decimal _currentQuantity;
+        private decimal _maxCapacity;
         private long _upgradeCost;
         private bool _canUpgrade;
         private short _level;
         private int _price;
         private readonly object _lock = new();
 
-        public long CurrentQuantity
+        public decimal CurrentQuantity
         {
             get { lock (_lock) return _currentQuantity; }
             set { lock (_lock) _currentQuantity = value; }
         }
-        public long MaxCapacity
+        public decimal MaxCapacity
         {
             get => _maxCapacity;
             set => _maxCapacity = value;
@@ -42,7 +42,7 @@ namespace Tycoonia.Domain.Resources.Storage
             get => _price;
             set => _price = value;
         }
-        public void Add(long amount)
+        public void Add(decimal amount)
         {
             lock (_lock)
             {
@@ -50,7 +50,7 @@ namespace Tycoonia.Domain.Resources.Storage
                 if (_currentQuantity > MaxCapacity) _currentQuantity = MaxCapacity;
             }
         }
-        public void Subtract(long amount)
+        public void Subtract(decimal amount)
         {
             lock (_lock)
             {

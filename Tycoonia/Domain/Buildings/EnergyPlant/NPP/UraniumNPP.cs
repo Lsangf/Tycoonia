@@ -5,7 +5,7 @@
         public UraniumNPP()
         {
             Name = "Uranium Nuclear Power Plant";
-            ProductionRate = 1;
+            ProductionRate = 1m;
             EnergyConsumption = 5;
             RecipeUpgradeList = new Dictionary<string, long>
             {
@@ -16,10 +16,10 @@
             {
                 { "Uranium Rod", 1 }
             };
-            ProductionItemList = new Dictionary<string, int>
+            ProductionItemList = new Dictionary<string, decimal>
             {
                 {"Energy", ProductionRate},
-                { "Plutonium-239", 1}
+                { "Plutonium-239", 1m}
             };
         }
     }

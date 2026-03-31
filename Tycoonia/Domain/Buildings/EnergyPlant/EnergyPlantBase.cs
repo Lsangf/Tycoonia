@@ -12,7 +12,7 @@ namespace Tycoonia.Domain.Buildings.EnergyPlant
         private decimal _energyConsumption;
         private Dictionary<string, short> _recipeList = [];
         private Dictionary<string, StorageResourcesBase> _resourceBuffer = [];
-        private Dictionary<string, int> _productionItemList = [];
+        private Dictionary<string, decimal> _productionItemList = [];
 
         public long MaxExpectedOtput
         {
@@ -59,11 +59,13 @@ namespace Tycoonia.Domain.Buildings.EnergyPlant
             get => _resourceBuffer;
             set => _resourceBuffer = value;
         }
-        public Dictionary<string, int> ProductionItemList
+        public Dictionary<string, decimal> ProductionItemList
         {
             get => _productionItemList;
             set => _productionItemList = value;
         }
+        public decimal ProductionTimePerIteration { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public TimeSpan ProgressTimeUi { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public EnergyPlantBase()
         {

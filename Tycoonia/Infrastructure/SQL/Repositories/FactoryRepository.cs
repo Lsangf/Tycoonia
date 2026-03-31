@@ -24,7 +24,9 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
                     Factories.ProductionRate,
                     Factories.EnergyConsumption,
                     Factories.ProductionTime,
+                    Facories.ProductionTimePerIteration,
                     Factories.ProgressTime,
+                    Factories.ProgressTimeUi,
                     Factories.WorkFlag,
                     Factories.TimeStart,
                     Factories.TimeEnd,
@@ -64,7 +66,9 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
             int factoryProductionRateIndex = reader.GetOrdinal("ProductionRate");
             int factoryEnergyConsumptionIndex = reader.GetOrdinal("EnergyConsumption");
             int factoryProductionTimeIndex = reader.GetOrdinal("ProductionTime");
+            int factoryProductionTimePerIterationIndex = reader.GetOrdinal("ProductionTimePerIteration");
             int factoryProgressTimeIndex = reader.GetOrdinal("ProgressTime");
+            int factoryProgressTimeUiIndex = reader.GetOrdinal("ProgressTimeUi");
             int factoryWorkFlagIndex = reader.GetOrdinal("WorkFlag");
             int factoryTimeStartIndex = reader.GetOrdinal("TimeStart");
             int factoryTimeEndIndex = reader.GetOrdinal("TimeEnd");
@@ -122,10 +126,12 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
 
                     factory.Id = reader.GetInt32(factoryIdIndex);
                     factory.Level = reader.GetInt16(factoryLevelIndex);
-                    factory.ProductionRate = reader.GetInt32(factoryProductionRateIndex);
+                    factory.ProductionRate = reader.GetDecimal(factoryProductionRateIndex);
                     factory.EnergyConsumption = reader.GetDecimal(factoryEnergyConsumptionIndex);
                     factory.ProductionTime = reader.GetDecimal(factoryProductionTimeIndex);
+                    factory.ProductionTimePerIteration = reader.GetDecimal(factoryProductionTimePerIterationIndex);
                     factory.ProgressTime = TimeSpan.FromTicks(reader.GetInt64(factoryProgressTimeIndex));
+                    factory.ProgressTimeUi = TimeSpan.FromTicks(reader.GetInt64(factoryProgressTimeUiIndex));
                     factory.WorkFlag = reader.GetBoolean(factoryWorkFlagIndex);
                     factory.TimeStart = reader.GetDateTime(factoryTimeStartIndex);
                     factory.TimeEnd = reader.GetDateTime(factoryTimeEndIndex);
@@ -144,8 +150,8 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
                     {
                         factory.ResourceBuffer[bufferName] = new StorageResourcesBase
                         {
-                            CurrentQuantity = reader.IsDBNull(bufferCurrentIndex) ? 0 : reader.GetInt64(bufferCurrentIndex),
-                            MaxCapacity = reader.IsDBNull(bufferMaxIndex) ? 0 : reader.GetInt64(bufferMaxIndex),
+                            CurrentQuantity = reader.IsDBNull(bufferCurrentIndex) ? 0 : reader.GetDecimal(bufferCurrentIndex),
+                            MaxCapacity = reader.IsDBNull(bufferMaxIndex) ? 0 : reader.GetDecimal(bufferMaxIndex),
                             UpgradeCost = reader.IsDBNull(bufferUpgradeCostIndex) ? 0 : reader.GetInt64(bufferUpgradeCostIndex),
                             Level = reader.IsDBNull(bufferLevelIndex) ? (short)0 : reader.GetInt16(bufferLevelIndex),
                             Price = reader.IsDBNull(bufferPriceIndex) ? 0 : reader.GetInt32(bufferPriceIndex)
@@ -154,7 +160,7 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
                 }
 
                 string productionName = reader.GetString(productionNameIndex);
-                int productionAmount = reader.GetInt32(productionAmountIndex);
+                decimal productionAmount = reader.GetDecimal(productionAmountIndex);
 
                 factory.ProductionItemList[productionName] = productionAmount;
             }
@@ -177,7 +183,9 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
                     Factories.ProductionRate,
                     Factories.EnergyConsumption,
                     Factories.ProductionTime,
+                    Factories.ProductionTimePerIteration,
                     Factories.ProgressTime,
+                    Factories.ProgressTimeUi,
                     Factories.WorkFlag,
                     Factories.TimeStart,
                     Factories.TimeEnd,
@@ -216,7 +224,9 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
             int factoryProductionRateIndex = reader.GetOrdinal("ProductionRate");
             int factoryEnergyConsumptionIndex = reader.GetOrdinal("EnergyConsumption");
             int factoryProductionTimeIndex = reader.GetOrdinal("ProductionTime");
+            int factoryProductionTimePerIterationIndex = reader.GetOrdinal("ProductionTimePerIteration");
             int factoryProgressTimeIndex = reader.GetOrdinal("ProgressTime");
+            int factoryProgressTimeUiIndex = reader.GetOrdinal("ProgressTimeUi");
             int factoryWorkFlagIndex = reader.GetOrdinal("WorkFlag");
             int factoryTimeStartIndex = reader.GetOrdinal("TimeStart");
             int factoryTimeEndIndex = reader.GetOrdinal("TimeEnd");
@@ -274,10 +284,12 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
 
                     factory.Id = factoryId;
                     factory.Level = reader.GetInt16(factoryLevelIndex);
-                    factory.ProductionRate = reader.GetInt32(factoryProductionRateIndex);
+                    factory.ProductionRate = reader.GetDecimal(factoryProductionRateIndex);
                     factory.EnergyConsumption = reader.GetDecimal(factoryEnergyConsumptionIndex);
                     factory.ProductionTime = reader.GetDecimal(factoryProductionTimeIndex);
+                    factory.ProductionTimePerIteration = reader.GetDecimal(factoryProductionTimePerIterationIndex);
                     factory.ProgressTime = TimeSpan.FromTicks(reader.GetInt64(factoryProgressTimeIndex));
+                    factory.ProgressTimeUi = TimeSpan.FromTicks(reader.GetInt64(factoryProgressTimeUiIndex));
                     factory.WorkFlag = reader.GetBoolean(factoryWorkFlagIndex);
                     factory.TimeStart = reader.GetDateTime(factoryTimeStartIndex);
                     factory.TimeEnd = reader.GetDateTime(factoryTimeEndIndex);
@@ -298,8 +310,8 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
                     {
                         factory.ResourceBuffer[bufferName] = new StorageResourcesBase
                         {
-                            CurrentQuantity = reader.IsDBNull(bufferCurrentIndex) ? 0 : reader.GetInt64(bufferCurrentIndex),
-                            MaxCapacity = reader.IsDBNull(bufferMaxIndex) ? 0 : reader.GetInt64(bufferMaxIndex),
+                            CurrentQuantity = reader.IsDBNull(bufferCurrentIndex) ? 0 : reader.GetDecimal(bufferCurrentIndex),
+                            MaxCapacity = reader.IsDBNull(bufferMaxIndex) ? 0 : reader.GetDecimal(bufferMaxIndex),
                             UpgradeCost = reader.IsDBNull(bufferUpgradeCostIndex) ? 0 : reader.GetInt64(bufferUpgradeCostIndex),
                             Level = reader.IsDBNull(bufferLevelIndex) ? (short)0 : reader.GetInt16(bufferLevelIndex),
                             Price = reader.IsDBNull(bufferPriceIndex) ? 0 : reader.GetInt32(bufferPriceIndex)
@@ -308,7 +320,7 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
                 }
 
                 string productionName = reader.GetString(productionNameIndex);
-                int productionAmount = reader.GetInt32(productionAmountIndex);
+                decimal productionAmount = reader.GetDecimal(productionAmountIndex);
 
                 factory.ProductionItemList[productionName] = productionAmount;
             }
@@ -325,17 +337,19 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
             {
                 SqlCommand insertFactoryCmd = new
                 ("""
-                    INSERT INTO Factories (Name, Level, ProductionRate, EnergyConsumption, ProductionTime, ProgressTime, WorkFlag, TimeStart, TimeEnd) 
+                    INSERT INTO Factories (Name, Level, ProductionRate, EnergyConsumption, ProductionTime, ProductionTimePerIteration, ProgressTime, ProgressTimeUi, WorkFlag, TimeStart, TimeEnd) 
                     OUTPUT INSERTED.Id
-                    VALUES (@Name, @Level, @ProductionRate, @EnergyConsumption, @ProductionTime, @ProgressTime, @WorkFlag, @TimeStart, @TimeEnd)
+                    VALUES (@Name, @Level, @ProductionRate, @EnergyConsumption, @ProductionTime, @ProductionTimePerIteration, @ProgressTime, @ProgressTimeUi, @WorkFlag, @TimeStart, @TimeEnd)
                  """, connection, transaction);
 
                 insertFactoryCmd.Parameters.Add("@Name", SqlDbType.NVarChar, 150).Value = factory.Name;
                 insertFactoryCmd.Parameters.Add("@Level", SqlDbType.SmallInt).Value = factory.Level;
-                insertFactoryCmd.Parameters.Add("@ProductionRate", SqlDbType.Int).Value = factory.ProductionRate;
+                insertFactoryCmd.Parameters.Add("@ProductionRate", SqlDbType.Decimal).Value = factory.ProductionRate;
                 insertFactoryCmd.Parameters.Add("@EnergyConsumption", SqlDbType.Decimal).Value = factory.EnergyConsumption;
                 insertFactoryCmd.Parameters.Add("@ProductionTime", SqlDbType.Decimal).Value = factory.ProductionTime;
+                insertFactoryCmd.Parameters.Add("@ProductionTimePerIteration", SqlDbType.Decimal).Value = factory.ProductionTimePerIteration;
                 insertFactoryCmd.Parameters.Add("@ProgressTime", SqlDbType.BigInt).Value = factory.ProgressTime.Ticks;
+                insertFactoryCmd.Parameters.Add("@ProgressTimeUi", SqlDbType.BigInt).Value = factory.ProgressTimeUi.Ticks;
                 insertFactoryCmd.Parameters.Add("@WorkFlag", SqlDbType.Bit).Value = factory.WorkFlag;
                 insertFactoryCmd.Parameters.Add("@TimeStart", SqlDbType.DateTime2).Value = factory.TimeStart;
                 insertFactoryCmd.Parameters.Add("@TimeEnd", SqlDbType.DateTime2).Value = factory.TimeEnd;
@@ -414,7 +428,7 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
 
                 insertFactoriesProductionItemListCmd.Parameters.Add("@FactoryId", SqlDbType.Int).Value = insertedFactoryId;
                 insertFactoriesProductionItemListCmd.Parameters.Add("@Name", SqlDbType.NVarChar, 150);
-                insertFactoriesProductionItemListCmd.Parameters.Add("@Amount", SqlDbType.Int);
+                insertFactoriesProductionItemListCmd.Parameters.Add("@Amount", SqlDbType.Decimal);
 
                 foreach (var item in factory.ProductionItemList)
                 {
@@ -442,17 +456,19 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
                 SqlCommand updateFactoryCmd = new
                 ("""
                     UPDATE Factories 
-                    SET Level=@Level, ProductionRate=@ProductionRate, EnergyConsumption=@EnergyConsumption, WorkFlag=@WorkFlag, ProductionTime=@ProductionTime, ProgressTime=@ProgressTime, TimeStart=@TimeStart, TimeEnd=@TimeEnd
+                    SET Level=@Level, ProductionRate=@ProductionRate, EnergyConsumption=@EnergyConsumption, WorkFlag=@WorkFlag, ProductionTime=@ProductionTime, ProductionTimePerIteration=@ProductionTimePerIteration, ProgressTime=@ProgressTime, ProgressTimeUi=ProgressTimeUi, TimeStart=@TimeStart, TimeEnd=@TimeEnd
                     WHERE Id=@Id
                  """, connection, transaction);
 
                 updateFactoryCmd.Parameters.Add("@Level", SqlDbType.SmallInt).Value = factory.Level;
-                updateFactoryCmd.Parameters.Add("@ProductionRate", SqlDbType.Int).Value = factory.ProductionRate;
+                updateFactoryCmd.Parameters.Add("@ProductionRate", SqlDbType.Decimal).Value = factory.ProductionRate;
                 updateFactoryCmd.Parameters.Add("@EnergyConsumption", SqlDbType.Decimal).Value = factory.EnergyConsumption;
                 updateFactoryCmd.Parameters.Add("@Id", SqlDbType.Int).Value = factory.Id;
                 updateFactoryCmd.Parameters.Add("@WorkFlag", SqlDbType.Bit).Value = factory.WorkFlag;
                 updateFactoryCmd.Parameters.Add("@ProductionTime", SqlDbType.Decimal).Value = factory.ProductionTime;
+                updateFactoryCmd.Parameters.Add("@ProductionTimePerIteration", SqlDbType.Decimal).Value = factory.ProductionTimePerIteration;
                 updateFactoryCmd.Parameters.Add("@ProgressTime", SqlDbType.BigInt).Value = factory.ProgressTime.Ticks;
+                updateFactoryCmd.Parameters.Add("@ProgressTimeUi", SqlDbType.BigInt).Value = factory.ProgressTimeUi.Ticks;
                 updateFactoryCmd.Parameters.Add("@TimeStart", SqlDbType.DateTime2).Value = factory.TimeStart;
                 updateFactoryCmd.Parameters.Add("@TimeEnd", SqlDbType.DateTime2).Value = factory.TimeEnd;
                 await updateFactoryCmd.ExecuteNonQueryAsync();
@@ -484,7 +500,7 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
 
                 updateFactoryProductionItemListCmd.Parameters.Add("@Name", SqlDbType.NVarChar, 100);
                 updateFactoryProductionItemListCmd.Parameters.Add("@Amount", SqlDbType.Int);
-                updateFactoryProductionItemListCmd.Parameters.Add("@Id", SqlDbType.Int).Value = factory.Id;
+                updateFactoryProductionItemListCmd.Parameters.Add("@Id", SqlDbType.Decimal).Value = factory.Id;
 
                 foreach (var item in factory.ProductionItemList)
                 {
@@ -521,8 +537,8 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
                     WHERE ResourceBufferId=@Id
                  """, connection, transaction);
 
-                updateFRBStorageResourcesBaseCmd.Parameters.Add("@CurrentQuantity", SqlDbType.BigInt);
-                updateFRBStorageResourcesBaseCmd.Parameters.Add("@MaxCapacity", SqlDbType.BigInt);
+                updateFRBStorageResourcesBaseCmd.Parameters.Add("@CurrentQuantity", SqlDbType.Decimal);
+                updateFRBStorageResourcesBaseCmd.Parameters.Add("@MaxCapacity", SqlDbType.Decimal);
                 updateFRBStorageResourcesBaseCmd.Parameters.Add("@UpgradeCost", SqlDbType.BigInt);
                 updateFRBStorageResourcesBaseCmd.Parameters.Add("@Level", SqlDbType.SmallInt);
                 updateFRBStorageResourcesBaseCmd.Parameters.Add("@Price", SqlDbType.Int);
@@ -536,8 +552,8 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
                     (@Id, @CurrentQuantity, @MaxCapacity, @UpgradeCost, @Level, @Price)
                  """, connection, transaction);
 
-                insertFRBStorageResourcesBaseCmd.Parameters.Add("@CurrentQuantity", SqlDbType.BigInt);
-                insertFRBStorageResourcesBaseCmd.Parameters.Add("@MaxCapacity", SqlDbType.BigInt);
+                insertFRBStorageResourcesBaseCmd.Parameters.Add("@CurrentQuantity", SqlDbType.Decimal);
+                insertFRBStorageResourcesBaseCmd.Parameters.Add("@MaxCapacity", SqlDbType.Decimal);
                 insertFRBStorageResourcesBaseCmd.Parameters.Add("@UpgradeCost", SqlDbType.BigInt);
                 insertFRBStorageResourcesBaseCmd.Parameters.Add("@Level", SqlDbType.SmallInt);
                 insertFRBStorageResourcesBaseCmd.Parameters.Add("@Price", SqlDbType.Int);
@@ -606,16 +622,18 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
                 SqlCommand updateFactoryCmd = new(
                 """
                    UPDATE Factories 
-                   SET Level=@Level, ProductionRate=@ProductionRate, EnergyConsumption=@EnergyConsumption, WorkFlag=@WorkFlag, ProductionTime=@ProductionTime, ProgressTime=@ProgressTime, TimeStart=@TimeStart, TimeEnd=@TimeEnd
+                   SET Level=@Level, ProductionRate=@ProductionRate, EnergyConsumption=@EnergyConsumption, WorkFlag=@WorkFlag, ProductionTime=@ProductionTime, ProductionTimePerIteration=@ProductionTimePerIteration, ProgressTime=@ProgressTime, ProgressTimeUi=ProgressTimeUi, TimeStart=@TimeStart, TimeEnd=@TimeEnd
                    WHERE Id=@Id
                 """, connection, transaction);
 
                 updateFactoryCmd.Parameters.Add("@Level", SqlDbType.SmallInt);
-                updateFactoryCmd.Parameters.Add("@ProductionRate", SqlDbType.Int);
+                updateFactoryCmd.Parameters.Add("@ProductionRate", SqlDbType.Decimal);
                 updateFactoryCmd.Parameters.Add("@EnergyConsumption", SqlDbType.Decimal);
                 updateFactoryCmd.Parameters.Add("@WorkFlag", SqlDbType.Bit);
                 updateFactoryCmd.Parameters.Add("@ProductionTime", SqlDbType.Decimal);
+                updateFactoryCmd.Parameters.Add("@ProductionTimePerIteration", SqlDbType.Decimal);
                 updateFactoryCmd.Parameters.Add("@ProgressTime", SqlDbType.BigInt);
+                updateFactoryCmd.Parameters.Add("@ProgressTimeUi", SqlDbType.BigInt);
                 updateFactoryCmd.Parameters.Add("@TimeStart", SqlDbType.DateTime2);
                 updateFactoryCmd.Parameters.Add("@TimeEnd", SqlDbType.DateTime2);
                 updateFactoryCmd.Parameters.Add("@Id", SqlDbType.Int);
@@ -639,7 +657,7 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
                 """, connection, transaction);
 
                 updateFactoryProductionItemListCmd.Parameters.Add("@Name", SqlDbType.NVarChar, 100);
-                updateFactoryProductionItemListCmd.Parameters.Add("@Amount", SqlDbType.Int);
+                updateFactoryProductionItemListCmd.Parameters.Add("@Amount", SqlDbType.Decimal);
                 updateFactoryProductionItemListCmd.Parameters.Add("@Id", SqlDbType.Int);
 
                 SqlCommand updateFactoryResourceBufferCmd = new(
@@ -670,8 +688,8 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
                    WHERE ResourceBufferId=@Id
                 """, connection, transaction);
 
-                updateFRBStorageResourcesBaseCmd.Parameters.Add("@CurrentQuantity", SqlDbType.BigInt);
-                updateFRBStorageResourcesBaseCmd.Parameters.Add("@MaxCapacity", SqlDbType.BigInt);
+                updateFRBStorageResourcesBaseCmd.Parameters.Add("@CurrentQuantity", SqlDbType.Decimal);
+                updateFRBStorageResourcesBaseCmd.Parameters.Add("@MaxCapacity", SqlDbType.Decimal);
                 updateFRBStorageResourcesBaseCmd.Parameters.Add("@UpgradeCost", SqlDbType.BigInt);
                 updateFRBStorageResourcesBaseCmd.Parameters.Add("@Level", SqlDbType.SmallInt);
                 updateFRBStorageResourcesBaseCmd.Parameters.Add("@Price", SqlDbType.Int);
@@ -685,8 +703,8 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
                    (@Id, @CurrentQuantity, @MaxCapacity, @UpgradeCost, @Level, @Price)
                 """, connection, transaction);
 
-                insertFRBStorageResourcesBaseCmd.Parameters.Add("@CurrentQuantity", SqlDbType.BigInt);
-                insertFRBStorageResourcesBaseCmd.Parameters.Add("@MaxCapacity", SqlDbType.BigInt);
+                insertFRBStorageResourcesBaseCmd.Parameters.Add("@CurrentQuantity", SqlDbType.Decimal);
+                insertFRBStorageResourcesBaseCmd.Parameters.Add("@MaxCapacity", SqlDbType.Decimal);
                 insertFRBStorageResourcesBaseCmd.Parameters.Add("@UpgradeCost", SqlDbType.BigInt);
                 insertFRBStorageResourcesBaseCmd.Parameters.Add("@Level", SqlDbType.SmallInt);
                 insertFRBStorageResourcesBaseCmd.Parameters.Add("@Price", SqlDbType.Int);
@@ -699,7 +717,9 @@ namespace Tycoonia.Infrastructure.SQL.Repositories
                     updateFactoryCmd.Parameters["@EnergyConsumption"].Value = factory.EnergyConsumption;
                     updateFactoryCmd.Parameters["@WorkFlag"].Value = factory.WorkFlag;
                     updateFactoryCmd.Parameters["@ProductionTime"].Value = factory.ProductionTime;
+                    updateFactoryCmd.Parameters["@ProductionTimePerIteration"].Value = factory.ProductionTimePerIteration;
                     updateFactoryCmd.Parameters["@ProgressTime"].Value = factory.ProgressTime.Ticks;
+                    updateFactoryCmd.Parameters["@ProgressTimeUi"].Value = factory.ProgressTimeUi.Ticks;
                     updateFactoryCmd.Parameters["@TimeStart"].Value = factory.TimeStart;
                     updateFactoryCmd.Parameters["@TimeEnd"].Value = factory.TimeEnd;
                     updateFactoryCmd.Parameters["@Id"].Value = factory.Id;

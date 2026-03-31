@@ -20,7 +20,7 @@ namespace Tycoonia.Domain.Buildings.Factory
                 { "Copper Wire", 1 },
                 { "Plastic", 1 }
             };
-            ProductionItemList = new Dictionary<string, int>
+            ProductionItemList = new Dictionary<string, decimal>
             {
                 { "Electronic Components", ProductionRate }
             };

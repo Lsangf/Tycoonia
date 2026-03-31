@@ -1,11 +1,9 @@
-﻿using System.Numerics;
-using Tycoonia.Application.Factory;
+﻿using Tycoonia.Application.Factory;
 using Tycoonia.Application.Services;
 using Tycoonia.Domain.Buildings.EnergyPlant;
 using Tycoonia.Domain.Buildings.Factory;
 using Tycoonia.Domain.Buildings.Mine;
 using Tycoonia.Domain.Player;
-using Tycoonia.Domain.Resources.ProducedResources;
 using Tycoonia.Domain.Resources.Storage;
 using Tycoonia.Presentation.UI;
 
@@ -34,28 +32,29 @@ namespace Tycoonia.Core
 
         public async Task StartAsync()
         {
-            DateTime currentTimeSeconds = DateTime.UtcNow;
+            DateTime currentTime = DateTime.UtcNow;
             decimal differenceSeconds = 0m;
 
             foreach (FactoryBase factory in _factories)
             {
-                if (factory.WorkFlag)
-                {
-                    differenceSeconds = (decimal)(currentTimeSeconds - factory.TimeStart).TotalSeconds;
-                }
+                if (!factory.WorkFlag)
+                    continue;
 
-                if (factory.WorkFlag && differenceSeconds >= factory.ProductionTime)
+                differenceSeconds = (decimal)(currentTime - factory.TimeStart).TotalSeconds;
+
+                if (differenceSeconds < 0)
+                    differenceSeconds = 0;
+
+                if (differenceSeconds >= factory.ProductionTime)
                 {
                     await SaveOfflineInStorage.SaveOffline(_factoryService, _storageResources, factory);
                 }
-                else if (factory.WorkFlag && differenceSeconds < factory.ProductionTime)
+                else
                 {
                     await SaveOfflineInStorage.SaveOfflinePartially(_factoryService, _storageResources, _energyStorage, factory, differenceSeconds);
-
                     _ = FactorySystem.UpdateFactoryCalculations(_factoryService, _storageResources, factory, _energyStorage, _player);
                 }
             }
-
             await ConsoleChoiceSystem.ConsoleChoiceAsync(_factories, _mines, _player, _factoryService, _energyPlants, _storageResources, _energyStorage);
         }
     }

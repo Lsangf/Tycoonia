@@ -47,7 +47,7 @@
                 _currentStorage -= amount;
             }
         }
-        public void AddSafe(long amount)
+        public void AddSafe(decimal amount)
         {
             lock (_lock)
             {

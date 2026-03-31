@@ -114,7 +114,7 @@ namespace Tycoonia.Presentation.UI
         {
             try
             {
-                long outPut = 0;
+                decimal outPut = 0;
                 int iterationCount = 0;
                 //FactoryInfo.ShowFactoryInfo(currentFactory);
                 //Console.WriteLine($"[DEBUG] Starting production: ProgressTime={currentFactory.ProgressTime.TotalSeconds}s, ProductionTime={currentFactory.ProductionTime}, TimeEnd={currentFactory.TimeEnd}");

@@ -13,7 +13,7 @@ namespace Tycoonia.Domain.Resources.Storage
             set { lock (_dictLock) _storageList = value; }
         }
 
-        public void AddResourceSafe(string name, long amount)
+        public void AddResourceSafe(string name, decimal amount)
         {
             StorageResourcesBase resource;
             lock (_dictLock)
@@ -22,7 +22,7 @@ namespace Tycoonia.Domain.Resources.Storage
             }
             resource.Add(amount);
         }
-        public void SubtractResourceSafe(string name, long amount)
+        public void SubtractResourceSafe(string name, decimal amount)
         {
             StorageResourcesBase resource;
 

@@ -6,10 +6,11 @@ namespace Tycoonia.Application.Factory
 {
     public class ProductionCalculation
     {
-        public static int ProductionCalculationFactory(StorageResources storageResources, FactoryBase factory, EnergyStorage energyStorage)
+        public static decimal ProductionCalculationFactory(StorageResources storageResources, FactoryBase factory, EnergyStorage energyStorage)
         {
             decimal energyNeeded = factory.EnergyConsumption;
-            Dictionary<string, byte> recipeListNeeded = factory.RecipeList;
+            Dictionary<string, long> recipeListNeeded = factory.RecipeList
+                .ToDictionary(kvp => kvp.Key, kvp => (long)kvp.Value);
             Dictionary<string, StorageResourcesBase> resorcesBuffer = factory.ResourceBuffer;
             bool buferCheck = ResourcesBufferBool.CheckResourcesBuffer(resorcesBuffer, recipeListNeeded);
 
@@ -28,13 +29,13 @@ namespace Tycoonia.Application.Factory
             return factory.ProductionRate;
         }
 
-        public static void ResourcesSubtraction(Dictionary<string, StorageResourcesBase> resorcesBuffer, Dictionary<string, byte> recipeListNeeded, FactoryBase factory)
+        public static void ResourcesSubtraction(Dictionary<string, StorageResourcesBase> resorcesBuffer, Dictionary<string, long> recipeListNeeded, FactoryBase factory)
         {
             foreach (var item in recipeListNeeded)
             {
                 if (resorcesBuffer[item.Key].CurrentQuantity >= item.Value * factory.ProductionRate)
                 {
-                    resorcesBuffer[item.Key].CurrentQuantity -= item.Value * factory.ProductionRate;
+                    resorcesBuffer[item.Key].CurrentQuantity -= (decimal)item.Value * factory.ProductionRate;
                 }
                 else
                 {

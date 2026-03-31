@@ -4,19 +4,20 @@ namespace Tycoonia.Domain.Buildings.Factory
 {
     public abstract class FactoryBase : GameEntityBase, IUpgradableBuilding
     {
-        private long _maxExpectedOtput;
+        private decimal _maxExpectedOtput;
         private decimal _energyConsumption;
         //private DateTime _timeStart;
         //private DateTime _timeEnd;
         private decimal _productionTime;
         private TimeSpan _progressTime;
-        //private decimal _productionTimePerIteration;
+        private TimeSpan _progressTimeUi;
+        private decimal _productionTimePerIteration;
         private Dictionary<string, byte> _recipeList = [];
         private Dictionary<string, StorageResourcesBase> _resourceBuffer = [];
-        private Dictionary<string, int> _productionItemList = [];
+        private Dictionary<string, decimal> _productionItemList = [];
         private bool _cancelFlag;
 
-        public long MaxExpectedOtput
+        public decimal MaxExpectedOtput
         {
             get => _maxExpectedOtput;
             set => _maxExpectedOtput = value;
@@ -46,11 +47,16 @@ namespace Tycoonia.Domain.Buildings.Factory
             get => _progressTime;
             set => _progressTime = value;
         }
-        //public decimal ProductionTimePerIteration
-        //{
-        //    get => _productionTimePerIteration;
-        //    set => _productionTimePerIteration = value;
-        //}
+        public TimeSpan ProgressTimeUi
+        {
+            get => _progressTimeUi;
+            set => _progressTimeUi = value;
+        }
+        public decimal ProductionTimePerIteration
+        {
+            get => _productionTimePerIteration;
+            set => _productionTimePerIteration = value;
+        }
         public Dictionary<string, byte> RecipeList
         {
             get => _recipeList;
@@ -61,7 +67,7 @@ namespace Tycoonia.Domain.Buildings.Factory
             get => _resourceBuffer;
             set => _resourceBuffer = value;
         }
-        public Dictionary<string, int> ProductionItemList
+        public Dictionary<string, decimal> ProductionItemList
         {
             get => _productionItemList;
             set => _productionItemList = value;

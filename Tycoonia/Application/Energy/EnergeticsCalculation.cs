@@ -6,7 +6,7 @@ namespace Tycoonia.Application.Energy
 {
     public class EnergeticsCalculation
     {
-        public static Dictionary<string, int> EnergeticsCalculationEnergyPlant(StorageResources storageResources, EnergyPlantBase energyPlant, EnergyStorage energyStorage, byte iteration)
+        public static Dictionary<string, decimal> EnergeticsCalculationEnergyPlant(StorageResources storageResources, EnergyPlantBase energyPlant, EnergyStorage energyStorage, byte iteration)
         {
             decimal energyNeeded = energyPlant.EnergyConsumption;
             Dictionary<string, short> recipeListNeeded = energyPlant.RecipeList;

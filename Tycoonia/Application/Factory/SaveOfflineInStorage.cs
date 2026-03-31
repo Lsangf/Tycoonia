@@ -28,27 +28,30 @@ namespace Tycoonia.Application.Factory
 
         public static async Task SaveOfflinePartially(FactoryService factoryService, StorageResources storageResources, EnergyStorage energyStorage, FactoryBase factory, decimal differenceSeconds)
         {
-            decimal amountIterations = factory.ProductionTime;
-            decimal amountOfflineIterations = Math.Floor(differenceSeconds);
+            //decimal amountIterations = factory.ProductionTime;
+            //decimal amountOfflineIterations = Math.Floor(differenceSeconds);
 
             foreach (var itemProduction in factory.ProductionItemList)
             {
-                storageResources.AddResourceSafe(itemProduction.Key, (long)(itemProduction.Value * amountOfflineIterations));
+                storageResources.AddResourceSafe(itemProduction.Key, (long)(itemProduction.Value * differenceSeconds));
             }
 
-            foreach (var item in factory.ResourceBuffer)
+            foreach (var recipe in factory.RecipeList)
             {
-                foreach (var itemProduction in factory.RecipeList)
+                if (factory.ResourceBuffer.ContainsKey(recipe.Key))
                 {
-                    if (item.Key == itemProduction.Key)
-                    {
-                        factory.ResourceBuffer[item.Key].CurrentQuantity -= (long)(itemProduction.Value * amountOfflineIterations);
-                    }
+                    factory.ResourceBuffer[recipe.Key].CurrentQuantity -= (long)(recipe.Value * differenceSeconds);
                 }
             }
 
-            factory.ProgressTime -= TimeSpan.FromSeconds(Math.Floor((double)differenceSeconds));
-            energyStorage.SubtractSafe(factory.EnergyConsumption * amountOfflineIterations);
+            energyStorage.SubtractSafe(factory.EnergyConsumption * differenceSeconds);
+
+            factory.ProgressTime -= TimeSpan.FromSeconds((double)differenceSeconds);
+            if (factory.ProgressTime < TimeSpan.Zero)
+                factory.ProgressTime = TimeSpan.Zero;
+
+            factory.ProgressTimeUi = TimeSpan.FromSeconds(Math.Ceiling(factory.ProgressTime.TotalSeconds));
+
             await factoryService.UpdateFactory(factory);
         }
     }

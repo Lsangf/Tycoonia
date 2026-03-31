@@ -4,7 +4,7 @@ namespace Tycoonia.Application
 {
     public class ResourcesBufferBool
     {
-        public static bool CheckResourcesBuffer(Dictionary<string, StorageResourcesBase> resorcesBuffer, Dictionary<string, byte> recipeListNeeded)
+        public static bool CheckResourcesBuffer(Dictionary<string, StorageResourcesBase> resorcesBuffer, Dictionary<string, long> recipeListNeeded)
         {
             bool check = false;
             foreach (var item in recipeListNeeded)

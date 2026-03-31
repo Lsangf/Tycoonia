@@ -5,7 +5,7 @@
         public CoalTPP()
         {
             Name = "Coal Thermal Power Plant";
-            ProductionRate = 1;
+            ProductionRate = 1m;
             EnergyConsumption = 5;
             RecipeUpgradeList = new Dictionary<string, long>
             {
@@ -16,7 +16,7 @@
             {
                 { "Coal", 10 }
             };
-            ProductionItemList = new Dictionary<string, int>
+            ProductionItemList = new Dictionary<string, decimal>
             {
                 {"Energy", ProductionRate}
             };

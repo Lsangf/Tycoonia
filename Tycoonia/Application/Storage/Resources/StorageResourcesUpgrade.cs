@@ -41,7 +41,7 @@ namespace Tycoonia.Application.Storage.Resources
         public static void UpdateUpgradeAmount(StorageResourcesBase upgradeResourceList)
         {            
             upgradeResourceList.UpgradeCost *= 2;
-            upgradeResourceList.MaxCapacity += (int)Math.Truncate(upgradeResourceList.MaxCapacity * 0.25 + 1);
+            upgradeResourceList.MaxCapacity += Math.Truncate(upgradeResourceList.MaxCapacity * 0.25m + 1);
             upgradeResourceList.Level += 1;
             upgradeResourceList.CanUpgrade = false;
 

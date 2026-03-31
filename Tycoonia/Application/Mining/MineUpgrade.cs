@@ -65,7 +65,7 @@ namespace Tycoonia.Application.Mining
             {
                 mine.RecipeUpgradeList[item.Key] = item.Value * 2;
             }
-            mine.ProductionRate += (int)Math.Truncate(mine.ProductionRate * 0.25 + 1);
+            mine.ProductionRate += Math.Truncate(mine.ProductionRate * 0.25m + 1);
             mine.EnergyConsumption += 0.01m;
             mine.Level += 1;
             mine.CanUpgrade = false;
