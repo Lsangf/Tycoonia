@@ -129,7 +129,7 @@ namespace Tycoonia.Core
             }
             factories = factoriesDB;
 
-            await Task.Delay(2000); // Simulate some initialization delay
+            //await Task.Delay(2000); // Simulate some initialization delay
             GameLoop gameLoop = new(factories, factoryService, player, storageResources, energyStorage, mines, energyPlants);
             await gameLoop.StartAsync();
         }

@@ -114,19 +114,54 @@ namespace Tycoonia.Presentation.UI
         {
             try
             {
-                FactoryInfo.ShowFactoryInfo(currentFactory);
+                long outPut = 0;
+                int iterationCount = 0;
+                //FactoryInfo.ShowFactoryInfo(currentFactory);
+                //Console.WriteLine($"[DEBUG] Starting production: ProgressTime={currentFactory.ProgressTime.TotalSeconds}s, ProductionTime={currentFactory.ProductionTime}, TimeEnd={currentFactory.TimeEnd}");
+               
                 while (DateTime.UtcNow < currentFactory.TimeEnd && currentFactory.WorkFlag)
                 {
-                    //FactoryInfo.ShowFactoryInfo(currentFactory);
-                    ProductionCalculation.ProductionCalculationFactory(storageResources, currentFactory, energyStorage);
+                    FactoryInfo.ShowFactoryInfo(currentFactory);
+                    iterationCount++;
+                    //Console.WriteLine($"[DEBUG] Iteration {iterationCount}: ProgressTime before={currentFactory.ProgressTime.TotalSeconds}s");
+                    
+                    outPut += ProductionCalculation.ProductionCalculationFactory(storageResources, currentFactory, energyStorage);
+                    
+                    //Console.WriteLine($"[DEBUG] Iteration {iterationCount}: ProgressTime after={currentFactory.ProgressTime.TotalSeconds}s");
+                    Console.WriteLine(DateTime.UtcNow);
+                    Console.WriteLine(outPut);
                     foreach (var item in currentFactory.ProductionItemList)
                     {
                         Console.WriteLine($"{item.Key}: {storageResources.StorageList[item.Key].CurrentQuantity}");
                     }
                     FactoryInfo.ShowFactoryInfo(currentFactory);
-                    Console.WriteLine(DateTime.UtcNow);
                     await Task.Delay(1000);
                 }
+
+                //if (currentFactory.WorkFlag)
+                //{
+                //    foreach (var item in currentFactory.RecipeList)
+                //    {
+                //        if (currentFactory.ResourceBuffer != null && currentFactory.ResourceBuffer[item.Key].CurrentQuantity > 0)
+                //        {
+                //            SaveInStorage.Save(storageResources, currentFactory);
+
+                //            foreach (var itemBuff in currentFactory.ResourceBuffer)
+                //            {
+                //                if (itemBuff.Key == "Money")
+                //                {
+                //                    player.AddSafe(itemBuff.Value.CurrentQuantity);
+                //                }
+                //                else
+                //                {
+                //                    storageResources.AddResourceSafe(item.Key, itemBuff.Value.CurrentQuantity);
+                //                }
+                //            }
+                //        }
+                //    }
+                //}
+
+                //Console.WriteLine($"[DEBUG] Production finished: Total iterations={iterationCount}, Final ProgressTime={currentFactory.ProgressTime.TotalSeconds}s");
             }
             catch (Exception ex)
             {
@@ -158,28 +193,5 @@ namespace Tycoonia.Presentation.UI
                 }
             }
         }
-
-        //public static async Task SafeUpdateFactory(FactoryService factoryService, FactoryBase factory)
-        //{
-        //    int retries = 3;
-
-        //    for (int i = 0; i < retries; i++)
-        //    {
-        //        try
-        //        {
-        //            await factoryService.UpdateFactory(factory);
-        //            return;
-        //        }
-        //        catch (SqlException ex) when (ex.Number == 1205)
-        //        {
-        //            Console.WriteLine($"Deadlock factory {factory.Name}, number1 {i + 1}");
-        //            await Task.Delay(100);
-        //        }
-        //    }
-
-        //    throw new Exception("deadlock");
-        //}
-
-
     }
 }
