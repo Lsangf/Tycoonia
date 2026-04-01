@@ -40,16 +40,16 @@ namespace Tycoonia.Presentation.UI.Info
             Console.WriteLine($"Resource Buffer:      {ResourceBufferString}");
             Console.WriteLine($"Production Item List: {ProductionItemListString}");
             Console.WriteLine($"Work Flag:            {energyPlant.WorkFlag}");
-            if (energyPlant.WorkFlag)
-            {
-                Console.WriteLine($"Start Time:           {energyPlant.TimeStart}");
-                Console.WriteLine($"End Time:             {energyPlant.TimeEnd}");
-            }
-            else
-            {
-                Console.WriteLine($"Start Time:           None");
-                Console.WriteLine($"End Time:             None");
-            }
+            //if (energyPlant.WorkFlag)
+            //{
+            //    Console.WriteLine($"Start Time:           {energyPlant.TimeStart}");
+            //    Console.WriteLine($"End Time:             {energyPlant.TimeEnd}");
+            //}
+            //else
+            //{
+            //    Console.WriteLine($"Start Time:           None");
+            //    Console.WriteLine($"End Time:             None");
+            //}
         }
     }
 }

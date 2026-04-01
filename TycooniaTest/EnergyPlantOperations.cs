@@ -83,9 +83,9 @@ namespace TycooniaTest
         {
             foreach (var energyPlant in energyPlants)
             {
-                energyPlant.ProductionTime = startProductionTimeEnergyPlant;
                 LaunchControleCenterEnergyPlant.PreparationLaunchEnergyPlant(energyPlant, storageResources, energyStorage, player, 1);
-                Dictionary<string, int> resultRateDictionary = EnergeticsCalculation.EnergeticsCalculationEnergyPlant(storageResources, energyPlant, energyStorage, 0);///!!!!!!!!!!!!
+                Dictionary<string, decimal> resultRateDictionary = EnergeticsCalculation.EnergeticsCalculationEnergyPlant(storageResources, energyPlant, energyStorage, 0);
+
                 decimal resultProductionTimeEnergyPlant = energyPlant.ProductionTime;
 
                 // 91 Assert.Null(energyPlant.ResourceBuffer);
@@ -109,8 +109,6 @@ namespace TycooniaTest
             foreach (var energyPlant in energyPlants)
             {
                 energyPlant.ProductionTime = startProductionTimeEnergyPlant;
-                energyPlant.ProductionTimePerIteration = 10m;
-                TimeSubtractionBuilding.TimeSubtraction(energyPlant);
                 decimal resultProductionTimeEnergyPlant = energyPlant.ProductionTime;
 
                 // 116 Assert.Equal(startProductionTimeEnergyPlant, resultProductionTimeEnergyPlant);

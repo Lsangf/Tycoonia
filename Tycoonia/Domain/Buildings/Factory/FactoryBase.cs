@@ -6,13 +6,16 @@ namespace Tycoonia.Domain.Buildings.Factory
     {
         private decimal _maxExpectedOtput;
         private decimal _energyConsumption;
+        private DateTime _lastUpdateTime;
         //private DateTime _timeStart;
         //private DateTime _timeEnd;
-        private decimal _productionTime;
-        private TimeSpan _progressTime;
-        private TimeSpan _progressTimeUi;
-        private decimal _productionTimePerIteration;
-        private Dictionary<string, byte> _recipeList = [];
+        //private decimal _productionTime;
+        //private TimeSpan _progressTime;
+        //private TimeSpan _progressTimeUi;
+        //private decimal _productionTimePerIteration;
+        private decimal _targetOutput;
+        private decimal _produced;
+        private Dictionary<string, long> _recipeList = [];
         private Dictionary<string, StorageResourcesBase> _resourceBuffer = [];
         private Dictionary<string, decimal> _productionItemList = [];
         private bool _cancelFlag;
@@ -27,6 +30,11 @@ namespace Tycoonia.Domain.Buildings.Factory
             get => _energyConsumption;
             set => _energyConsumption = value;
         }
+        public DateTime LastUpdateTime
+        {
+            get => _lastUpdateTime;
+            set => _lastUpdateTime = value;
+        }
         //public DateTime TimeStart
         //{
         //    get => _timeStart;
@@ -37,27 +45,37 @@ namespace Tycoonia.Domain.Buildings.Factory
         //    get => _timeEnd;
         //    set => _timeEnd = value;
         //}
-        public decimal ProductionTime
+        //public decimal ProductionTime
+        //{
+        //    get => _productionTime;
+        //    set => _productionTime = value;
+        //}
+        //public TimeSpan ProgressTime
+        //{
+        //    get => _progressTime;
+        //    set => _progressTime = value;
+        //}
+        //public TimeSpan ProgressTimeUi
+        //{
+        //    get => _progressTimeUi;
+        //    set => _progressTimeUi = value;
+        //}
+        //public decimal ProductionTimePerIteration
+        //{
+        //    get => _productionTimePerIteration;
+        //    set => _productionTimePerIteration = value;
+        //}
+        public decimal TargetOutput
         {
-            get => _productionTime;
-            set => _productionTime = value;
+            get => _targetOutput;
+            set => _targetOutput = value;
         }
-        public TimeSpan ProgressTime
+        public decimal Produced
         {
-            get => _progressTime;
-            set => _progressTime = value;
+            get => _produced;
+            set => _produced = value;
         }
-        public TimeSpan ProgressTimeUi
-        {
-            get => _progressTimeUi;
-            set => _progressTimeUi = value;
-        }
-        public decimal ProductionTimePerIteration
-        {
-            get => _productionTimePerIteration;
-            set => _productionTimePerIteration = value;
-        }
-        public Dictionary<string, byte> RecipeList
+        public Dictionary<string, long> RecipeList
         {
             get => _recipeList;
             set => _recipeList = value;

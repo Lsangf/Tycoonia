@@ -8,8 +8,6 @@
         private Dictionary<string, long> _recipeUpgradeList = new();
         private decimal _productionRate;
         private bool _workFlag;
-        private DateTime _timeStart;
-        private DateTime _timeEnd;
 
         public string Name
         {
@@ -40,16 +38,6 @@
         {
             get => _workFlag;
             set => _workFlag = value;
-        }
-        public DateTime TimeStart
-        {
-            get => _timeStart;
-            set => _timeStart = value;
-        }
-        public DateTime TimeEnd
-        {
-            get => _timeEnd;
-            set => _timeEnd = value;
         }
     }
 }

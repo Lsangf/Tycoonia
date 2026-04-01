@@ -1,4 +1,4 @@
-﻿using System.Xml.Linq;
+using System.Xml.Linq;
 
 namespace Tycoonia.Domain.Buildings.Factory
 {
@@ -15,7 +15,7 @@ namespace Tycoonia.Domain.Buildings.Factory
             };
             ProductionRate = 1m;
             EnergyConsumption = 0.5m;
-            RecipeList = new Dictionary<string, byte>
+            RecipeList = new Dictionary<string, long>
             {
                 { "Money", 10 },
                 { "Thorium-232", 1},
@@ -28,3 +28,4 @@ namespace Tycoonia.Domain.Buildings.Factory
         }
     }
 }
+

@@ -70,7 +70,7 @@ namespace Tycoonia.Presentation.UI
                     }
                     Console.WriteLine("Write ");
                     int choiceProductYield = (int)ConsoleInput.ConsoleChoice();
-                    if (choiceProductYield < currentFactory.ProductionRate)
+                    if (choiceProductYield < currentFactory.ProductionRate || choiceProductYield > currentFactory.MaxExpectedOtput)
                     {
                         throw new InputException();
                     }
@@ -114,54 +114,19 @@ namespace Tycoonia.Presentation.UI
         {
             try
             {
-                decimal outPut = 0;
-                int iterationCount = 0;
-                //FactoryInfo.ShowFactoryInfo(currentFactory);
-                //Console.WriteLine($"[DEBUG] Starting production: ProgressTime={currentFactory.ProgressTime.TotalSeconds}s, ProductionTime={currentFactory.ProductionTime}, TimeEnd={currentFactory.TimeEnd}");
-               
-                while (DateTime.UtcNow < currentFactory.TimeEnd && currentFactory.WorkFlag)
+                while (currentFactory.WorkFlag)
                 {
-                    FactoryInfo.ShowFactoryInfo(currentFactory);
-                    iterationCount++;
-                    //Console.WriteLine($"[DEBUG] Iteration {iterationCount}: ProgressTime before={currentFactory.ProgressTime.TotalSeconds}s");
-                    
-                    outPut += ProductionCalculation.ProductionCalculationFactory(storageResources, currentFactory, energyStorage);
-                    
-                    //Console.WriteLine($"[DEBUG] Iteration {iterationCount}: ProgressTime after={currentFactory.ProgressTime.TotalSeconds}s");
+                    ProductionCalculation.ProductionCalculationFactory(storageResources, currentFactory, energyStorage);
+
                     Console.WriteLine(DateTime.UtcNow);
-                    Console.WriteLine(outPut);
                     foreach (var item in currentFactory.ProductionItemList)
                     {
                         Console.WriteLine($"{item.Key}: {storageResources.StorageList[item.Key].CurrentQuantity}");
                     }
                     FactoryInfo.ShowFactoryInfo(currentFactory);
-                    await Task.Delay(1000);
+
+                    await Task.Delay(900);
                 }
-
-                //if (currentFactory.WorkFlag)
-                //{
-                //    foreach (var item in currentFactory.RecipeList)
-                //    {
-                //        if (currentFactory.ResourceBuffer != null && currentFactory.ResourceBuffer[item.Key].CurrentQuantity > 0)
-                //        {
-                //            SaveInStorage.Save(storageResources, currentFactory);
-
-                //            foreach (var itemBuff in currentFactory.ResourceBuffer)
-                //            {
-                //                if (itemBuff.Key == "Money")
-                //                {
-                //                    player.AddSafe(itemBuff.Value.CurrentQuantity);
-                //                }
-                //                else
-                //                {
-                //                    storageResources.AddResourceSafe(item.Key, itemBuff.Value.CurrentQuantity);
-                //                }
-                //            }
-                //        }
-                //    }
-                //}
-
-                //Console.WriteLine($"[DEBUG] Production finished: Total iterations={iterationCount}, Final ProgressTime={currentFactory.ProgressTime.TotalSeconds}s");
             }
             catch (Exception ex)
             {
@@ -173,8 +138,6 @@ namespace Tycoonia.Presentation.UI
                 {
                     item.Value.CurrentQuantity = 0;
                 }
-                currentFactory.ProductionTime = 0m;
-                currentFactory.ProgressTime = TimeSpan.Zero;
                 await factoryService.UpdateFactory(currentFactory);
             }
             finally
@@ -182,8 +145,6 @@ namespace Tycoonia.Presentation.UI
                 Console.WriteLine("Finaly stop factory");
 
                 currentFactory.WorkFlag = false;
-                currentFactory.ProductionTime = 0m;
-                currentFactory.ProgressTime = TimeSpan.Zero;
 
                 await factoryService.UpdateFactory(currentFactory);
 

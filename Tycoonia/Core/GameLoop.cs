@@ -40,18 +40,18 @@ namespace Tycoonia.Core
                 if (!factory.WorkFlag)
                     continue;
 
-                differenceSeconds = (decimal)(currentTime - factory.TimeStart).TotalSeconds;
+                differenceSeconds = (decimal)(currentTime - factory.LastUpdateTime).TotalSeconds;
 
                 if (differenceSeconds < 0)
                     differenceSeconds = 0;
 
-                if (differenceSeconds >= factory.ProductionTime)
+                decimal remainingOutput = factory.TargetOutput - factory.Produced;
+                if (differenceSeconds >= remainingOutput / factory.ProductionRate)
                 {
-                    await SaveOfflineInStorage.SaveOffline(_factoryService, _storageResources, factory);
+                    await SaveOfflineInStorage.SaveOffline(_factoryService, _storageResources, _energyStorage, factory);
                 }
                 else
                 {
-                    await SaveOfflineInStorage.SaveOfflinePartially(_factoryService, _storageResources, _energyStorage, factory, differenceSeconds);
                     _ = FactorySystem.UpdateFactoryCalculations(_factoryService, _storageResources, factory, _energyStorage, _player);
                 }
             }

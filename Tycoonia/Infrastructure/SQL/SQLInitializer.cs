@@ -45,15 +45,12 @@ namespace Tycoonia.Infrastructure.SQL
                 Id INT PRIMARY KEY IDENTITY,
                 Name NVARCHAR(150) NOT NULL,
                 Level SMALLINT NOT NULL,
-                ProductionRate DECIMAL(10, 3) NOT NULL,
-                EnergyConsumption DECIMAL(10, 3) NOT NULL,
-                ProductionTime DECIMAL(10, 3) NOT NULL,
-                ProductionTimePerIteration DECIMAL(10, 3) NOT NULL,
-                ProgressTime BIGINT NOT NULL,
-                ProgressTimeUi BIGINT NOT NULL,
+                ProductionRate DECIMAL(20, 9) NOT NULL,
+                EnergyConsumption DECIMAL(20, 9) NOT NULL,
                 WorkFlag BIT NOT NULL,
-                TimeStart DATETIME2 NOT NULL,
-                TimeEnd DATETIME2 NOT NULL
+                LastUpdateTime DATETIME2 NOT NULL,
+                TargetOutput DECIMAL(20, 9) NOT NULL,
+                Produced DECIMAL(20, 9) NOT NULL
             );
             """;// CTF
 
@@ -97,8 +94,8 @@ namespace Tycoonia.Infrastructure.SQL
             CREATE TABLE FRBStorageResourcesBase (
                 Id INT PRIMARY KEY IDENTITY,
                 ResourceBufferId INT NOT NULL,
-                CurrentQuantity DECIMAL(10, 3) NOT NULL,
-                MaxCapacity DECIMAL(10, 3) NOT NULL,
+                CurrentQuantity DECIMAL(20, 9) NOT NULL,
+                MaxCapacity DECIMAL(20, 9) NOT NULL,
                 UpgradeCost BIGINT NOT NULL,
                 Level SMALLINT NOT NULL,
                 Price INT NOT NULL,
@@ -113,7 +110,7 @@ namespace Tycoonia.Infrastructure.SQL
                 Id INT PRIMARY KEY IDENTITY,
                 FactoryId INT NOT NULL,
                 Name NVARCHAR(100) NOT NULL,
-                Amount DECIMAL(10, 3) NOT NULL,
+                Amount DECIMAL(20, 9) NOT NULL,
                 FOREIGN KEY(FactoryId) REFERENCES Factories(Id) ON DELETE CASCADE
             );
             """;// CTFPIL

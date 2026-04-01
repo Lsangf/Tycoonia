@@ -1,52 +1,64 @@
-﻿using Tycoonia.Application.ApplicationExceptions;
-using Tycoonia.Domain.Buildings.Factory;
+﻿using Tycoonia.Domain.Buildings.Factory;
 using Tycoonia.Domain.Resources.Storage;
 
 namespace Tycoonia.Application.Factory
 {
     public class ProductionCalculation
     {
-        public static decimal ProductionCalculationFactory(StorageResources storageResources, FactoryBase factory, EnergyStorage energyStorage)
+        public static void ProductionCalculationFactory(StorageResources storageResources, FactoryBase factory, EnergyStorage energyStorage)
         {
-            decimal energyNeeded = factory.EnergyConsumption;
-            Dictionary<string, long> recipeListNeeded = factory.RecipeList
-                .ToDictionary(kvp => kvp.Key, kvp => (long)kvp.Value);
-            Dictionary<string, StorageResourcesBase> resorcesBuffer = factory.ResourceBuffer;
-            bool buferCheck = ResourcesBufferBool.CheckResourcesBuffer(resorcesBuffer, recipeListNeeded);
+            if (!factory.WorkFlag)
+                return;
 
-            if (!buferCheck)
+            DateTime now = DateTime.UtcNow;
+
+            decimal seconds = (decimal)(now - factory.LastUpdateTime).TotalSeconds;
+
+            if (seconds <= 0)
+                return;
+
+            decimal produced = factory.ProductionRate * seconds;
+
+            decimal remaining = factory.TargetOutput - factory.Produced;
+
+            if (produced > remaining)
+                produced = remaining;
+
+            bool bufferCheck = ResourcesBufferBool.CheckResourcesBuffer(factory.ResourceBuffer, factory.RecipeList, produced);
+
+            if (!bufferCheck)
             {
                 factory.WorkFlag = false;
-                return 0;
+                return;
             }
-            else
-            {
-                ResourcesSubtraction(resorcesBuffer, recipeListNeeded, factory);
-                EnergySubtraction(energyStorage, energyNeeded, factory);
-                TimeSubtractionBuilding.TimeSubtraction(factory);
-                SaveInStorage.Save(storageResources, factory);
-            }
-            return factory.ProductionRate;
+
+            ResourcesSubtraction(factory, produced);
+
+            energyStorage.SubtractSafe(factory.EnergyConsumption * produced);
+
+            SaveInStorage.Save(storageResources, factory, produced);
+
+            factory.Produced += produced;
+
+            factory.LastUpdateTime = now;
+
+            if (factory.Produced >= factory.TargetOutput)
+                factory.WorkFlag = false;
         }
 
-        public static void ResourcesSubtraction(Dictionary<string, StorageResourcesBase> resorcesBuffer, Dictionary<string, long> recipeListNeeded, FactoryBase factory)
+        public static void ResourcesSubtraction(FactoryBase factory, decimal produced)
         {
-            foreach (var item in recipeListNeeded)
+            foreach (var recipe in factory.RecipeList)
             {
-                if (resorcesBuffer[item.Key].CurrentQuantity >= item.Value * factory.ProductionRate)
-                {
-                    resorcesBuffer[item.Key].CurrentQuantity -= (decimal)item.Value * factory.ProductionRate;
-                }
-                else
-                {
-                    throw new StorageException("ERR resourcesCalculation");
-                }
+                decimal need = recipe.Value * produced;
+
+                factory.ResourceBuffer[recipe.Key].CurrentQuantity -= need;
             }
         }
 
-        public static void EnergySubtraction(EnergyStorage energyStorage, decimal energyNeeded, FactoryBase factory)
-        {
-            energyStorage.SubtractSafe(energyNeeded * factory.ProductionRate);
-        }
+        //public static void EnergySubtraction(EnergyStorage energyStorage, decimal energyNeeded, FactoryBase factory)
+        //{
+        //    energyStorage.SubtractSafe(energyNeeded * factory.ProductionRate);
+        //}
     }
 }

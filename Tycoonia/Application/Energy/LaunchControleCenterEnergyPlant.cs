@@ -13,7 +13,7 @@ namespace Tycoonia.Application.Energy
             {
                 CreateBufferCheck(energyPlant, storageResources, expectedOutput);
                 bool checkValues = CheckingValuesForFactory(energyPlant, storageResources, energyStorage, player);
-				CreateProductionTime(energyPlant, expectedOutput);
+				//CreateProductionTime(energyPlant, expectedOutput);
 				if (!checkValues)
                 {
                     throw new StorageException();
@@ -63,12 +63,12 @@ namespace Tycoonia.Application.Energy
             }
         }
 
-		public static void CreateProductionTime(EnergyPlantBase energyPlant, int expectedOutput)
-		{
-			energyPlant.ProductionTime = (decimal)expectedOutput / (decimal)energyPlant.ProductionRate;
-            energyPlant.TimeStart = DateTime.UtcNow;
-            energyPlant.TimeEnd = energyPlant.TimeStart.AddSeconds((double)energyPlant.ProductionTime);
-            energyPlant.ProgressTime = TimeSpan.FromSeconds(Math.Ceiling((energyPlant.TimeEnd - energyPlant.TimeStart).TotalSeconds));
-        }
+		//public static void CreateProductionTime(EnergyPlantBase energyPlant, int expectedOutput)
+		//{
+		//	energyPlant.ProductionTime = (decimal)expectedOutput / (decimal)energyPlant.ProductionRate;
+  //          energyPlant.TimeStart = DateTime.UtcNow;
+  //          energyPlant.TimeEnd = energyPlant.TimeStart.AddSeconds((double)energyPlant.ProductionTime);
+  //          energyPlant.ProgressTime = TimeSpan.FromSeconds(Math.Ceiling((energyPlant.TimeEnd - energyPlant.TimeStart).TotalSeconds));
+  //      }
 	}
 }

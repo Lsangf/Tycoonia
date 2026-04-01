@@ -13,7 +13,8 @@ namespace Tycoonia.Application.Factory
             {
                 CreateBufferCheck(factory, storageResources, player, expectedOutput);
                 bool checkValues = CheckingValuesForFactory(factory, storageResources, energyStorage, player);
-                CreateProductionTime(factory, expectedOutput);
+                //CreateProductionTime(factory, expectedOutput);
+                StartFactoryProduction.Start(factory, expectedOutput);
                 if (!checkValues)
                 {
                     throw new StorageException();
@@ -21,8 +22,8 @@ namespace Tycoonia.Application.Factory
                 else
                 {
                     BufferSubtraction(factory, storageResources, player);
+                    factory.LastUpdateTime = DateTime.UtcNow;
                     factory.WorkFlag = true;
-                    factory.TimeStart = DateTime.UtcNow;
                 }
             }
             catch
@@ -85,35 +86,16 @@ namespace Tycoonia.Application.Factory
             }
         }
 
-        public static void CreateProductionTime(FactoryBase factory, int expectedOutput)
+        public static class StartFactoryProduction
         {
-            //factory.ProductionTime = expectedOutput / factory.ProductionRate;
-            ////factory.ProductionTimePerIteration = 1m / factory.ProductionTime;
-            //factory.ProductionTimePerIteration = factory.ProductionTime / expectedOutput;
-            //factory.TimeStart = DateTime.UtcNow;
-            //factory.TimeEnd = factory.TimeStart.AddSeconds((double)factory.ProductionTime);
+            public static void Start(FactoryBase factory, decimal expectedOutput)
+            {
+                factory.TargetOutput = expectedOutput;
+                factory.Produced = 0;
 
-            ////double seconds = Math.Ceiling((factory.TimeEnd - factory.TimeStart).TotalSeconds);
-            ////factory.ProgressTime = TimeSpan.FromSeconds(seconds);
-            //factory.ProgressTime = TimeSpan.FromSeconds((factory.TimeEnd - factory.TimeStart).TotalSeconds);
-            //double seconds = Math.Ceiling((factory.TimeEnd - factory.TimeStart).TotalSeconds);
-            //factory.ProgressTimeUi = TimeSpan.FromSeconds(seconds);
-
-
-            //factory.ProductionTime = expectedOutput / factory.ProductionRate;
-            //factory.ProductionTimePerIteration = factory.ProductionTime / expectedOutput;
-
-            //factory.TimeStart = DateTime.UtcNow;
-            //factory.TimeEnd = factory.TimeStart.AddSeconds((double)factory.ProductionTime);
-
-            
-            factory.ProductionTime = expectedOutput / factory.ProductionRate;
-
-            factory.TimeStart = DateTime.UtcNow;
-            factory.TimeEnd = factory.TimeStart.AddSeconds((double)factory.ProductionTime);
-
-            factory.ProgressTime = TimeSpan.FromSeconds((double)factory.ProductionTime);
-            factory.ProgressTimeUi = TimeSpan.FromSeconds(Math.Ceiling((double)factory.ProductionTime));
+                factory.LastUpdateTime = DateTime.UtcNow;
+                factory.WorkFlag = true;
+            }
         }
 
         public static void StopFactory(FactoryBase factory, StorageResources storageResources, PlayerReal player)
@@ -129,7 +111,6 @@ namespace Tycoonia.Application.Factory
                     storageResources.AddResourceSafe(item.Key, item.Value.CurrentQuantity);
                 }
             }
-            factory.ProductionTime = 0;
             factory.ResourceBuffer.Clear();
             factory.WorkFlag = false;
         }

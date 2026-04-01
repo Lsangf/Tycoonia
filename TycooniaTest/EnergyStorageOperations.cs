@@ -10,7 +10,7 @@ namespace TycooniaTest
         private EnergyStorage energyStorage;
         private long startBallance;
         private PlayerReal player;
-        private long startBricks;
+        private decimal startBricks;
 
         public EnergyStorageOperations()
         {
@@ -35,7 +35,7 @@ namespace TycooniaTest
         public void CorrectUpgradeSubtractionStorage()
         {
             EnergyStorageUpgrade.UpgradeSubtractionStorage(energyStorage, storageResources, player);
-            long resultStorageResourceBricks = storageResources.StorageList["Bricks"].CurrentQuantity;
+            decimal resultStorageResourceBricks = storageResources.StorageList["Bricks"].CurrentQuantity;
             long resultPlayerBallance = player.Ballance;
 
             Assert.NotEqual(startBricks, resultStorageResourceBricks);
@@ -57,7 +57,7 @@ namespace TycooniaTest
         public void CorrectUpgradeStorage()
         {
             EnergyStorageUpgrade.UpgradeStorage(energyStorage, storageResources, player);
-            long resultStorageResourceBricks = storageResources.StorageList["Bricks"].CurrentQuantity;
+            decimal resultStorageResourceBricks = storageResources.StorageList["Bricks"].CurrentQuantity;
             long resultPlayerBallance = player.Ballance;
 
             Assert.False(energyStorage.CanUpgrade);

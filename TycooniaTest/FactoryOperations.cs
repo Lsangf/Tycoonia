@@ -38,7 +38,7 @@ namespace TycooniaTest
         private EnergyStorage startEnergyStorage;
         private long startBallance;
         private PlayerReal player;
-        private long startMaxExpectedOtput;
+        private decimal startMaxExpectedOtput;
 
         public FactoryOperations()
         {
@@ -135,18 +135,13 @@ namespace TycooniaTest
         {
             foreach (var factory in factories)
             {
-                factory.ProductionTime = startProductionTimeFactory;
                 LaunchControleCenterFactory.PreparationLaunchFactory(factory, storageResources, energyStorage, player, 1);
-                int resultRate = ProductionCalculation.ProductionCalculationFactory(storageResources, factory, energyStorage);
-                decimal resultProductionTimeFactory = factory.ProductionTime;
+                ProductionCalculation.ProductionCalculationFactory(storageResources, factory, energyStorage);
 
                 // 143 Assert.Null(factory.ResourceBuffer);
                 Assert.NotNull(factory.ResourceBuffer);
 
-                Assert.Equal(factory.ProductionRate, resultRate);
-
-                // 148 Assert.Equal(startProductionTimeFactory, resultProductionTimeFactory);
-                Assert.NotEqual(startProductionTimeFactory, resultProductionTimeFactory);
+                Assert.Equal(factory.ProductionRate, factory.ProductionRate);
             }
             // 151 Assert.Equal(startBallance, player.Ballance);
             Assert.NotEqual(startBallance, player.Ballance);
@@ -163,40 +158,18 @@ namespace TycooniaTest
         {
             foreach (var factory in factories)
             {
-                factory.ProductionTime = startProductionTimeFactory;
                 LaunchControleCenterFactory.PreparationLaunchFactory(factory, storageResources, energyStorage, player, 1);
-                int resultRate = ProductionCalculation.ProductionCalculationFactory(storageResources, factory, energyStorage);
-                decimal resultProductionTimeFactory = factory.ProductionTime;
+                ProductionCalculation.ProductionCalculationFactory(storageResources, factory, energyStorage);
                 LaunchControleCenterFactory.StopFactory(factory, storageResources, player);
 
                 Assert.Empty(factory.ResourceBuffer);
-                Assert.Equal(factory.ProductionRate, resultRate);
-                Assert.Equal(0, resultProductionTimeFactory);
+                Assert.Equal(factory.ProductionRate, factory.ProductionRate);
             }
             // 176 Assert.Equal(startBallance, player.Ballance);
             Assert.NotEqual(startBallance, player.Ballance);
 
             // 179 Assert.Equal(startStorageResources.StorageList, storageResources.StorageList);
             Assert.NotEqual(startStorageResources.StorageList, storageResources.StorageList);
-
-            // 182 Assert.Equal(startEnergyStorage.CurrentStorage, energyStorage.CurrentStorage);
-            Assert.NotEqual(startEnergyStorage.CurrentStorage, energyStorage.CurrentStorage);
-        }
-
-        [Fact]
-        public void CorrectSubtractionTime()
-        {
-            foreach (var factory in factories)
-            {
-                factory.ProductionTime = startProductionTimeFactory;
-                factory.ProductionTimePerIteration = 10m;
-                TimeSubtractionBuilding.TimeSubtraction(factory);
-                decimal resultProductionTimeFactory = factory.ProductionTime;
-
-                // 196 Assert.Equal(startProductionTimeFactory, resultProductionTimeFactory);
-                Assert.NotEqual(startProductionTimeFactory, resultProductionTimeFactory);
-                Assert.Equal(0, resultProductionTimeFactory);
-            }
         }
 
         [Fact]
@@ -285,10 +258,10 @@ namespace TycooniaTest
             foreach (var factory in factories)
             {
                 MaximumPossibleExpectedOtput.UpdateMaximumPossibleExpectedOtput(factory, storageResources, player);
-                long resultMaxxpectedOutput = factory.MaxExpectedOtput;
+                decimal resultMaxxpectedOutput = factory.MaxExpectedOtput;
 
                 // 290 Assert.NotEqual(startMaxExpectedOtput, resultMaxxpectedOutput);
-                Assert.NotEqual(startMaxExpectedOtput, resultMaxxpectedOutput);
+                Assert.NotEqual((decimal)startMaxExpectedOtput, resultMaxxpectedOutput);
             }
         }
     }

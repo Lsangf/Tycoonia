@@ -5,30 +5,26 @@ namespace Tycoonia.Domain.Buildings.EnergyPlant
     public abstract class EnergyPlantBase : GameEntityBase, IUpgradableBuilding
     {
         private long _maxExpectedOtput;
-        //private DateTime _timeStart;
-        //private DateTime _timeEnd;
         private decimal _productionTime;
         private TimeSpan _progressTime;
         private decimal _energyConsumption;
         private Dictionary<string, short> _recipeList = [];
         private Dictionary<string, StorageResourcesBase> _resourceBuffer = [];
         private Dictionary<string, decimal> _productionItemList = [];
+        private decimal _targetOutput;
+        private decimal _produced;
+        private DateTime _lastUpdateTime;
 
         public long MaxExpectedOtput
         {
             get => _maxExpectedOtput;
             set => _maxExpectedOtput = value;
         }
-        //public DateTime TimeStart
-        //{
-        //    get => _timeStart;
-        //    set => _timeStart = value;
-        //}
-        //public DateTime TimeEnd
-        //{
-        //    get => _timeEnd;
-        //    set => _timeEnd = value;
-        //}
+        public DateTime LastUpdateTime
+        {
+            get => _lastUpdateTime;
+            set => _lastUpdateTime = value;
+        }
         public decimal ProductionTime
         {
             get => _productionTime;
@@ -39,11 +35,6 @@ namespace Tycoonia.Domain.Buildings.EnergyPlant
             get => _progressTime;
             set => _progressTime = value;
         }
-        //public decimal ProductionTimePerIteration
-        //{
-        //    get => _productionTimePerIteration;
-        //    set => _productionTimePerIteration = value;
-        //}
         public decimal EnergyConsumption
         {
             get => _energyConsumption;
@@ -64,8 +55,16 @@ namespace Tycoonia.Domain.Buildings.EnergyPlant
             get => _productionItemList;
             set => _productionItemList = value;
         }
-        public decimal ProductionTimePerIteration { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public TimeSpan ProgressTimeUi { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public decimal TargetOutput
+        {
+            get => _targetOutput;
+            set => _targetOutput = value;
+        }
+        public decimal Produced
+        {
+            get => _produced;
+            set => _produced = value;
+        }
 
         public EnergyPlantBase()
         {

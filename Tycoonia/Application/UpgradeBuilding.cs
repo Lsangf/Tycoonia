@@ -69,10 +69,10 @@ namespace Tycoonia.Application
             {
                 building.RecipeUpgradeList[item.Key] = item.Value * 2;
             }
-            foreach (var item in building.ProductionItemList)
-            {
-                building.ProductionItemList[item.Key] += Math.Truncate(item.Value * 0.25m + 1);
-            }
+            //foreach (var item in building.ProductionItemList)
+            //{
+            //    building.ProductionItemList[item.Key] += Math.Truncate(item.Value * 0.25m + 1);
+            //}
             building.ProductionRate += Math.Truncate(building.ProductionRate * 0.25m + 1);
             building.EnergyConsumption += 0.01m;
             building.Level += 1;
